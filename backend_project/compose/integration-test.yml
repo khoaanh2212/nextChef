@@ -1,0 +1,11 @@
+version: '2'
+services:
+  web:
+    command: "python /code/backend/runtests.py"
+  frontend_tests:
+    build:
+      context: ..
+      dockerfile: Dockerfile.node-tools
+    volumes_from:
+      - web
+    command: grunt test

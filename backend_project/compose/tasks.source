@@ -1,0 +1,74 @@
+NEXTCHEF_ENVIRONMENT=${NEXTCHEF_ENVIRONMENT:-}
+NEXTCHEF_TAG=${TAG:-latest}
+NEXTCHEF_REGISTRY=${REGISTRY:-docker.apiumtech.io}
+
+echo "NEXTCHEF_ENVIRONMENT: $NEXTCHEF_ENVIRONMENT" 1>&2
+echo "TAG: $TAG" 1>&2
+echo "REGISTRY: $REGISTRY" 1>&2
+
+docker_compose() {
+	if [ -z "$NEXTCHEF_ENVIRONMENT" ]; then
+    	echo "Error. Please set 'NEXTCHEF_ENVIRONMENT' environment variable before running this function" 1>&2
+    	return 1
+	fi  
+	TAG=$NEXTCHEF_TAG REGISTRY=$NEXTCHEF_REGISTRY docker-compose -p "nextchef${NEXTCHEF_ENVIRONMENT}" -f compose/base.yml -f "compose/${NEXTCHEF_ENVIRONMENT}.yml" $@
+}
+
+base_task() {
+	docker_compose -f compose/tasks.yml run managepy $@
+}
+
+task_syncdb() {
+	base_task syncdb
+}
+
+task_migrate() {
+	base_task migrate
+}
+
+# Metric related tasks
+task_registered_users() {
+	base_task registered_users
+}
+
+task_recipes_created() {
+	base_task recipes_created
+}
+
+task_social_actions() {
+	base_task social_actions
+}
+
+base_task_count_users_by_activity() {
+	base_task count_users_by_activity "$@"
+}
+
+task_count_users_by_activity_7() {
+	base_task_count_users_by_activity --days=7
+}
+
+task_count_users_by_activity_30() {
+	base_task_count_users_by_activity --days=30
+}
+
+task_count_users_by_activity_60() {
+	base_task_count_users_by_activity --days=60
+}
+
+task_count_users_by_activity_180() {
+	base_task_count_users_by_activity --days=180
+}
+
+# Recipe tasks
+task_detect_recipe_language() {
+	base_task detect_recipe_language
+}
+
+task_score_recipes() {
+	base_task score_recipes
+}
+
+# Elastic search
+task_es_reindex_recipes() {
+	base_task es_reindex_recipes
+}

@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Kitchen - NextChef{% endblock title %}
+{% block description %}A tool to document your step by step recipes.{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+
+{% block fb_title %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block fb_image %}{{ recipe.cover|thumbnail_url:"explore_box" }}{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+
+{% block tw_summary %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block tw_title %}{{ block.super }} {% trans 'Recipe' %}{% endblock %}
+{% block tw_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+{% block tw_image %}{{ recipe.cover|thumbnail_url:"explore_box" }}{% endblock %}
+
+{% block extra_css %}
+	<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block extra_js %}
+	<script src="{% static 'js/vendor/jquery-ui.js' %}"></script>
+	<script>
+		var RECIPE_ID = {{recipe.id}};
+		var BOOKS = {{books|safe}};
+        var CHEF_ID = {{recipe.chef.id}};
+        var CHEF_MEMBERSHIP = "{{recipe.chef.membership}}";
+        var LIBRARY_URL = "{% url 'library' slug=request.user.slug id=request.user.id%}";
+		var PRICE_URL = "{% url 'pricing'%}";
+        var ALL_ALLERGENS = {{ ALL_ALLERGENS|safe }};
+        var EDAMAM_URL = "{%  url 'edamam' %}";
+	</script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/models/Book.js' %}"></script>
+	<script src="{% static 'js/models/Chef.js' %}"></script>
+    <script src="{% static 'js/service/ToasterService.js' %}"></script>
+    <script src="{% static 'js/service/AjaxService.js' %}"></script>
+    <script src="{% static 'js/service/PresenterHandleCreator.js' %}"></script>
+
+    <script src="{% static 'js/models/AllergenModel.js' %}"></script>
+    <script src="{% static 'js/presenters/AllergenPresenter.js' %}"></script>
+    <script src="{% static 'js/controllers/AllergenOnKitchenCtrl.js' %}"></script>
+
+    <script src="{% static 'js/models/IngredientOnKitchenModel.js' %}"></script>
+    <script src="{% static 'js/presenters/IngredientOnKitchenPresenter.js' %}"></script>
+    <script src="{% static 'js/controllers/IngredientOnKitchenCtrl.js' %}"></script>
+    <script src="{% static 'js/controllers/BookSlideOnKitchenCtrl.js' %}"></script>
+    <script src="{% static 'js/controllers/RecipeOnKitchenCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/KitchenCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/BookModalCtrl.js' %}"></script>
+	<script src="{% static 'js/presenters/BookModalPresenter.js' %}"></script>
+	<script src="{% static 'js/models/BookModalModel.js' %}"></script>
+
+    <script src="{% static 'js/models/kitchen/IngredientModel.js' %}"></script>
+    <script src="{% static 'js/presenters/kitchen/IngredientPresenter.js' %}"></script>
+    <script src="{% static 'js/controllers/kitchen/IngredientCtrl.js' %}"></script>
+	<script>
+		var user_id = "{{ request.user.email }}";
+		mixpanel.track("recipe_begin", {
+		    "source": "web",
+		    "distinct_id": user_id
+		});
+    </script>
+{% endblock extra_js %}
+
+{% block open_js %}
+
+	<script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
+	<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+	<script type="text/javascript">
+
+	window.fbAsyncInit = function() {
+       		FB.init({
+          		appId      : '{{FACEBOOK_APP_ID}}',
+          		xfbml      : true,
+          		version    : 'v2.6'
+        	});
+      	};
+
+      	(function(d, s, id){
+         	var js, fjs = d.getElementsByTagName(s)[0];
+         	if (d.getElementById(id)) {return;}
+         	js = d.createElement(s); js.id = id;
+         	js.src = "//connect.facebook.net/en_US/sdk.js";
+         	fjs.parentNode.insertBefore(js, fjs);
+       	}(document, 'script', 'facebook-jssdk'));
+
+      	var facebook_share_obj = {
+			method: 'feed',
+  			redirect_uri:'{{ request.build_absolute_uri }}',
+  			link: '{{ request.build_absolute_uri }}',
+  			picture: '{{ recipe.cover|thumbnail_url:"explore_box" }}',
+  			name: '{{recipe.name}} {% trans "PHOTORECIPE" %}',
+  			caption: '{% trans "by" %} {{recipe.chef.name}} {{recipe.chef.surname}}',
+  			description: '{% trans "at NextChef" %}'
+		};
+
+      	var pinterest_share_obj = "//www.pinterest.com/pin/create/button/" +
+      		    "?url={{ request.build_absolute_uri }}" +
+      		    "&media={{ recipe.cover|thumbnail_url:'explore_box' }}" +
+      		    "&description={{recipe.name|capfirst}}%20{% trans 'photo recipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}%20-%20NextChef%20";
+
+    </script>
+{% endblock open_js %}
+
+{% block navbar %}{% endblock navbar %}
+
+{% block nav-bar-fixed-space %}{% endblock %}
+
+{% block content %}
+	<div class="kitchen" ng-controller="KitchenController">
+
+		<div id="kitchen_upgrade_banner" class="kitchen-banner" ng-show="showUpgradeBanner==true">
+			<h1>
+                {% trans "It’s time to give it a further step and enjoy all benefits from NextChef" %}
+                <button class="btn btn-green" ng-click="redirectToPayement()">{% trans "UPGRADE NOW!" %}</button>
+            </h1>
+            <span class="close gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click To Close" data-gtme-tag="close" ng-click="closeUpgradeBanner()"></span>
+		</div>
+
+		<ul class="steps-control" ng-show="currentSlide != 6">
+			<li class="back">
+				<!--a href="{% url 'library' slug=request.user.slug id=request.user.id%}"-->
+                <a class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Go Back" data-gtme-tag="go_back" ng-click="goBack()">
+					<img src="{% static 'img/arrow-left-dark.png' %}">
+				</a>
+			</li>
+			<li class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Slider" data-gtme-tag="step_slide" ng-click="selectSlide(2)" ng-class="{active:currentSlide==2, disabled: recipe.steps.length == 0, done: checkSteps()}">{% trans 'Steps' %}</li>
+			<li class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Slider" data-gtme-tag="ingredients_slide" ng-click="selectSlide(3)" ng-class="{active:currentSlide==3, disabled: recipe.steps.length == 0, done: checkIngredients() && checkServes() && checkPrepTime() && checkTags()}">{% trans 'Ingredients' %}</li>
+			<li class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Slider" data-gtme-tag="title_slide" ng-click="selectSlide(4)" ng-class="{active:currentSlide==4, disabled: recipe.steps.length == 0, done: checkTitle()}">{% trans 'Title' %}</li>
+			<li class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Slider" data-gtme-tag="publish_slide" ng-click="selectSlide(5)" ng-class="{active:currentSlide==5, disabled: recipe.steps.length == 0, done: checkPublish()}">{% trans 'Publish' %}</li>
+		</ul>
+
+ 		<div class="row steps-content">
+
+			<!-- Step LOADING -->
+			<div class="col-md-6 col-md-offset-3 content step0" ng-show="loading==true">
+	 			<h2>{% trans 'Loading...' %}</h2>
+			</div>
+
+			<!-- Step UPLOAD IMAGES -->
+			<div class="col-md-6 col-md-offset-3 content step1" ng-show="currentSlide==1 && loading==false">
+				<label id="uploader_button" for="uploader" class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Step" data-gtme-tag="upload_steps" onclick="document.getElementById('uploader_input').click();">
+					<img src="{% static 'img/kitchen/camera.png' %}">
+					<br><br>
+					<span>{% trans 'upload pictures' %}</span>
+					<h1>{% trans 'Start a Photorecipe' %}</h1>
+				</label>
+				<input id="uploader_input" type="file" name="uploader" style="display:none;" multiple  accept="image/*" onchange="angular.element(this).scope().addPhotos(this.files);"/>
+			</div>
+
+			<!-- Step EDIT STEPS -->
+			<div class="col-md-10 col-md-offset-1 content step2" ng-show="currentSlide==2 && loading==false">
+
+				<div class="step-matrix" style="min-height: 560px;">
+
+					<!-- Step EDIT STEP -->
+					<div class="step-edit" style="display:block;">
+						<h2 style="width:100%;">{% trans 'STEP' %}&nbsp;&nbsp;{% verbatim %}{{selectedStep.order}}{% endverbatim %}</h2>
+						<br>
+						{% verbatim %}<img ng-src="{{selectedStep.edit_thumb}}">{% endverbatim %}
+						<progress ng-show="selectedStep.uploading" value="{{selectedStep.progress_loaded}}" max="{{selectedStep.progress_total}}"></progress>
+						<img style="top: 90px;" ng-hide="selectedStep.uploading" class="delete gtm-event" data-gtme-category="Kitchen"
+                             data-gtme-action="Click Step" data-gtme-tag="delete_step" ng-click="openDeleteImagePopup()"
+                             src="{% static 'img/fullframe-close-icon.png' %}" data-toggle="modal" data-target="#delete_step_modal">
+						<textarea class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Step" data-gtme-tag="add_instruction"
+                                  ng-blur="changeStepInstructions(selectedStep)" ng-keypress="selectedStep.changed=true;" ng-keydown="selectedStep.changed=true;" ng-focus="selectedStep.changed=true;" placeholder="Type instructions.." ng-model="selectedStep.instructions"></textarea>
+					</div>
+
+					<!-- Step ORDER STEPS -->
+					<div class="steps-list" style="float:right;">
+						<h2 style="width:100%;">&nbsp;</h2>
+						<br>
+						{% verbatim %}
+							<div class="step gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Step" data-gtme-tag="select_step" ng-repeat="step in recipe.steps" ng-click="selectStep(step);" ng-class="{active:selectedStep.id==step.id}">
+								<p>{{step.order}}</p>
+								<img ng-src="{{step.drag_thumb}}" ng-hide="step.uploading">
+								<progress ng-show="step.uploading" value="{{step.progress_loaded}}" max="{{step.progress_total}}"></progress>
+							</div>
+						{% endverbatim %}
+						<div class="step add-step">
+							<img src="{% static 'img/kitchen/camera.png' %}" class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Step" data-gtme-tag="upload_steps" onclick="document.getElementById('uploader_input').click();">
+						</div>
+					</div>
+				</div>
+				<br>
+				<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="saveDraft(3)">{% trans 'Save Draft' %}</button>
+				<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="currentSlide=3">{% trans 'Next' %}</button>
+			</div>
+
+			<!-- Step EDIT INGREDIENTS & TAGS -->
+			<div class="col-md-8 col-md-offset-2 content step3" ng-show="currentSlide==3 && loading==false">
+				<div class="col-md-12">
+					<ul class="time-cooking">
+						<li>
+							<h2>{% trans 'Serves' %}</h2>
+							<input class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Ingredients" data-gtme-tag="change_serves" type="text" ng-model="recipe.serves" maxlength="2" type="number" min="1" max="99" ng-blur="changeServes()">
+						</li>
+						<li>
+							<h2>{% trans 'Minutes' %}</h2>
+							<input class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Ingredients" data-gtme-tag="change_minutes" type="text" ng-model="recipe.prep_time" ng-blur="changePrepTime()" maxlength="3" type="number" min="1" max="999">
+						</li>
+					</ul>
+				</div>
+                {% include 'partials/kitchen/ingredient-adding.html' %}
+                <div class="col-md-12 allergens">
+                    <h2>{% trans 'Allergens' %}</h2>
+                    <ul class="list-inline">
+                        {% verbatim %}
+                        <li ng-repeat="item in allergenCtrl.data.allergensList track by $index">
+                            <div class="checkbox-field">
+                                <input type="checkbox"
+                                   ng-change="allergenCtrl.toggleAllergen($index, recipe);"
+                                   ng-model="allergenCtrl.data.selectedAllergens[item]"
+                                   ng-checked="allergenCtrl.data.selectedAllergens[item]"/>
+                            </div>
+                            <div class="title">{{ item }}</div>
+                        </li>
+                        {% endverbatim %}
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+				<div class="col-md-12">
+					<h2>{% trans 'Tags' %}</h2>
+					<input class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Ingredients" data-gtme-tag="change_tags" ng-model="tags" placeholder="Separate tags with commas" ng-blur="changeTags()">
+					<br><br><br>
+					<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="saveDraft(4)">{% trans 'Save Draft' %}</button>
+					<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="currentSlide=4">{% trans 'Next' %}</button>
+				</div>
+			</div>
+
+			<!-- Step EDIT TITLE & SELECT COVER -->
+			<div class="col-md-6 col-md-offset-3 content step4" ng-show="currentSlide==4 && loading==false">
+				<div class="step4-content">
+					<h2>{% trans 'Select Cover' %}</h2>
+					<div id="cover_carousel" class="covers-list carousel slide">
+						<div class="carousel-inner">
+							{% verbatim %}
+								<div id="{{step.id}}" class="item" data-id="{{step.id}}" ng-repeat="step in recipe.steps" ng-style="{'background-image': 'url(' + step.edit_thumb +')'}"></div>
+							{% endverbatim %}
+						</div>
+						<a class="right carousel-control gtm-event"
+                           data-gtme-category="Kitchen"
+                           data-gtme-action="Click Title"
+                           data-gtme-tag="select_cover"
+                           href="#cover_carousel"
+                           role="button"
+                           data-slide="next"
+                           ng-click="carouselSlide('#cover_carousel','next')"><img src="{% static 'img/arrow-right.png' %}"></a>
+						<a class="left carousel-control gtm-event"
+                           data-gtme-category="Kitchen"
+                           data-gtme-action="Click Title"
+                           data-gtme-tag="select_cover"
+                           href="#cover_carousel"
+                           role="button"
+                           data-slide="prev"
+                           ng-click="carouselSlide('#cover_carousel','prev')"><img src="{% static 'img/arrow-left.png' %}"></a>
+					</div>
+					<h2>{% trans 'Title' %}</h2>
+					<input class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Title" data-gtme-tag="change_name" type="text" ng-model="recipe.name" ng-blur="changeTitle()" max-length="100" placeholder="Type your recipe name">
+					<br><br>
+					<!-- div class="select-cover"><input type="checkbox" ng-model="selectedStep.cover" ng-change="selectStepAsCover(selectedStep)"><span>{% trans 'Select as cover' %}</span></div-->
+					<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="saveDraft(5)">{% trans 'Save Draft' %}</button>
+					<button class="next gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Next" data-gtme-tag="next_slide" ng-click="currentSlide=5">{% trans 'Next' %}</button>
+				</div>
+			</div>
+
+			<!-- Step PUBLISH -->
+			<div class="col-md-6 col-md-offset-3 content step5" ng-show="currentSlide==5 && loading==false">
+				<div class="step5-content">
+					<div>
+						<h2>{% trans 'Select Books' %}</h2>
+						<div id="books_carousel" class="books-list carousel slide" data-ride="carousel" data-interval="false">
+							<div class="carousel-inner" role="listbox">
+								{% verbatim %}
+								<div class="item" ng-class="{active: $index == 0}"
+                                     ng-repeat="booksSlide in bookSlideCtrl.bookSlides">
+									<div class="book gtm-event"
+                                         data-gtme-category="Kitchen"
+                                         data-gtme-action="Click Publish"
+                                         data-gtme-tag="select_book"
+                                         ng-repeat="book in booksSlide"
+                                         ng-click="selectBook(book)"
+                                         ng-class="{selected:isBookSelected(book)}">
+										<p>{{book.name}}</p>
+                                        <div class="book-private" ng-if="book.private"></div>
+										<img ng-src="{{book.cover_thumb}}">
+									</div>
+								</div>
+								{% endverbatim %}
+							</div>
+                            {% include 'partials/book-modal.html' %}
+							<a class="right carousel-control gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Publish" data-gtme-tag="slide_books" href="#books_carousel" role="button" data-slide="next" ng-click="carouselSlide('#books_carousel','next')"><img src="{% static 'img/arrow-right.png' %}"></a>
+							<a class="left carousel-control gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Publish" data-gtme-tag="slide_books" href="#books_carousel" role="button" data-slide="prev" ng-click="carouselSlide('#books_carousel','prev')"><img src="{% static 'img/arrow-left.png' %}"></a>
+						</div>
+					</div>
+                    <hr>
+					<br>
+					<div class="publish-wrapper">
+                        <button class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Publish" data-gtme-tag="save_privately" ng-click="recipeCtrl.savePrivate()" class="col-md-6">{% trans 'Save Private' %}</button>
+						<button class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Publish" data-gtme-tag="publish" ng-click="recipeCtrl.savePublic()" class="col-md-6">{% trans 'PUBLISH' %}</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-md-offset-3 content step6" ng-show="currentSlide==6 && loading==false">
+				<h1>{% trans 'Congratulations' %}</h1>
+				<br>
+				<p ng-show="recipe.isPrivate">{% trans 'Your recipe has been created, check it at' %}<br><a class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Congrats" data-gtme-tag="recipe_link" href="http://{{SITE}}{% verbatim %}{{recipe.public_url}}{% endverbatim %}">{{SITE}}{% verbatim %}{{recipe.public_url}}{% endverbatim %}</a></p>
+				<p ng-show="!recipe.isPrivate">{% trans 'Your recipe has been published, check it at' %}<br><a class="gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Congrats" data-gtme-tag="recipe_link" href="http://{{SITE}}{% verbatim %}{{recipe.public_url}}{% endverbatim %}">{{SITE}}{% verbatim %}{{recipe.public_url}}{% endverbatim %}</a></p>
+				<hr ng-show="!recipe.isPrivate">
+				<p ng-show="!recipe.isPrivate">{% trans 'Promote it' %}</p>
+				<ul ng-show="!recipe.isPrivate">
+					<li><a class="facebook gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Congrats" data-gtme-tag="share_facebook" id="facebook_share_button" href="#">Facebook</a></li>
+	                <li><a class="twitter gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Congrats" data-gtme-tag="share_twitter" href="https://twitter.com/intent/tweet?text={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}&url={{ request.build_absolute_uri }}&via=NextChefCo Your intelligent Kitchen Assistant&hashtags=photorecipe">Twitter</a></li>
+	                <li><a class="pinterest gtm-event" data-gtme-category="Kitchen" data-gtme-action="Click Congrats" data-gtme-tag="share_pinterest" id="pinterest_share_button" href="">Pinterest</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="delete_step_modal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-body">
+	       				<p>{% trans 'Do you really want to delete the step' %} {% verbatim %}{{selectedStep.order}}{% endverbatim %}?</p>
+	     			</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default gtm-event" data-gtme-category="Pop Up" data-gtme-action="Delete Step" data-gtme-tag="cancel" data-dismiss="modal">{% trans 'Cancel' %}</button>
+						<button type="button" class="btn btn-primary gtm-event" data-gtme-category="Pop Up" data-gtme-action="Delete Step" data-gtme-tag="accept" ng-click="deleteStep();" data-dismiss="modal">{% trans 'Delete' %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="publish_error_modal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-body">
+						{% verbatim %}
+		       				<p ng-repeat="error in publishErrors">{{error}}</p>
+	       				{% endverbatim %}
+	     				</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary gtm-event" data-gtme-category="Pop Up" data-gtme-action="Publish Error" data-gtme-tag="accept" data-dismiss="modal">{% trans 'Accept' %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+        {% verbatim %}
+        <div class="toaster">
+            <div class="block-message message-{{allergenCtrl.toaster.data.alert.type}} alert" id="block-message">
+                <span class="msg">{{allergenCtrl.toaster.data.alert.msg}}</span>
+            </div>
+        </div>
+        {% endverbatim %}
+
+	</div>
+
+{% endblock content %}
+
+{% block social %}{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }} | {{ recipe.name }}{% endblock title %}
+{% block description %}{{ recipe.name }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+
+{% block fb_title %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block fb_image %}{{ recipe.cover|thumbnail_url:"explore_box" }}{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+
+{% block tw_summary %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block tw_title %}{{ block.super }} {% trans 'Recipe' %}{% endblock %}
+{% block tw_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+{% block tw_image %}{{ recipe.cover|thumbnail_url:"explore_box" }}{% endblock %}
+
+{% block extra_css %}
+	<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block extra_js %}
+	<script src="{% static 'js/vendor/jquery-ui.js' %}"></script>
+
+    <script src="{{STATIC_URL}}js/plugins/jquery.scrollTo.min.js"></script>
+    <script src="{{STATIC_URL}}js/plugins/jquery.localScroll.min.js"></script>
+
+	<script src="{% static 'js/recipe.js' %}">
+		{% if 'new-recipe' in request.path %}
+            var user_id = "{{ request.user.email }}";
+
+            mixpanel.track("recipe_begin", {
+                "source": "web",
+                "distinct_id": user_id
+            });
+		{% endif %}
+    </script>
+
+{% endblock extra_js %}
+
+{% block open_js %}
+
+	<script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
+	<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+	<script type="text/javascript">
+
+	window.fbAsyncInit = function() {
+       		FB.init({
+          		appId      : '{{FACEBOOK_APP_ID}}',
+          		xfbml      : true,
+          		version    : 'v2.6'
+        	});
+      	};
+
+      	(function(d, s, id){
+         	var js, fjs = d.getElementsByTagName(s)[0];
+         	if (d.getElementById(id)) {return;}
+         	js = d.createElement(s); js.id = id;
+         	js.src = "//connect.facebook.net/en_US/sdk.js";
+         	fjs.parentNode.insertBefore(js, fjs);
+       	}(document, 'script', 'facebook-jssdk'));
+
+      	var facebook_share_obj = {
+			method: 'feed',
+  			redirect_uri:'{{ request.build_absolute_uri }}',
+  			link: '{{ request.build_absolute_uri }}',
+  			picture: '{{ recipe.cover|thumbnail_url:"explore_box" }}',
+  			name: '{{recipe.name}} {% trans "PHOTORECIPE" %}',
+  			caption: '{% trans "by" %} {{recipe.chef.name}} {{recipe.chef.surname}}',
+  			description: '{% trans "at Nextchef" %}'
+		};
+
+      	var pinterest_share_obj = "//www.pinterest.com/pin/create/button/" +
+      		    "?url={{ request.build_absolute_uri }}" +
+      		    "&media={{ recipe.cover|thumbnail_url:'explore_box' }}" +
+      		    "&description={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}%20-%20NexChef%20";
+
+    </script>
+{% endblock open_js %}
+
+{% block content %}
+	<script>
+
+		{% if 'new-recipe' in request.path %}
+			var NEW_RECIPE = true;
+		{% else %}
+			var NEW_RECIPE = false;
+		{% endif %}
+		var RECIPE_ID = {{recipe.id}};
+        var DO_LOVE_URL = "{% url 'do-love' %}";
+        var ADD_TO_BOOK_URL = "{% url 'add-recipe-to-book' recipe_id=recipe.id %}";
+        var ADD_BOOK_URL = "{% url 'add-book-with-recipe' recipe_id=recipe.id %}";
+
+        {% if request.user.is_authenticated %}
+            var user_is_authenticated = true;
+            var loved_recipes = "{{request.user.json_loves_list}}";
+        {% else %}
+            var user_is_authenticated = false;
+            var loved_recipes = null;
+        {% endif %}
+
+	</script>
+
+	<div id="recipe" itemscope itemtype="http://schema.org/Recipe">
+		{% if not 'new-recipe' in request.path %}
+
+        {% with cover_thumb=recipe.cover|thumbnail_url:'explore_cover' %}
+        {% if cover_thumb %}
+        <div class="header" style="background-image: url({{cover_thumb}})">
+        {% else %}
+        <div class="header" itemprop="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+        {% endif %}
+        {% endwith %}
+			<div class="image-gradient"></div>
+			<a class="chef {% if recipe.chef.type == 1 %}pro{% endif %}" itemprop="author" href="{% url 'library' slug=recipe.chef.slug id=recipe.chef.id %}">{{recipe.chef.name}} {{recipe.chef.surname}}</a>
+		</div>
+		{% endif %}
+		<div class="title">
+			<div>
+				<h1 itemprop="name" >{{recipe.name}}</h1>
+				{% if recipe.chef == request.user %}
+					<a href="#" id="edit_recipe_name" data-change-name-url="{% url 'recipe-edit-name' recipe_id=recipe.id %}">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="social">
+			<div class="social-nb">
+				<p class="nb-likes {% if request.user.is_authenticated and recipe.id in request.user.loves_list %}loved{% endif %}">{{recipe.nb_likes}}</p>
+			</div>
+			<div class="social-nb" id="comments_scroll">
+				<a href="#comments_row"><p class="nb-comments">{{recipe.nb_comments}}</p></a>
+			</div>
+			<div class="social-nb" >
+				<a  class="nb-added" href="#" id="add_dropdown_button">{{recipe.nb_added}}</a>
+				{% if request.user.is_authenticated %}
+				<div id="add_dropdown" class="dropdown" style="display:none;">
+					<div class="list-header">{% trans 'MY BOOKS' %}</div>
+					<ul>
+	                    {% for book in books %}
+	                    	<li data-book-id="{{book.id}}">
+	                    		<input type="checkbox" {% if book.id in recipe_in_books %}checked{% endif %}>
+	                    		<p>{{book.name}}</p>
+	                    	</li>
+	                    {% endfor %}
+	                </ul>
+	                <div id="add_book_dropdown_button">
+		                <input id="add_book_input" type="text" placeholder="{% trans 'Type new book name..' %}">
+		                <button id="add_book_button">+</button>
+	                </div>
+                </div>
+                {% endif %}
+			</div>
+			{% comment %}
+			<div class="social-nb" >
+	            <div id="share_dropdown_button" class="nb-share">
+	                <div id="share_dropdown" class="dropdown" style="display:none;">
+	                    <ul>
+	                    	<li><a id="show_embed_popup" href="#"><b>{% trans '< >' %}</b>{% trans 'Embed' %}</a></li>
+	                    	<li><a id="facebook_share_button" href="#"><img src="{% static 'img/facebook-page-icon.png' %}"> Facebook</a></li>
+	                    	<li><a href="https://twitter.com/intent/tweet?text={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}&url={{ request.build_absolute_uri }}&via=cookbooth&hashtags=photorecipe"><img src="{% static 'img/twitter-page-icon.png' %}"> Twitter</a></li>
+	                    	<li><a id="pinterest_share_button" href=""><img src="{% static 'img/pinterest-page-icon.png' %}"> Pinterest</a></li>
+	                    </ul>
+	                </div>
+	            </div>
+	        </div>
+	        {% endcomment %}
+		</div>
+
+		{% if recipe.chef == request.user %}
+			<script>
+				var EDIT_INGREDIENT_URL = "{% url 'recipe-edit-ingredient' recipe_id=recipe.id %}";
+			</script>
+		{% endif %}
+		<div class="container">
+			<div class="ingredients row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<a href="#" id="dropdown_ingredients">{% trans 'INGREDIENTS' %}</a>
+                    {% if recipe.chef == request.user %}
+                        <a href="#" id="enable_edit_ingredients">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="glyphicon glyphicon-ok" style="display:none;"></span>
+                        </a>
+                    {% endif %}
+					<ul id="ingredients_list" style="display: none;">
+						{% if recipe.chef == request.user %}
+							{% if recipe.ingredients.all.count == 0 %}
+								<li>
+									<input type="text" class="edit-ingredient" value="" placeholder="{% trans 'Type an ingredient..' %}"/>
+								</li>
+							{% endif %}
+						{% endif %}
+						{% for ingredient in recipe.ingredients.all %}
+							{% if recipe.chef == request.user %}
+								<li data-ingredient-id="{{ingredient.id}}">
+									<input type="text" class="edit-ingredient" value="{{ingredient.name}}" placeholder="{% trans 'Type an ingredient..' %}" disabled/>
+								</li>
+							{% else %}
+								<li itemprop="ingredients">{{ingredient.name}}</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+
+			<div class="views">
+				<ul class="pull-right">
+					{% if recipe.chef == request.user %}
+					<li class="edit-tool" style="display:none;"><a id="edit_text_view" class="active" data-toggle="tooltip" data-placement="top" title="{% trans 'EDIT TEXT' %}"><span class="glyphicon glyphicon-align-left"></span></a></li>
+					<li class="edit-tool" style="display:none;"><a id="reorder_steps_view" class="reorder-steps"><span class="glyphicon glyphicon-move"></span></a></li>
+					<li class="edit-tool" style="display:none;"><a class="add-step"><span class="glyphicon glyphicon-plus"></span></a></li>
+					<li class="edit-tool" style="display:none;"><a id="cover_photo_view"><span class="glyphicon glyphicon-cutlery"></span></a></li>
+					<li class="edit-tool" style="display:none;"><a id="disable_edit_view"><span class="glyphicon glyphicon-ok"></span></a></li>
+					<li class="view-tool" ><a id="enable_edit_view"><span class="glyphicon glyphicon-pencil"></span></a></li>
+					{% endif %}
+					<li class="view-tool"><a id="grid_view" class="active"><!--span class="glyphicon glyphicon-th"></span--><img src="{% static 'img/grid-icon.png' %}"></a></li>
+					<li class="view-tool"><a id="list_view"><!-- span class="glyphicon glyphicon-th-large"></span --><img src="{% static 'img/list-icon.png' %}"></a></li>
+					<li class="view-tool"><a id="fullscreen_view"><!-- span class="glyphicon glyphicon-fullscreen"></span--><img src="{% static 'img/fullscreen-icon.png' %}"></a></li>
+				</ul>
+			</div>
+
+			<div id="fullscreen_view_modal" class="fullscreen-view col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
+				<a id="fullscreen_close_button" href="#" class="fullscreen-close"><img src="{% static 'img/fullframe-close-icon.png' %}"></a>
+				<table class="fullscreen-slider">
+					<tr>
+						<td width="10%"><a class="left carousel-control" href="#fullscreen-steps-carousel" data-slide="prev" role="button"><img src="{% static 'img/arrow-left.png' %}"></a></td>
+						<td width="80%">
+							<div id="fullscreen-steps-carousel" class="carousel slide" data-ride="carousel" data-interval="false" data-pause="true">
+								<div class="carousel-inner">
+									{% for step in recipe.photos.all %}
+						    		<div class="item {% if forloop.first %}active{% endif %}">
+
+					    				<div class="image-wrapper col-xs-12 col-sm-8 col-md-8 col-lg-9">
+					      					<div class="image" style="background-image:url({{step.s3_url|thumbnail_url:'recipe_step_full_size'}});"></div>
+					      				</div>
+										<div class="recipe-info col-xs-12 col-sm-4 col-md-4 col-lg-3">
+											<h1>{{recipe.name}}</h1>
+											<h2>{{step.photo_order}}</h2>
+											<p>{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+										</div>
+
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</td>
+						<td width="10%"><a class="right carousel-control" href="#fullscreen-steps-carousel" data-slide="next" role="button"><img src="{% static 'img/arrow-right.png' %}"></a></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="clearfix"></div>
+
+			<div id="steps_list" class="steps row" data-recipe-id="{{recipe.id}}">
+
+				{% for step in recipe.photos.all %}
+                    {% if step != None and step.id != None and step.photo_order != None and step.image != None%}
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 step {% if step.is_cover %}is-cover{% endif %}" data-step-id="{{step.id}}"
+                            {% if recipe.chef.id == request.user.id %}data-order-url="{% url 'recipe-edit-photo-order' photo_id=step.id %}"
+                            data-change-cover-url="{% url 'recipe-edit-photo-cover' photo_id=step.id %}" data-delete-url="{% url 'recipe-delete-photo' photo_id=step.id %}"{% endif %}>
+                            <div class="image" style="background-image: url('{{step.image|thumbnail_url:'recipe_step'}}')">
+                                <div class="layout">
+                                    <a class="delete-step-button" href="#"><img src="{% static 'img/fullframe-close-icon.png' %}"></a>
+                                    <p class="order">
+                                        <b>{{step.photo_order}}</b>
+                                        {% if recipe.chef == request.user %}
+                                            <a href="#" class="edit-step-text" data-instructions-url="{% url 'recipe-edit-photo-instructions' photo_id=step.id%}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        {% endif %}
+                                    </p>
+                                    <p class="instructions">{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+                                </div>
+                                {% if recipe.chef == request.user %}
+                                <a href="#" class="edit-corner reorder-steps"></a>
+                                {% endif %}
+                            </div>
+                            <div class="description" style="display: none;">
+                                <h3 class="order">
+                                    <b>{{step.photo_order}}</b>
+                                    {% if recipe.chef == request.user %}
+                                        <a href="#" class="edit-step-text" data-instructions-url="{% url 'recipe-edit-photo-instructions' photo_id=step.id%}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    {% endif %}</h3>
+                                <p class="instructions" itemprop="recipeInstructions">{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+				{% endfor %}
+				{% if recipe.chef == request.user %}
+					<a href="#" id="add_photo" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 step add-step" style="display:none;" data-add-photo-url="{% url 'recipe-add-photo' recipe_id=recipe.id %}"></a>
+					<form id="add_photo_form" action="{% url 'recipe-add-photo' recipe_id=recipe.id %}" method="POST" enctype="multipart/form-data" style="display:none;">
+						{% csrf_token %}
+					    <input id="add_photo_input" name="image" type="file">
+					</form>
+					<canvas id="temporal_canvas" style="display:none;"></canvas>
+				{% endif %}
+			</div>
+
+			{% if recipe.chef == request.user %}
+			<div class="change-draft-wrapper row">
+				<a id="make_public_button" class="change-draft" href="#" {% if recipe.draft == 0 %} style="display:none" {% endif %} data-url="{% url 'recipe-make-public' recipe_id=recipe.id %}">{% trans 'Make it public' %}</a>
+				<a id="make_private_button" class="change-draft" href="#" {% if recipe.draft == 1 %} style="display:none" {% endif %} data-url="{% url 'recipe-make-private' recipe_id=recipe.id %}">{% trans 'Make it a draft' %}</a>
+				<a class="delete-recipe-button" href="{% url 'delete-recipe' id=recipe.id %}">{% trans 'Delete Recipe' %}</a>
+			</div>
+			{% endif %}
+
+			<div class="comments row" id="comments_row">
+				{% if recipe.comments.all.count > 0 or request.user.is_authenticated %}
+				<h3>{% trans 'COMMENTS' %}</h3>
+				{% endif %}
+				{% for comment in recipe.comments.all %}
+					<div class="comment {% if forloop.first %}first{% endif %} col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+							<div class="avatar" style="background-image:url({{comment.chef.photo}})"></div>
+						</div>
+						<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" itemscope itemtype="https://schema.org/UserComments">
+							<p class="sender" itemprop="creator">{{comment.chef.name}}</p>
+							<p class="text" itemprop="commentText">{{comment.comment}}</p>
+							<p class="date" itemprop="commentTime">{{comment.creation_date}}</p>
+						</div>
+					</div>
+				{% endfor %}
+                {% if request.user.is_authenticated %}
+                    <div class="comment new-comment col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+							<div class="avatar" style="background-image:url({{request.user.photo}})"></div>
+						</div>
+						<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
+                            <p class="sender">{% trans 'Write a comment' %}:</p>
+							<textarea id="new_comment"></textarea>
+                            <button id="new_comment_button" class="btn pull-right" data-comment-recipe-url="{% url 'comment-recipe' recipe_id=recipe.id %}">{% trans 'SEND' %}</button>
+						</div>
+					</div>
+                {% endif %}
+			</div>
+		</div>
+
+        <div id="embed_popup" class="popup" style="display: none;">
+            <div class="content">
+                  <h2>{% trans 'Embed Photorecipe' %}</h2>
+                  <iframe style='display:inline-block;border:0px;' src="{% url 'recipe-embed' slug=recipe.slug id=recipe.id %}" width="600" height="450" ></iframe>
+                <p>{% trans 'Copy the code below to integrate the recipe in your blog' %}:</p>
+                  <div class="width">
+                    <p>{% trans 'Width' %}:</p>
+                    <select name="width-select" onchange="selectOnChange(this.value)">
+                        <option class="width-button" value=600 selected>600px</option>
+                        <option class="width-button" value=100>100%</option>
+                    </select>
+                  </div>
+                  <textarea class="width-600" id="textarea_iframe" readonly>
+                      <iframe src="http://{{SITE}}{% url 'recipe-embed' slug=recipe.slug id=recipe.id %}" width="600" height="450" style='border:0px;'></iframe>
+                      <a href="nextchef.co" target="blank" style="display:block;float:right;text-align:right;font-size:12px;color:#000;font-family:sans-serif;font-weight:200;">{% trans 'more photo-recipes at Nextchef' %}</a>
+                  </textarea>
+            </div>
+        </div>
+	</div>
+
+{% endblock content %}

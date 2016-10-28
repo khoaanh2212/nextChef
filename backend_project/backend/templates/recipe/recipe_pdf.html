@@ -1,0 +1,141 @@
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        
+        <style type="text/css">
+            @font-face {
+{#              font-family: BrisaAlternates;#}
+{#              src: url('http://nextchef.co/static/fonts/Brisa/Brisa%20Alternates.ttf');#}
+{#                #}
+                font-family: GTHaptikLight;
+	                src: url('../fonts/GTHaptikLight/GTHaptikLight.ttf');
+            }
+
+            @page {
+				margin-right: 50px;
+               	margin-left: 50px;
+               	margin-top: 140px;
+				bottom: 0;
+                margin-bottom: 120px;
+                top: 0;
+
+				@frame footer {
+				    -pdf-frame-content: footer;
+				    margin-right: 50px;
+	               	margin-left: 50px;
+	               	height: 90px;
+	               	bottom: 30px;
+				}
+                @frame header {
+                    -pdf-frame-content: header;
+                    margin-right: 50px;
+	               	margin-left: 50px;
+                    height: 100px;
+                    top: 30px;
+                }
+            }
+            
+        </style>
+        <title>{% block title %}Next Chef Recipe{% endblock title %}</title>
+	</head>
+	<body>
+        <div id="header" style="text-align: center; padding-top: 15px;">
+            <img style="width:117px;" src="./{% static 'img/NextChefblack.png' %}">
+        </div>
+       	<h1 style="padding-bottom: 4px; font-weight: 100; text-align: center; line-height: 30px; margin: 0px; font-size: 20px;">{{recipe.name|upper}}</h1>
+
+       	<table style="text-align: center; width: 100%; margin-top: 15px;">
+       		<tr>
+       			<td><div style="border-top: 1px solid black; border-bottom: 0px; display: block; font-size: 10px;"><br></div></td>
+       			<td><h2 style="color: rgb(143,143,143); font-weight: 200; font-family: BrisaAlternates; font-size: 40px">{{recipe.chef.name}} {{recipe.chef.surname}}</h2></td>
+       			<td><div style="border-top: 1px solid black; border-bottom: 0px; display: block; font-size: 10px;"><br></div></td>
+       		</tr>
+       	</table>
+       	<table style="width:100%">
+       		<tr>
+       			<td style="width:70%; text-align: left;">
+       				<h2 style="font-weight: 200; font-size: 14px;">{% trans 'INGREDIENTS' %}</h2>
+       			</td>
+       			<td style="width:15%; text-align: right;">
+       				{% if recipe.prep_time != None %}
+       					<p style="color: rgb(143,143,143); font-weight: 200; font-size: 14px; "><b style="color: black; font-weight: 200;">{{recipe.prep_time}}</b> {% trans 'MINUTES' %}</p>
+               		{% endif %}
+       			</td>
+       			<td style="width:15%; text-align: right;">
+               		{% if recipe.serves != None %}
+               			<p style="color: rgb(143,143,143); font-weight: 200; font-size: 14px; "><b style="color: black; font-weight: 200;">{{recipe.serves}}</b> {% trans 'SERVINGS' %}</p>
+               		{% endif %}
+       			</td>
+       		</tr>
+       	</table>
+       	
+		<br>
+		
+		<ul style="margin: 0px; padding: 0px; list-style-type: none;">
+{#		 	{% for ingredient in recipe.get_sorted_ingredients %}#}
+{#		 	<li style="font-size: 12px; margin: 0px; padding: 0px; color: rgb(143,143,143); display: block; list-style-type: none;">{{ingredient.name}}</li>#}
+{#		    {% endfor %}#}
+            {% for ingredient in ingredients %}
+		 	    <li style="font-size: 12px; margin: 0px; padding: 0px; color: rgb(143,143,143); display: block; list-style-type: none;">{{ingredient.quantity}}&nbsp;{{ingredient.measure}}&nbsp;{{ingredient.name}}</li>
+		    {% endfor %}
+		</ul>
+		
+        {% if allergens.count > 0 %}
+            <h2 style="font-weight: 200; font-size: 14px;">{% trans 'ALLERGENS' %}</h2>
+			<ul style="list-style: none;">
+			    {% for allergen in allergens %}
+			        <li style="font-size: 12px; margin: 0px; margin-right: 20px; padding-right: 20px; color: rgb(143,143,143); display: inline-block;">{{ allergen }}</li>
+                {% endfor %}
+			</ul>
+
+			<br>
+        {% endif %}
+        
+        {% if recipe.tags.all.count > 0 %}
+			<h2 style="font-weight: 200; font-size: 14px;">{% trans 'TAGS' %}</h2>
+			<ul style="list-style: none;">
+			    {% for tag in recipe.tags.all %}
+			    <li style="font-size: 12px; margin: 0px; margin-right: 20px; padding-right: 20px; color: rgb(143,143,143); display: inline-block;">{{tag.name}}</li>
+			      {% endfor %}
+			</ul>
+			
+			<br>
+        {% endif %}
+		<table cellspacing="0" cellpadding="3">
+			<tr>
+				{% for step in recipe.photos.all %}
+					{% if forloop.counter0|divisibleby:3 %}</tr><tr>{% endif %}
+					<td valign="top">
+						<img style="height: 154px; width: 225px; padding-bottom: 10px;" src="{{ step.image|thumbnail_url:'kitchen_edit' }}">
+						<br><br>
+					    <h2 style="padding-top: 10px; padding-bottom: 10px; font-size: 20px; margin: 0px; font-weight: 200;">{{step.photo_order}}</h2>
+					    <p style="font-size: 12px; color: rgb(143,143,143); padding-top: 0px; padding-bottom: 20px; margin: 0px;">{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+					</td>
+				{% endfor %}
+			</tr>
+		</table>
+        <div id="footer">
+            <table style="border-top: 1px solid rgb(208,208,208); font-size: 10px;">
+                <tr>
+{#                    <td style="padding-top: 5px;text-align: left; width:80px;">#}
+{#                        <img src="http://chart.googleapis.com/chart?cht=qr&chs={{84}}x{{84}}&chl={{recipe.public_url}}" alt="{{recipe.public_url}}">#}
+{#                    </td>#}
+                    <td  style="padding-top: 5px; padding-left: 10px; text-align: left;font-weight: 200; font-size: 10px;">
+                        <h2 style="font-weight: 200; font-size: 10px; color: black; display: inline-block;">{{recipe.name|upper}}, {% trans 'by' %} {{recipe.chef.full_name}}</h2>
+                        <br>
+                        <a style="display: inline-block; color: black; text-decoration: None;" href="http://nextchef.co">nextchef.co</a>
+                        <h2 style="font-weight: 200; font-size: 10px; color: rgb(143,143,143); display: inline-block;">{{recipe.full_url}}</h2>
+
+                    </td>
+                    <td style="text-align: right; font-weight: 200; font-size: 12px; padding-top: 7px;">
+                        <pdf:pagenumber>
+                    </td>
+                </tr>
+       	    </table>
+        </div>
+	</body>
+</html>

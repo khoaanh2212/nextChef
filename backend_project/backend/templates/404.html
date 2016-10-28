@@ -1,0 +1,8 @@
+{% extends "error_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Page Not found' %}{% endblock title %}
+
+{% block error-content %}
+    <p>{% trans 'Page not found. Please, keep on cooking.' %}</p>
+{% endblock error-content %}

@@ -1,0 +1,17 @@
+{% extends 'emails/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h4>Hola {{user.name}},</h4>
+	
+	<p>Gracias por unirte a la comunidad de NextChef. Ya casi estás. <br>Sólo falta que valides tu email abajo.</p>
+	
+	<br>
+	
+	<a href="http://{{ site.domain }}{% url 'registration_activate' activation_key %}" class="action">CONFIRMAR EMAIL</a>
+	
+{% endblock %}
+
+{% block unsubscribe %}{% endblock %}

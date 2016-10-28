@@ -1,0 +1,33 @@
+{% extends 'emails/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h4>Create your first photo recipe</h4>
+	<p>Here’s a <a href="http://nextchef.co/recipe/tutorial-76190" style="color:#2e2e2e;">tutorial</a> from chef & food stylist Iain Graham <br>to help you shoot your first recipe.</p>
+	<br><br>
+	<img src="http://{{ site.domain }}{% static 'img/emailing/activation_email_a.jpeg'%}">
+	<br><br>
+	<a href="http://{{ site.domain }}" class="action">START A PHOTO RECIPE</a>
+	
+	<br><br><hr><br><br>
+	
+	<table class="chefs-table">
+		<tbody>
+			<tr>
+				<td class="image small" style="text-align:center;">
+					<a href="http://nextchef.co/library/iain-graham-126179?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">
+						<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/59190.jpeg.130x130_q85_crop_upscale.jpg">
+						<h2>Meet Iain Graham</h2>
+						<!-- >h2>Iain Graham</h2-->
+						<h3>Chef</h3>
+					</a>
+					<p>Iain is a specialist in creating art with his food.<br> He has worked as Executive Chef and consultant <br>and his food styling clients include Kinfolk, Vanity Fair, <br>Harrods and Sainsbury’s.</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+{% endblock %}
+

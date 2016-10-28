@@ -1,0 +1,8 @@
+{% extends "error_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Forbiden' %}{% endblock title %}
+
+{% block error-content %}
+    <p>{% trans 'This is a private page. You can find other cooking libraries wide open.' %}</p>
+{% endblock error-content %}

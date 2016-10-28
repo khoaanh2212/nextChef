@@ -1,0 +1,192 @@
+{% load staticfiles %}
+{% load i18n %}
+<!-- MAIN NAVBAR -->
+{% if not user.is_authenticated %}
+    <nav id="global_navbar" class="navbar navbar-inverse navbar-fixed-top topbar nobg">
+        <div class="navbar-header container-fluid">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand bii" href="{% url 'home' %}">
+                <img src="{% static 'img/landing/logo_1.png' %}" class="gtm-event img-origin" data-gtme-category="Navbar"
+                     data-gtme-action="Click" data-gtme-tag="brand">
+                <img src="{% static 'img/bii_landing/bii-logo.png' %}" class="gtm-event img-bii" data-gtme-category="Navbar"
+                     data-gtme-action="Click" data-gtme-tag="brand">
+            </a>
+{#            <a class="navbar-brand bii-logo" href="{% url 'home' %}">#}
+{#                #}
+{#            </a>#}
+            <!-- OPTIONS MENU -->
+            <div class="collapse navbar-collapse pull-right">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- PRODUCT BUTTON -->
+                    <li><a href="{% url 'product' %}"
+                           class="{% ifequal request.path '/product/' %}selected-path{% endifequal %} gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="product">
+                        Product</a></li>
+                    <!-- PRICING BUTTON -->
+                    <li><a href="{% url 'pricing' %}"
+                           class="{% ifequal request.path '/pricing/' %}selected-path{% endifequal %} gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click"
+                           data-gtme-tag="pricing">{% trans 'Pricing' %}</a></li>
+                    <!-- SIGN IN BUTTON -->
+                    <li id="navbar-login-button">
+                        <a href="#" data-toggle="modal" data-target="#account_modal" class="gtm-event"
+                           ng-click="fn.showLoginPopup()"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="signin">
+                            {% trans 'Sign in' %}</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% else %}
+    <nav id="global_navbar" class="navbar navbar-inverse topbar navbar-fixed-top {% if request.path == '/' %}nobg{% else %}{% endif %}">
+        <div class="navbar-header container-fluid">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            {% if request.path == '/' %}
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'img/landing/logo_1.png' %}" class="gtm-event" data-gtme-category="Navbar"
+                         data-gtme-action="Click" data-gtme-tag="brand">
+                </a>
+            {% else %}
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" class="gtm-event" data-gtme-category="Navbar"
+                         data-gtme-action="Click" data-gtme-tag="brand">
+                </a>
+            {% endif %}
+            <!-- OPTIONS MENU -->
+            <div class="collapse navbar-collapse pull-right">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- EXPLORE BUTTON -->
+                    <li><a href="{% url 'explore' %}"
+                           class="{% ifequal request.path '/explore/' %}selected-path{% endifequal %}
+                           {% ifequal request.path '/explore/foodies' %}selected-path{% endifequal %}
+                           {% ifequal request.path '/explore/chefs' %}selected-path{% endifequal %} gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="explore">
+                        Explore</a></li>
+                    <!-- KITCHEN BUTTON -->
+                    <li>
+                        <a id="kitchen" href="{% url 'kitchen' %}" class="gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="kitchen">
+                            Kitchen</a></li>
+                    <!-- COSTING BUTTON -->
+                    <li><a href="{% url 'costing' %}" class="gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click"
+                           data-gtme-tag="account">{% trans 'Costing' %}</a></li>
+                    <!-- SEARCH BUTTON -->
+                    <li class="hidden-xs">
+                        <a href="" class="search-button gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="search">
+                            <img src="{% static 'img/search-icon.png' %}" class="gtm-event"
+                                 data-gtme-category="Navbar"
+                                 data-gtme-action="Click" data-gtme-tag="search"></a></li>
+                    <!-- ACCOUNT INFORMATION AFTER LOGIN -->
+                    <!-- MOBILE LOGOUT BUTTON -->
+                    <li class="visible-xs">
+                        <a href="{{ user.url }}" class="gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="account">
+                            {% trans 'Library' %}</a>
+                    </li>
+                    <li class="userAccount hidden-xs">
+                        <span>Hi</span>
+                        <a href="{{ user.url }}" class="gtm-event"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="account">
+                            {{ request.user.name }}</a>
+                        <a href="{% url 'auth_logout' %}" class="gtm-event logout"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="logout">
+                            <img src="/static/img/logout-icon.png" alt="Logout"></a>
+                    </li>
+                    <li class="userAccount visible-xs">
+                        <a href="{% url 'auth_logout' %}" class="gtm-event logout visible-sm visible-xs"
+                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="logout">
+                            {% trans 'Logout' %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endif %}
+
+{% if request.user.is_authenticated %}
+    {% comment %}
+        <!-- SHOP BUTTON -->
+        <li>
+            <a href="http://shop.nextchef.com/products/easykit-espherification" target="_blank"
+               class="gtm-event"
+               data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="shop">
+                Shop</a></li>
+        <!-- BLOG BUTTON -->
+        <li>
+            <a href="http://blog.nextchef.co" class="gtm-event" target="_blank"
+               data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="blog">
+                Blog</a></li>
+
+        <!-- CHEFS BUTTON -->
+        <li>
+            <a href="#" ng-click="fn.checkAuthenticated('chefs')" class="gtm-event"
+               data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="Chefs">
+                Chefs</a></li>
+        <!-- NEWSLETTER BUTTON -->
+        <li>
+            <a href="http://blog.nextchef.co/newsletter/" class="gtm-event"
+               data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="newsletter">
+                Newsletter</a></li>
+        <!-- GET THE APP BUTTON -->
+        {#                    <li id="navbar-get-the-app-button">#}
+        {#                        <a target="_blank"#}
+        {#                           href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8"#}
+        {#                           class="gtm-event"#}
+        {#                           data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="get-the-app">#}
+        {#                            {% trans 'GET THE APP' %}</a></li>#}
+        <!-- JOIN BUTTON -->
+        <li id="navbar-register-button">
+            <a href="#" class="gtm-event" data-toggle="modal" data-target="#account_modal"
+               ng-click="fn.showJoinPopup()"
+               data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="join">
+                {% trans 'Join' %}</a></li>
+        <!-- USER DROPDOWN -->
+        {#                    <li id="user_nenu" class="hidden-xs">#}
+        {#                        {% with avatar_thumb=USER_AVATAR %}#}
+        {#                            {% if avatar_thumb %}#}
+        {#                                <a href="{{ user.url }}" class="dropdown-toggle gtm-event"#}
+        {#                                   style="background-image: url({{ avatar_thumb }});" data-gtme-category="Navbar"#}
+        {#                                   data-gtme-action="Click" data-gtme-tag="avatar"></a>#}
+        {#                            {% else %}#}
+        {#                                <div>{{ USER_AVATAR }}</div>#}
+        {#                                <a href="{{ user.url }}" class="dropdown-toggle gtm-event"#}
+        {#                                   style="background-image: url({% static 'img/chef_avatar.jpg' %});"#}
+        {#                                   data-gtme-category="Navbar" data-gtme-action="Click" data-gtme-tag="avatar"></a>#}
+        {#                            {% endif %}#}
+        {#                        {% endwith %}#}
+        {##}
+        {#                        <ul class="dropdown-menu" role="menu">#}
+        {#                            {% comment %}#}
+        {#                                <li><a href="{{ user.url }}" class="gtm-event" style="text-transform:uppercase;"#}
+        {#                                       data-gtme-category="Navbar" data-gtme-action="Click"#}
+        {#                                       data-gtme-tag="account">{% trans 'library' %}</a></li>#}
+        {#                            {% endcomment %}#}
+        {#                            <li><a href="{% url 'auth_logout' %}" class="gtm-event" data-gtme-category="Navbar"#}
+        {#                                   data-gtme-action="Click" data-gtme-tag="logout">{% trans 'Logout' %}</a></li>#}
+        {#                        </ul>#}
+        {#                    </li>#}
+    {% endcomment %}
+    </li>
+{% endif %}
+<!-- SEARCH BAR -->
+<div class="search-bar container" style="display: none;">
+    <div class="triangle"></div>
+    <input id="search_input" type="text" placeholder="{% trans 'looking for..' %}" class="gtm-event"
+           data-gtme-category="Navbar" data-gtme-action="Search" data-gtme-tag="type">
+    <div class="results-wrapper" style="display: none;">
+        <ul class="results" data-search-url="{% url 'search_navbar_recipes_list' %}"></ul>
+        <a id="search_more_results_button" class="more-results gtm-event" href="#" data-gtme-category="Navbar"
+           data-gtme-action="Search Click" data-gtme-tag="see_all">+</a>
+    </div>
+</div>

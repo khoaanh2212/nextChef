@@ -1,0 +1,2 @@
+
+CREATE VIEW recipe_suggestion_view AS SELECT r.id as id, b.id as book_id, r.id as recipe_id, b.book_type as book_type, GROUP_CONCAT(b.chef_id) as chef_id, r.name as recipe_name, b.collaborators, r.draft as recipe_is_draft from books b LEFT JOIN books_has_recipes br on b.id = br.book_id LEFT JOIN recipes r on br.recipe_id = r.id GROUP BY r.id;

@@ -1,0 +1,86 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load thumbnail %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% include "head.html" %}
+
+<body id="body" ng-app="cookbooth" ng-controller="CookboothCtrl" ng-init="bii = true;">
+{% include 'popup.html' %}
+{% if not DEBUG %}
+    {% if request.user.is_authenticated %}
+        <script> var cbUserId = {{request.user.id}}; </script>
+    {% endif %}
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start': new Date().getTime(), event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+                '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-PGKMLD');</script>
+    <!-- End Google Tag Manager -->
+{% endif %}
+
+<div id="bii_landing">
+    {% include 'navigation-bii.html' %}
+    <div class="blackCover"></div>
+    <div class="body">
+        <div class="slogan">
+            <h1>Make more profit</h1>
+            <div>As Bii member, get free access to all </br> of NextChef's features:</div>
+        </div>
+        <div class="icon">
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="first-image image-style"></div>
+                <div class="title">
+                    <div class="logo-check"></div><div class="title-detail">Visual Recipe Cloud</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="second-image image-style"></div>
+                <div class="title">
+                    <div class="logo-check"></div><div class="title-detail">Menu creation</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="third-image image-style"></div>
+                <div class="title">
+                    <div class="logo-check"></div><div class="title-detail">Team Training</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="fourth-image image-style"></div>
+                <div class="title">
+                    <div class="logo-check"></div><div class="title-detail">Online Promotion</div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% if not request.user.is_authenticated %}
+        <div class="email-register">
+            <input type="text" class="form-control" placeholder="Email address" ng-model="emailAddress">
+            <button class="btn btn-yellow"
+                    class="gtm-event"
+                    ng-click="fn.showRegisterPopupWithEmail()"
+                    data-gtme-category="Navbar"
+                    data-gtme-action="Click"
+                    data-gtme-tag="signin">Sign up for free
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% include "footer.html" %}
+
+<!-- javascript -->
+{% include "javascript.html" %}
+{% block extra_js %}{% endblock extra_js %}
+</body>
+</html>

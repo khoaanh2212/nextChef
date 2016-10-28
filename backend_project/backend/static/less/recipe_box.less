@@ -1,0 +1,577 @@
+
+.recipe-box{
+
+  	height: 400px;
+  	text-align: center;
+	overflow: hidden;
+	position: relative;
+	width: 220px;
+	display: inline-block;
+	margin: 5px;
+	
+	&.xmas,
+	&.pro.xmas{
+		.image{
+			.logo{
+				//background-color: rgba(0,0,0,0.5);
+			}
+			
+			.xmas-icon{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0px;
+				left: 0px;
+				background-image: url('../img/christmas/christmas_icon_1.png');
+				background-repeat: no-repeat;
+				background-position: center 190px;
+				background-size: 50px;
+				opacity: 1;
+				-webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+				
+				
+				&.xmas-icon-1{
+					background-image: url('../img/christmas/christmas_icon_1.png');
+				}
+				
+				&.xmas-icon-2{
+					background-image: url('../img/christmas/christmas_icon_2.png');
+				}
+				
+				&.xmas-icon-3{
+					background-image: url('../img/christmas/christmas_icon_3.png');
+				}
+				
+				&.xmas-icon-4{
+					background-image: url('../img/christmas/christmas_icon_4.png');
+				}
+				
+				&.xmas-icon-5{
+					background-image: url('../img/christmas/christmas_icon_5.png');
+				}
+				
+			}
+		}
+		.info{
+			border-top: 5px solid #dc0000;
+		}
+	}
+	
+	&.pro{
+  		.info{
+  			background-color: rgb(46,46,46);
+  			border: 1px solid #2e2e2e;
+  			
+  			.description{
+  				p{
+  					a{
+	        			color: white;
+		        		font-weight: 200;
+		      		}	
+  				}
+	    	}
+	
+			.social{
+				
+				p{
+					color: white;
+				}
+				
+		    	.loves{
+		      		background-color: #2e2e2e;
+		      		max-width: 100%;
+			
+		      		&.loved{
+		        		p{
+		          			&:after {
+		            			background-image: url('../img/love_red.png');
+		      				}
+		    			}
+		  			}
+		
+			  		p{
+			    		color: #989898;
+			    		&:after{
+			      			background-image: url('../img/love_clear.png');
+			    		}
+			    		
+			    		&.loved{
+			    			&:after {
+		            			background-image: url('../img/love_red.png');
+		      				}
+			    		}
+			  		}
+				}
+			}
+  		}
+    	
+		.image{
+	  		.logo{
+	    		&:after {
+	      			//background-image: url('../img/brand-circle.png');
+	    		}
+	      	}
+		}
+  	}
+  	
+  	&.tosell{
+  		.info{
+  			background-color: white;
+  			  border: 1px solid #E0E0E0;
+  			
+  			.description{
+  				p{
+  					a{
+	        			color: #5a5a5a;
+		        		font-weight: 300;
+		      		}	
+  				}
+	    	}
+	
+			.social{
+				background-color: #ff4341;
+				height: 60px;
+				width: 100%;
+				line-height: 57px;
+				  
+				p{
+					color: white;
+				}
+				
+				.nb-shares,
+				.nb-added,
+				.nb-comments{
+					display: none;
+				}
+				
+				
+		    	.nb-likes{
+		      		background-color: transparent;
+		      		max-width: 100%;
+					
+					
+		      		&.loved{
+		        		p{
+		          			&:after {
+		            			background-image: url('../img/love_white.png');
+		      				}
+		    			}
+		  			}
+		
+			  		p{
+			    		color: #989898;
+			    		&:after{
+			      			background-image: url('../img/love_white.png');
+			    		}
+			    		
+			    		&.loved{
+			    			&:after {
+		            			background-image: url('../img/love_white.png');
+		      				}
+			    		}
+			  		}
+				}
+			}
+  		}
+    	
+		.image{
+	  		.logo{
+	    		&:after {
+	      			//background-image: url('../img/brand-circle.png');
+	    		}
+	      	}
+		}
+  	}
+	
+	&:hover{
+		&.xmas,
+		&.pro.xmas{
+			.image{
+				.xmas-icon{
+					opacity: 0;
+					-webkit-transition: all 300ms ease-in-out;
+			  		-moz-transition: all 300ms ease-in-out;
+			  		-o-transition: all 300ms ease-in-out;
+			  		transition: all 300ms ease-in-out;	
+				}
+				
+			}			
+		}
+		
+    	.image{
+      		.logo{
+
+        		background-color: rgba(0,0,0,0.5);
+        		transition: background-color 300 ease-in-out;
+        		-moz-transition: background-color 300 ease-in-out;
+        		-webkit-transition: background-color 300 ease-in-out;
+
+        		&:after {
+          			opacity: 1;
+          			transition: opacity 300 ease-in-out;
+          			-moz-transition: opacity 300 ease-in-out;
+          			-webkit-transition: opacity 300 ease-in-out;
+        		}
+      		}
+    	}
+  	}
+  	
+	.image{
+	    height: 240px;
+	    background-repeat: no-repeat;
+	    background-position: center center;
+	    background-size: cover;
+	    position: relative;
+	    
+	    .logo{
+      		white-space: nowrap;
+      		overflow:hidden;
+      		text-align: center;
+      		width: 100%;
+			font-family: "GTHaptikLight", serif;
+	  		font-size: 18px;
+	  		font-weight: 200;
+	  		color: white;
+	  		margin: 0px;
+	  		padding: 0px;
+	  		display: block;
+ 	 		line-height: 240px;
+	  		text-decoration: none;
+
+  			background-color: rgba(0,0,0,0.0);
+  			transition: background-color .25s ease-in-out;
+  			-moz-transition: background-color .25s ease-in-out;
+  			-webkit-transition: background-color .25s ease-in-out;
+
+  			&:after {
+    			width: 100%;
+   			 	height: 240px;
+    			top: 0px;
+    			left: 0px;
+    			position: absolute;
+    			content: " ";
+				//background-image: url('../img/brand-circle.png');
+        		background-repeat: no-repeat;
+        		background-position: center center;
+        		display: inline-block;
+        		margin-left: auto;
+        		opacity: .0;
+
+        		margin:0px auto;
+        		transition: opacity .25s ease-in-out;
+        		-moz-transition: opacity .25s ease-in-out;
+        		-webkit-transition: opacity .25s ease-in-out;
+      		}
+    	}
+  	}
+  	
+	.info{
+		position: absolute;
+		width: 100%;
+		bottom: 0px;
+		background-color: white;
+	  	border: 1px solid #e0e0e0;
+	  	border-top: 0px;
+	  	height: 160px;
+	  	
+	  	.description{
+	    	display: table;
+	    	width: 100%;
+	
+	    	div{
+	      		vertical-align: middle;
+	      		display: table-cell;
+	      		padding: 10px;
+	      		margin: 0px;
+	      		height: 100px;
+	      		width: 100%;
+
+                &.draft {
+                    height: 91px;
+                }
+	
+	      		p{
+	        		text-align: center;
+	        		display: inline;
+	        		padding: 0px;
+	        		margin: 0px;
+	        		width: 100%;
+	        		height: 100px;
+	
+	        		a{
+		          		display: block;
+		          		padding: 0px;
+		          		margin: 0px;
+		
+		          		overflow: hidden;
+		          		text-overflow: ellipsis;
+		          		max-height: 85px;
+		
+		          		color: #5a5a5a;
+		          		font-size: 15px;
+		          		text-transform: uppercase;
+		          		cursor: pointer;
+		          		font-weight: 300;
+						text-decoration: none;
+		        	}
+	      		}
+			}
+	  	}
+        .delete-draft {
+                margin-bottom: 10px;
+                border-top: 1px solid #e0e0e0;
+                display: inline-block;
+                button {
+                    color: #FF5049;
+					outline: none;
+					font-size: 14px;
+					padding-top: 20px;
+					margin-bottom: 0px;
+					text-decoration: none;
+					&:hover{
+						text-decoration: underline;
+					}
+                }
+        }
+		
+		.social{
+			height: 50px;
+	    	line-height: 50px;
+	    	text-align: center;
+	    	color: #5a5a5a;
+	    	font-size: 18px;
+	    	font-weight: 300;
+	    	border-top: 1px solid #e0e0e0;
+	    	width: 85%;
+	    	display: inline-block;
+            -webkit-transition: all 300ms ease-in-out;
+            -moz-transition: all 300ms ease-in-out;
+            -o-transition: all 300ms ease-in-out;
+            transition: all 300ms ease-in-out;
+
+			p{
+                -webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+				margin: 0px;
+		  		padding: 0px;
+		  		display: inline;
+		  		position: relative;
+				font-size: 14px;
+                margin-right: 10px;
+				cursor: pointer;
+
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+
+				&:after {
+					content: " ";
+					position: relative;
+					right: -2px;
+					top: 3px;
+					background-position: center center;
+					background-repeat: no-repeat;
+					width: 16px;
+					height: 16px;
+					display: inline-block;
+					background-size: 14px 14px;
+				}
+			}
+
+
+			.nb-likes{
+                -webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+				&:after{
+				    background-image: url('../img/love_clear.png');
+				}
+				&.loved{
+	              &:after {
+	                background-image: url('../img/love_red.png');
+	              }
+				}
+			}
+			.nb-comments{
+                -webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+				&:after {
+				    background-image: url('../img/comment.png');
+				}
+			}
+			.nb-added{
+                -webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+				&:after {
+				    background-image: url('../img/plus.png');
+				}
+			}
+			.nb-shares{
+                -webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+				&:after {
+				    background-image: url('../img/share.png');
+				}
+			}
+
+			.comments{
+				display: block;
+				overflow: hidden;
+				width: 100%;
+				-webkit-transition: all 300ms ease-in-out;
+		  		-moz-transition: all 300ms ease-in-out;
+		  		-o-transition: all 300ms ease-in-out;
+		  		transition: all 300ms ease-in-out;
+                margin: 0px;
+                padding: 0px;
+
+                .comment{
+					padding: 0px;
+					margin: 0px;
+					padding-top: 15px;
+					display: block;
+					height: 30px;
+                    padding-bottom: 30px;
+
+					.avatar{
+						height: 30px;
+						width: 30px;						
+						background-position: center center;
+				        background-repeat: no-repeat;
+				        background-size: 30px 30px;
+				        float: left;
+				        position: relative;
+						top: 0px;
+						-webkit-border-radius: 15px;
+						-moz-border-radius: 15px;
+						border-radius: 15px;
+					}
+					.text{
+						padding: 0px;
+						margin: 0px;
+						text-align: left;
+						float: right;
+						width: 80%;
+						.name{
+							padding: 0px;
+							margin: 0px;
+							font-weight: 400;
+							white-space: nowrap;
+	  						overflow: hidden;
+	  						margin-bottom: 0px;
+	  						font-size: 14px;
+	  						line-height: 14px;
+	  						color: #5a5a5a;
+						}
+						.comment_line{
+							padding: 0px;
+							margin: 0px;
+							font-weight: 300;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							font-size: 14px;
+							line-height: 14px;
+							color: #5a5a5a;
+						}
+					}
+				}
+                &.oneline{
+                    height: 35px;
+                }
+                &.twolines{
+                    height: 70px;
+                }
+                &.ng-hide {
+                    -webkit-transition: all 300ms ease-in-out;
+                    -moz-transition: all 300ms ease-in-out;
+                    -o-transition: all 300ms ease-in-out;
+                    transition: all 300ms ease-in-out;
+                }
+			}
+		}
+			
+	  	.loves{
+	    	height: 50px;
+	    	line-height: 50px;
+	    	text-align: center;
+	    	color: #5a5a5a;
+	    	font-size: 18px;
+	    	font-weight: 300;
+	    	border-top: 1px solid #e0e0e0;
+	    	max-width: 230px;
+	    	width: 100%;
+	    	display: inline-block;
+	
+		    &.loved{
+		      	p{
+		        	&:after {
+		          		background-image: url('../img/love_red.png');
+		    		}
+		  		}
+			}
+		
+			p{
+		  		margin: 0px;
+		  		padding: 0px;
+		  		display: inline;
+		  		position: relative;
+		  		cursor: pointer;
+		
+		  		&:after {
+		    		content: " ";
+					position: relative;
+					right: -5px;
+					top: 4px;
+					background-image: url('../img/love.png');
+		        	background-position: center center;
+		        	background-repeat: no-repeat;
+		        	width: 22px;
+		        	height: 22px;
+		        	display: inline-block;
+		        	cursor: pointer;
+		      	}
+			}
+		}
+	}
+}

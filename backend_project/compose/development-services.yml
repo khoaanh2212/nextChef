@@ -1,0 +1,33 @@
+version: '2'
+services:
+
+  mysql:
+    image: mysql:5.5.46
+    env_file:
+      - "config.env"
+    command: "--max_allowed_packet=512M"
+    network_mode: "host"
+    volumes:
+      - msyqldata:/var/lib/mysql
+
+  elasticsearch:
+    image: theypsilon/docker-elasticsearch:1.2.4
+    network_mode: "host"
+    volumes:
+      - elasticsearchdata:/var/lib/elasticsearch/data
+
+  redis:
+    image: theypsilon/docker-redis:2.4.18
+    network_mode: "host"
+
+  less_watcher:
+    build:
+      context: ..
+      dockerfile: Dockerfile.node-tools
+    volumes:
+      - ../backend/:/code/backend/
+    command: grunt dev
+
+volumes:
+  msyqldata: {}
+  elasticsearchdata: {}

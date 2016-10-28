@@ -1,0 +1,327 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{book.name}} Book - NextChef{% endblock title %}
+{% block description %}{{book.description}}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{collection.name}} {% trans 'COLLECTION' %}{% endblock %}
+{% block fb_image %}{{ collection.cover|thumbnail_url:"facebook_thumb" }}{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{{collection.title1}} {{collection.title2}}{% endblock %}
+{% block tw_summary %}{{collection.name}} {% trans 'COLLECTION' %}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{collection.title1}} {{collection.title2}}{% endblock %}
+{% block tw_image %}{{ collection.cover|thumbnail_url:"explore_box" }}{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+		var BOOK_ID = {{book.id|safe}};
+        var INIT_RECIPES = {{book_recipes|safe}};
+		var USER_LOVED_RECIPES = {% if USER_LOVES_LIST %}{{USER_LOVES_LIST}}{% else%}[]{% endif %};
+		var NEED_LOGIN = {% if need_login %}true{% else %}false{% endif %};
+		var NEED_CHANGE_PASSWORD = {% if need_change_password %}true{% else %}false{% endif %};
+		var BUY_CALLBACK_MODAL = {% if buy_callback %}true{% else %}false{% endif %};
+		var ALREADY_BOGUTH = {% if already_bought %}true{% else %}false{% endif %};
+	</script>
+	<script src="https://checkout.stripe.com/checkout.js"></script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/controllers/RecipesListCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/BookCtrl.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+	<div id="book" ng-controller="BookController" ng-init="stripe_key='{{stripe_key}}';">
+	
+		<!-- HEADER -->
+        <div class="header" itemprop="image" style="background-image: url({% if book_cover %}{{book_cover}}{% else %}{% static 'img/chef_cover.jpg' %}{% endif %});">
+        	<div class="label">{{book_nb_recipes}}</div>
+			<div class="image-gradient"></div>
+			<a class="chef {% if chef.type == 1 %}pro{% endif %} gtm-event" 
+				data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="GoToChef" 
+				href="{% url 'library' slug=chef.slug id=chef.id %}">
+				<img src="{{chef_avatar}}">
+				<strong>{{chef.name}} {{chef.surname}}</strong>
+			</a>
+			<br>
+			<div class="book-info">
+				<hr>
+				<small>{{book.description|safe}}</small>
+			</div>
+			<br>
+			<div class="glyphicon glyphicon-play" aria-hidden="true" ng-click="showBookVideo()"></div>
+		</div>
+		
+		<!-- TITLE -->
+		<div class="title">
+			<div>
+				<h1>{{book.name}}</h1>
+			</div>
+		</div>
+		{% if not book_bought %}
+		<div class="price" ng-click="showBuyPopup()">
+			<div>
+				<h2>{% trans 'ADD BOOK' %} {{book.price}}€</h2>
+			</div>
+		</div>
+		{% endif %}
+		
+		<div class="recipes-list" ng-controller="RecipesListController">
+			{% include 'partials/book_recipe.html' %}
+		</div>
+		
+		<form id="checkout_form" method="POST" action="{% url 'book_checkout' id=book.id %}" style="display:none;">
+	        {% csrf_token %}
+	        <input type="text" name="stripe_token">
+	        <input type="text" name="stripe_response">
+	    </form>
+	    
+		{% if book.video_web %}
+			<div id="video_modal" class="modal fade" role="dialog" ng-click="hideBookVideo()">
+				<div class="modal-dialog modal-md" style="max-width:800px;">
+					<div class="modal-content">
+						<div class="modal-body" style="margin:0px;padding: 0px;background-color: black;">
+							<video width="100%" controls>
+							  	<source src="{{book.video_web.url}}" type="video/mp4">
+							  	Your browser does not support HTML5 video.
+							</video>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}	
+		
+		{% if not book_bought %}
+			<div id="buy_book_modal" class="modal fade" tabindex="-1" role="dialog">
+	            <div class="modal-dialog modal-md">
+	            
+	            	<!-- MODAL WHEN YOU CLICK A RECIPE -->
+	                <div class="modal-content" ng-show="recipe_popup!=null && login_before_buy==false">
+	                	<div class="modal-body hidden-xs">
+	                		<table>
+		                		<tr>
+		                			{% verbatim %}
+		                			<td class="image-td" style="background-image:url({{recipe_popup.image_url}});">
+		                			{% endverbatim %}
+		                				<div class="logo">{{chef.name}} {{chef.surname}}</div>
+		                			</td>
+		                			<td>
+		                				{% verbatim %}
+		                				<h3>{{recipe_popup.name}}</h3>
+			                        	<p ng-bind-html="html_description"></p>
+			                        	{% endverbatim %}
+			                        	<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+			                        	{% comment %}
+				                        	{% if request.user.is_authenticated %}
+				                        		<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+				                        	{% else %}
+		                      					<label>{% trans 'I already hace a NextChef Account:' %}</label><br>
+		                      					<a href="#" class="btn" ng-click="showLoginBeforeBuyPopup()">{% trans 'Sign in and buy' %}</a><br>
+		                      					<label>{% trans "I don't have a NextChef Account yet:" %}</label><br>
+		                      					<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'Sign up and buy' %}</a><br>
+				                        	{% endif %}
+			                        	{% endcomment %}
+		                			</td>
+		                		</tr>
+	                        </table>
+	                    </div>
+	                    <div class="modal-body visible-xs-* hidden-sm hidden-md hidden-lg">
+	                    	{% verbatim %}
+	                    	<div class="image"  style="background-image:url({{recipe_popup.image_url}});">
+	                    	{% endverbatim %}
+	                    		<div class="logo">{{chef.name}} {{chef.surname}}</div>
+	                    	</div>
+	                    	{% verbatim %}
+	                    	<h3>{{recipe_popup.name}}</h3>
+	                        <p ng-bind-html="html_description"></p>
+	                        {% endverbatim %}
+	                        {% comment %}
+		                        {% if not request.user.is_authenticated %}
+		                			<label>{% trans 'I already hace a NextChef Account:' %}</label><br>
+		                			<a href="#" class="btn" ng-click="showLoginBeforeBuyPopup()">{% trans 'Sign in and buy' %}</a><br>
+		               				<label>{% trans "I don't have a NextChef Account yet:" %}</label><br>
+		           					<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'Sign up and buy' %}</a><br>
+		           					<br><br><br>
+		                       	{% endif %}
+	                       	{% endcomment %}
+	                    </div>
+	                    <div class="modal-footer visible-xs-* hidden-sm hidden-md hidden-lg">
+	                        <a href="#" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+	                    </div>
+	                    {% comment %}
+	                    {% if request.user.is_authenticated %}
+		                    <div class="modal-footer visible-xs-* hidden-sm hidden-md hidden-lg">
+		                        <a href="#" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+		                    </div>
+	                    {% endif %}
+	                    {% endcomment %}
+	                </div>
+	                
+	                
+	                <!-- MODAL WHEN YOU CLICK ADD TO BOOK -->
+	                <div class="modal-content" ng-show="recipe_popup==null && login_before_buy==false">
+	                	<div class="modal-body hidden-xs">
+	                		<table>
+		                		<tr>
+		                			<td class="image-td" style="background-image:url({% if book_cover %}{{book_cover}}{% else %}{% static 'img/chef_cover.jpg' %}{% endif %});">
+		                				<div class="logo">{{chef.name}} {{chef.surname}}</div>
+		                			</td>
+		                			<td>
+		                				<h3>{{book.name}}</h3>
+			                        	<p>{{book.description|safe}}</p>
+			                        	<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+			                        	{% comment %}
+				                        	{% if request.user.is_authenticated %}
+				                        		<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+				                        	{% else %}
+		                      					<label>{% trans 'I already hace a NextChef Account:' %}</label><br>
+		                      					<a href="#" class="btn" ng-click="showLoginBeforeBuyPopup()">{% trans 'Sign in and buy' %}</a><br>
+		                      					<label>{% trans "I don't have a NextChef Account yet:" %}</label><br>
+		                      					<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'Sign up and buy' %}</a><br>
+				                        	{% endif %}
+				                        {% endcomment %}
+		                			</td>
+		                		</tr>
+	                        </table>
+	                    </div>
+	                    <div class="modal-body visible-xs-* hidden-sm hidden-md hidden-lg">
+	                    	<div class="image"  style="background-image:url({% if book_cover %}{{book_cover}}{% else %}{% static 'img/chef_cover.jpg' %}{% endif %});">
+	                    		<div class="logo">{{chef.name}} {{chef.surname}}</div>
+	                    	</div>
+	                    	<h3>{{book.name}}</h3>
+		                    <p>{{book.description|safe}}</p>
+		                    {% comment %}
+		                    {% if not request.user.is_authenticated %}
+	                			<label>{% trans 'I already hace a NextChef Account:' %}</label><br>
+	                			<a href="#" class="btn" ng-click="showLoginBeforeBuyPopup()">{% trans 'Sign in and buy' %}</a><br>
+	               				<label>{% trans "I don't have a NextChef Account yet:" %}</label><br>
+	           					<a href="#" class="btn" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'Sign up and buy' %}</a><br>
+	           					<br><br><br>
+	                       	{% endif %}
+	                       	{% endcomment %}
+	                    </div>
+	                    <div class="modal-footer visible-xs-* hidden-sm hidden-md hidden-lg">
+	                        <a href="#" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+	                    </div>
+	                    {% comment %}
+	                    {% if request.user.is_authenticated %}
+		                    <div class="modal-footer visible-xs-* hidden-sm hidden-md hidden-lg">
+		                        <a href="#" ng-click="showBuyForm('{{book.name}}', '{% trans 'By Chef' %} {{book.chef.get_full_name}}', '{% trans 'ADD BOOK' %} {{book.price}}€', {{book_price}}, '{{chef_avatar}}')">{% trans 'ADD BOOK' %} {{book.price}}€</a>
+		                    </div>
+	                    {% endif %}
+	                    {% endcomment %}
+	                </div>
+	                
+	                <!-- MODAL TO LOGIN OR REIGSTER -->
+	                <div class="modal-content" ng-show="login_before_buy==true">
+	                	<div class="modal-body">
+	                		<table>
+		                		<tr>
+		                			<td class="image-td  hidden-xs" style="background-image:url({% if book_cover %}{{book_cover}}{% else %}{% static 'img/chef_cover.jpg' %}{% endif %});"></td>
+		                			<td>
+		                				<form method="post" action="{% url 'auth_login' %}">
+											{% csrf_token %}
+											<input type="hidden" name="next" value="{{request.path}}"/>
+											<input class="{% if form.username.errors %}error{% endif %}" 
+												maxlength="254" name="username" type="text" placeholder="{% trans 'Email' %}"><br>
+											{% if form.username.errors %}<div>{{ form.username.errors }}</div>{% endif %}
+											<input class="{% if form.password.errors %}error{% endif %}" 
+												name="password" type="password" placeholder="{% trans 'Password' %}"><br>
+											{% if form.password.errors %}<div>{{ form.password.errors }}</div>{% endif %}
+											<div>{{form.non_field_errors}}</div>
+											<button class="btn btn-primary">{% trans 'Sign in' %}</button><br>
+											<a href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a>
+										</form>
+		                			</td>
+		                		</tr>
+	                        </table>
+	                    </div>
+	                </div>
+	                
+	            </div>
+	        </div>
+        {% endif %}
+        
+        {% if already_bought %}
+        	<div id="already_bought_modal" class="modal fade gtm-event" role="dialog" data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<h2>{% trans 'You aready have this book!' %}</h2>
+									<a href="#" class="btn btn-link" data-dismiss="modal">OK</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        {% endif %}
+        
+        {% if buy_callback %}
+			<div id="buy_callback_modal" class="modal fade gtm-event" role="dialog" data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+				<div class="modal-dialog modal-md">
+					<div class="modal-content">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<h2>{% trans 'Let’s cook!' %}</h2>
+									<p><b>{{book.name}}</b> {% trans 'by' %} {{chef.get_full_name}}<br> {% trans 'has been added to your library.' %}</p>
+									{% if need_change_password %}
+										<p style="  padding-top: 0px;">{% trans 'Write a password to access your account and consult it.' %}</p>
+										<form method="post" action="{% url 'book_checkout_change_password' id=book.id %}">
+											{% csrf_token %} 
+											<input class="{% if form.new_password1.errors %}error{% endif %}" id="id_new_password1" name="new_password1" type="password" placeholder="{% trans 'Password..' %}">
+											{% if form.new_password1.errors %}<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ form.new_password1.errors }}</div>{% endif %}
+											<input class="{% if form.new_password2.errors %}error{% endif %}" id="id_new_password2" name="new_password2" type="password" placeholder="{% trans 'Password repeat..' %}">
+											{% if form.new_password2.errors %}<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ form.new_password2.errors }}</div>{% endif %}
+											<div class="">{{form.non_field_errors}}</div>
+											<input class="btn btn-link" type="submit" value="{% trans 'OK' %}" />
+										</form>
+										
+									{% elif need_login %}
+										<p style="  padding-top: 0px;">{% trans 'Access your account to consult it.' %}</p><br>
+										<button class="btn btn-fb gtm-event" ng-click="facebookCheck()" style="margin: 0px; width: 100%;"
+				        					data-gtme-category="Signin Popup" data-gtme-action="Click Signin" data-gtme-tag="signin">
+				        					{% trans 'Facebook' %}</button>
+				        				<button class="btn btn-link" ng-show="showBuyEmailLoginForm==false" ng-init="showBuyEmailLoginForm=false" ng-click="showBuyEmailLoginForm=true">Email</button>
+										<form method="post" action="{% url 'auth_login' %}" ng-show="showBuyEmailLoginForm">
+											{% csrf_token %}
+											<input type="hidden" name="next" value="{{ request.path }}"/>
+											<input class="{% if form.username.errors %}error{% endif %}" 
+												maxlength="254" name="username" type="text" placeholder="{% trans 'Email' %}">
+											{% if form.username.errors %}<div>{{ form.username.errors }}</div>{% endif %}
+											<input class="{% if form.password.errors %}error{% endif %}" 
+												name="password" type="password" placeholder="{% trans 'Password' %}">
+											{% if form.password.errors %}<div>{{ form.password.errors }}</div>{% endif %}
+											<div>{{form.non_field_errors}}</div>
+											<button class="btn btn-link">{% trans 'Sign In' %}</button>
+											<a href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a>
+										</form>
+										
+									{% else %}
+										<a href="#" class="btn btn-link" data-dismiss="modal">OK</a>
+										{% comment %}
+										<h2>{% trans 'Hi' %} {{request.user.name}},</h2>
+										<p>{% trans 'You just purchased the digital cookbook' %} {{book.name}},<br>
+										{% trans 'We hope you’ll enjoy the cooking with chef' %} {{chef.get_full_name}}.<br>
+										{% trans 'Don’t hesitate to comment his recipes and ask him questions!' %}<br><br>
+										{% trans 'Happy cooking!' %}</p>
+										{% endcomment %}
+									{% endif %}
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}	
+        
+	</div>
+
+{% endblock content %}

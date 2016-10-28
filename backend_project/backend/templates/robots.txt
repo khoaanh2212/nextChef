@@ -1,0 +1,12 @@
+Sitemap: http://nextchef.co/sitemap.xml
+User-agent: *
+Disallow: /embed/
+Disallow: /search/
+Disallow: /explore/following/
+Disallow: /recipe/create/
+Disallow: /recipe/detail/
+Disallow: /recipe/delete/
+Disallow: /recipe/love/
+Disallow: /recipe/edit/
+Disallow: /recipe/add/
+Disallow: /recipe/pdf/

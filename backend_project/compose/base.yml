@@ -1,0 +1,20 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.5.46
+    env_file:
+      - "config.env"
+    command: "--max_allowed_packet=512M"
+  elasticsearch:
+    image: theypsilon/docker-elasticsearch:1.2.4
+  redis:
+    image: theypsilon/docker-redis:2.4.18
+  web:
+    image: "$REGISTRY/nextchef:$TAG"
+    links:
+      - db:nextchef.db
+      - elasticsearch:nextchef.elasticsearch
+      - redis:nextchef.redis
+    env_file:
+      - "config.env"
+    command: "python /code/backend/runserver.py"

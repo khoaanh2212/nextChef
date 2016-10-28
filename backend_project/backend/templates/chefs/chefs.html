@@ -1,0 +1,120 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }}{% endblock title %}
+{% block description %}{{ block.super }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{ block.super }}{% endblock %}
+{% block fb_image %}{{ block.super }}{% endblock %}
+{% block fb_url %}{% endblock %}
+{% block fb_description %}{{ block.super }}{% endblock %}
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{ block.super }}{% endblock %}
+{% block tw_image %}{{ block.super }}{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        mixpanel.track("chefs");
+    </script>
+	<script src="{% static 'js/vendor/underscore-min.js' %}"></script>
+	<script src="{% static 'js/vendor/angular.js' %}"></script>
+	<script src="{% static 'js/vendor/angular-resource.js' %}"></script>
+	<script type="text/javascript">
+		var MORE_CHEFS_URL = '{{MORE_CHEFS_URL}}';
+        var DO_FOLLOW_URL = "{% url 'chefs_follow' %}";
+        {% if request.user.is_authenticated %}
+        var user_is_authenticated = true;
+        var follows_list = {{USER_LOVES_LIST}};
+        {% else %}
+        var user_is_authenticated = false;
+        {% endif %}
+	</script>
+	<script src="{% static 'js/chefs.js' %}"></script>
+    <script src="{% static 'js/chef_box.js' %}"></script>
+{% endblock %}
+
+{% block ng_app %}cookbooth.chefs.app{% endblock %}
+
+{% block content %}
+	
+	<div id="chefs">
+	
+		<div id="featured-chefs-carousel" class="carousel slide" data-ride="carousel">
+			<div class="carousel-inner">
+				{% for chef in chefs %}
+	    		<div class="item {% if forloop.first %}active{% endif %}" itemscope itemtype="https://schema.org/Person">
+
+                    <div class="image-wrapper">
+                        <div class="image-gradient"></div>
+                        {% with cover_thumb=chef.cover|thumbnail_url:'explore_cover' %}
+                        {% if cover_thumb %}
+                        <div class="image" style="background-image: url({{cover_thumb}})"></div>
+                        {% else %}
+                        <div class="image" itemprop="image" style="background-image: url({% static 'img/chef_cover.jpg' %});"></div>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="carousel-caption">
+                        <h1><a href="{% url 'recipe' slug=recipe.slug id=recipe.id %}">{{recipe.name}}</a></h1>
+                        <h2><a itemprop="name" href="{% url 'library' slug=chef.slug id=chef.id %}">{{chef.name}} {{chef.surname}}</a></h2>
+                    </div>
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		
+		<div class="navbar">
+			<div class="container">
+				<ul class="nav navbar-nav">
+					<li><a class="first {% if request.path == '/chefs/' %}active{% endif %}" href="{% url 'chefs' %}">{% trans 'ALL' %}</a></li>
+					<li><a class="{% if request.path == '/chefs/pro/' %}active{% endif %}" href="{% url 'chefs_pro' %}">{% trans 'CHEFS' %}</a></li>
+					<li><a class="{% if request.path == '/chefs/foodies/' %}active{% endif %}" href="{% url 'chefs_foodies' %}">{% trans 'FOODIES' %}</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="chefs-list">
+			<div class="container" ng-controller="ChefsController">
+				{% for chef in chefs %}
+					{% include "chefs/chef.html" %}
+				{% endfor %}
+				
+				{% verbatim %}
+				
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-repeat="chef in chefs">
+					<div id="id_chef_{{chef.id}}" class="chef {{chef.ty pe_class}}" itemscope itemtype="https://schema.org/Person">
+						<div class="image" style="background-image: url({{chef.cover}});">
+							<a itemprop="name" href="{{chef.url}}">{{chef.full_name}}</a>
+						</div> 
+						<div class="info-bar">
+							<div class="loves pull-left">
+								<p itemprop="follows">{{chef.loves}}</p>
+							</div>
+							<div class="avatar" style="background-image: url({{chef.photo}});">
+                                <div class="follow" ng-class="{following: is_following(chef.id)}" ng-click="do_follow(chef.id)"></div>
+							</div>
+							<div class="follows pull-right">
+								<p>{{chef.loves}}</p>
+							</div>
+						</div>
+						<p class="location" itemprop="address">{{chef.location}}</p>
+						<div class="description">
+							<div><p><a itemprop="description" href="{{chef.url}}">{{chef.short_bio}}</a></p></div>
+						</div>
+					</div>
+				</div>
+				{% endverbatim %}
+								
+				<div class="load-more">
+					<button class="btn" ng-click="loadChefs()">{% trans 'Load more' %}</button>
+					<img class="loader" src="{% static 'img/ajax-loader.gif' %}" style="display: none;">
+				</div>
+			</div>			
+		</div>
+		
+	</div>
+	
+{% endblock content %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}NextChef{% endblock title %}
+{% block description %}A global community of creative chefs and foodies.{% endblock %}
+
+{% block nav-bar-fixed-space %}
+    <div style="height: 120px"></div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript">
+        _Stripe = Stripe;
+        _Stripe.setPublishableKey("{{ STRIPE_KEY_PUBLIC }}");
+        {% if plan != None and amount != None%}
+        var PLAN_TYPE = '{{ plan.type }}';
+        var PLAN_INTERVAL = '{{ plan.interval }}';
+        var AMOUNT = {{ amount }};
+        var PLAN_ID = {{ plan.id }};
+        var DUE_DATE = '{{ due_date | date:"c" }}';
+        {% endif %}
+        var ERROR;
+        {% if error %}
+        ERROR = {{ error }};
+        {% endif %}
+
+        var GET_PLAN_URL = "{% url 'get_plan' %}";
+
+    </script>
+
+    <script src="{% static 'js/service/AjaxService.js' %}"></script>
+    <script src="{% static 'js/models/Stripe.js' %}"></script>
+    <script src="{% static 'js/models/Plan.js' %}"></script>
+    <script src="{% static 'js/models/PaymentModel.js' %}"></script>
+    <script src="{% static 'js/service/PresenterHandleCreator.js' %}"></script>
+    <script src="{% static 'js/presenters/PaymentPresenter.js' %}"></script>
+    <script src="{% static 'js/controllers/PaymentCtrl.js' %}"></script>
+
+{% endblock %}
+
+{% block ng_app %}payment{% endblock %}
+
+{% block content %}
+    <div id="payment-page" ng-controller="PaymentController" ng-init="fn.init()">
+        <div class="billing-summary">
+            <h1>BILLING SUMMARY</h1>
+
+            {% verbatim %}
+            <p>- You are buying the <strong>{{ plan.type }}</strong> plan
+                <a href="#" ng-click="fn.switchType()">Switch to {{ plan.nextType }}</a>
+            </p>
+
+            <p>- You are paying <strong>{{ plan.interval }}</strong>
+                <a href="#" ng-click="fn.switchInterval()">Switch to {{ plan.nextInterval }} </a>
+            </p>
+            <p>- You will pay <strong>£{{ plan.amount }}</strong></p>
+            <p class="note">The renewal is due on <strong>{{ plan.dueDate | date:'MMMM, dd yyyy' }}</strong></p>
+
+            {% endverbatim %}
+
+        </div>
+
+        <div class="billing-submission-form col-sm-12 col-md-6 col-lg-3 no-pd-lt">
+
+            <form id="billing-submission" name="billing-submission" method="POST" action="{% url 'submit-payment' %}"
+                  class="checkout-form">
+                {% csrf_token %}
+
+                <input type="text" name="plan_type" ng-model="plan.type" class="ng-hide"/>
+                <input type="text" name="plan_interval" ng-model="plan.interval" class="ng-hide" />
+                <input type="hidden" name="token" id="token"/>
+                <input type="hidden" name="last4" id="last4"/>
+                <input type="hidden" name="costingPage" id="costingPage"/>
+
+                {% verbatim %}
+                <div class="form-error">
+                    <div class="alert alert-danger" ng-repeat="error in errors">{{error.msg}}</div>
+                </div>
+                {% endverbatim %}
+
+                <div class="form-content">
+                    <div class="form-group">
+                        <div class="card-number-wrapper col-sm-12 no-pd">
+                            <label for="card-number">Card Number:</label>
+                            <input type="text" class="form-control card-number" ng-model="cardNumber" id="card-number"/>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="card-cvc-wrapper col-xs-4 no-pd-lt">
+                            <label for="card-cvc">CVC:</label>
+                            <input type="text" class="form-control card-cvc" ng-model="cardCVC" id="card-cvc"/>
+                        </div>
+
+                        <div class="card-expiry-wrapper col-xs-4 no-pd-lt no-pd-rt">
+                            <label for="card-expiry-month">Expiry:</label>
+                            <select class="form-control card-expiry card-expiry-month"
+                                    ng-model="cardExpiryMonth"
+                                    id="card-expiry-month"
+                                    name="expMonth"
+                                    style="height: 44px;">
+                                <option value="">Select month</option>
+                                <option ng-repeat="month in months track by $index" ng-value="month">
+                                    {% verbatim %}{{ month }}{% endverbatim %}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="card-expiry-wrapper col-xs-4 no-pd-rt">
+                            <label for="card-expiry-year" class="year">&nbsp;</label>
+                            <select class="form-control card-expiry card-expiry-year"
+                                    ng-model="cardExpiryYear"
+                                    id="card-expiry-year"
+                                    name="expYear"
+                                    style="height: 44px;">
+                                <option value="">Select year</option>
+                                <option ng-repeat="year in years track by $index" ng-value="year">
+                                    {% verbatim %}{{ year }}{% endverbatim %}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-button">
+                    <button type="button" ng-click="fn.submitPayment()" class="btn btn-success btn-large">COMPLETE YOUR
+                        PURCHASE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+{% endblock %}

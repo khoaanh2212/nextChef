@@ -1,0 +1,352 @@
+
+@import "bootstrap/bootstrap.less";
+@import "fonts.less";
+
+html{
+    width: 100%;
+    height: 450px;
+
+    body{
+        width: 100%;
+        height: inherit;
+        font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+        .logo{
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            z-index: 90;
+            opacity: 0.4;
+            filter: alpha(opacity=40);
+            -webkit-transition: opacity 300ms;
+            transition: opacity 300ms;
+
+            img{
+                width: 100px;
+                vertical-align: bottom;
+            }
+
+            &:hover{
+                opacity: 1;
+                filter: alpha(opacity=100);
+                -webkit-transition: opacity 300ms;
+                transition: opacity 300ms;
+            }
+        }
+
+        section {
+            width: inherit;
+            height: 450px;
+            position: relative;
+            overflow: hidden;
+
+            button {
+                padding: 0px;
+                margin: 0px;
+                position: absolute;
+                right: 35px;
+                top: 106px;
+                border: 0px;
+                background-image: url('../img/dropdown_icon.png');
+                background-position: center center;
+                background-repeat: no-repeat;
+                width: 13px;
+                height: 13px;
+                background-color: white;
+                outline: none;
+                -ms-transform: rotate(180deg);
+                -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
+                z-index: 36;
+
+                -webkit-transition: -webkit-transform 300ms;
+                transition: transform 300ms;
+
+                &.active {
+                    -ms-transform: rotate(0deg); /* IE 9 */
+                    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+                    transform: rotate(0deg);
+
+                    -webkit-transition: -webkit-transform 300ms;
+                    transition: transform 300ms;
+
+                    top: 320px;
+                }
+            }
+
+            article {
+                width: inherit;
+                height: inherit;
+                overflow-x: hidden;
+                overflow-y: auto;
+
+                &.ingredients {
+                    background-color: white;
+                    min-height: 50px;
+                    max-height: 280px;
+                    width: inherit;
+                    display: block;
+                    z-index: 20;
+                    padding: 40px;
+                    padding-top: 20px;
+                    border: 1px solid #e0e0e0;
+                    border-bottom: 0px;
+                    padding-left: 40px;
+                    padding-right: 40px;
+                    padding-bottom: 10px;
+                    position: relative;
+                    overflow-x: hidden;
+                    overflow-y: scroll;
+
+                    .ingredients-wrapper {
+
+                        h2 {
+                            color: #b0b0b0;
+                            font-size: 18px;
+                            text-transform: uppercase;
+                            font-weight: 300;
+                            text-decoration: none;
+                            padding-top: 2px;
+                            margin-top: 0px;
+                        }
+
+                        ul {
+                            list-style: none;
+                            padding: 0px;
+                            margin: 0px;
+
+                            li {
+                                display: block;
+                                border-bottom: 1px solid #e0e0e0;
+                                line-height: 40px;
+                                color: #000000;
+                                font-size: 18px;
+                                font-weight: 300;
+                                padding: 0px;
+                                margin: 0px;
+                            }
+                        }
+                    }
+
+                }
+
+                #steps-carousel {
+                    width: inherit;
+                    height: inherit;
+
+                    .glyphicon {
+                        position: absolute;
+                        top: 40%;
+                    }
+
+                    .carousel-control {
+                        z-index: 2;
+                    }
+
+                    .carousel-inner {
+                        width: inherit;
+                        height: inherit;
+
+                        .item {
+                            width: inherit;
+                            height: inherit;
+                            opacity: 0;
+                            transition-property: opacity;
+
+                            .recipe-title {
+                                width: inherit;
+                                min-height: 80px;
+                                background-color: #f0f0f0;
+                                border-top: 1px solid #e0e0e0;
+                                border-bottom: 1px solid #e0e0e0;
+                                z-index: 20;
+                                position: absolute;
+                                bottom: 0px;
+                                left: 0px;
+
+                                h1 {
+                                    text-align: center;
+                                    font-size: 20px;
+                                    height: inherit;
+                                    width: inherit;
+                                    line-height: 78px;
+                                    padding: 0px;
+                                    margin: 0px;
+                                    color: #727272;
+                                    font-weight: 300;
+                                    padding-right: 70px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    padding-left: 30px;
+                                    z-index: 20;
+                                    text-transform: uppercase;
+                                }
+
+                                a {
+                                    position: absolute;
+                                    right: 30px;
+                                    top: 30px;
+                                    color: #727272;
+
+                                    &:hover {
+                                        color: #828282;
+                                    }
+                                }
+                            }
+
+                            .cover {
+                                width: inherit;
+                                height: 370px;
+                                background-repeat: no-repeat;
+                                background-position: center center;
+                                background-size: cover;
+                                text-align: center;
+
+                                a {
+                                    z-index: 20;
+                                    position: relative;
+                                    font-family: 'Brisa Alternates';
+                                    font-size: 45px;
+                                    font-weight: 200;
+                                    color: white;
+                                    //background-image: url('../img/brand-circle.png');
+                                    background-repeat: no-repeat;
+                                    background-position: center center;
+                                    min-width: 300px;
+                                    min-height: 188px;
+                                    display: inline-block;
+                                    line-height: 188px;
+                                    text-decoration: none;
+                                    top: 40%;
+                                    margin-top: -94px;
+
+                                    &.pro {
+                                        //background-image: url('../img/brand-circle.png');
+                                    }
+                                }
+                            }
+
+                            .layout {
+                                height: 385px;
+                                position: absolute;
+                                top: 0px;
+                                left: 0px;
+                                width: inherit;
+                                height: inherit;
+                                background-color: black;
+                                opacity: 0;
+                                z-index: 1;
+
+                                &:hover {
+                                    opacity: 0.80;
+                                }
+                            }
+
+                            .image {
+                                height: 385px;
+                                position: absolute;
+                                top: 0px;
+                                left: 0px;
+                                width: inherit;
+                                height: inherit;
+                                background-repeat: no-repeat;
+                                background-position: center center;
+                                background-size: cover;
+
+                            }
+                            #button_instructions {
+                                padding: 0px;
+                                margin: 0px;
+                                position: absolute;
+                                right: 35px;
+                                top: 406px;
+                                z-index: 36;
+                                border: 0px;
+                                background-image: url('../img/dropdown_icon.png');
+                                background-position: center center;
+                                background-repeat: no-repeat;
+                                width: 13px;
+                                height: 13px;
+                                background-color: white;
+                                outline: none;
+
+                                -ms-transform: rotate(180deg);
+                                -webkit-transform: rotate(180deg);
+                                transform: rotate(180deg);
+
+                                -webkit-transition: -webkit-transform 300ms;
+                                transition: transform 300ms;
+
+                                &.active {
+                                    -ms-transform: rotate(0deg); /* IE 9 */
+                                    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+                                    transform: rotate(0deg);
+
+                                    -webkit-transition: -webkit-transform 300ms;
+                                    transition: transform 300ms;
+
+                                    top: 406px;
+                                }
+                            }
+
+                            .instructions {
+                                font-size: 18px;
+                                font-weight: 300;
+                                position: absolute;
+                                left: 0px;
+                                bottom: 0px;
+                                min-height: 65px;
+                                padding-top: 0px;
+                                padding-bottom: 0px;
+                                color: #2e2e2e;
+                                text-align: left;
+                                width: 100%;
+                                padding-right: 40px;
+                                padding-left: 40px;
+                                background-color: white;
+                                z-index: 10;
+                                border-bottom: 1px solid #e0e0e0;
+
+                                h2 {
+                                    font-weight: 300;
+                                    font-size: 30px;
+                                    color: #2e2e2e;
+                                    padding: 0px;
+                                    margin: 0px;
+                                    height: 65px;
+                                    line-height: 65px;
+                                    width: 50px;
+                                    display: block;
+                                }
+
+                                .instructions-text {
+                                    display: block;
+                                    padding-bottom: 20px;
+                                }
+                            }
+                        }
+                        .active {
+                            opacity: 1;
+                        }
+
+                        .active.left,
+                        .active.right {
+                            left: 0;
+                            opacity: 0;
+                            z-index: 1;
+                        }
+
+                        .next.left,
+                        .prev.right {
+                            opacity: 1;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+

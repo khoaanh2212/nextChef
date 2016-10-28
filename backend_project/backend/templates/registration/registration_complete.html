@@ -1,0 +1,15 @@
+{% extends "registration/base.html" %}
+{% load i18n %}
+
+{% block registration-content %}
+	<p>{% trans "Your library is almost ready." %}</p>
+    <p>{% trans "Activate your account following the link on the email we`ve just sent you." %}</p>
+    <a style="text-decoration: underline" href="{{request.user.url}}">{% trans 'Start exploring your profile' %}</a>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        mixpanel.track("registration_complete");
+    </script>
+{% endblock extra_js %}

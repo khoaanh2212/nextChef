@@ -1,0 +1,296 @@
+#bii_landing {
+  font-family: "GTHaptikLight", serif;
+  position: relative;
+  width: 100%;
+  //min-height: 1070px;
+  height: 100%;
+  overflow: hidden;
+  color: white;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url('../img/bii_landing/bii-main-background.png') no-repeat center;
+    background-size: cover;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+
+  @media (max-height: 900px) {
+    min-height: 700px;
+  }
+  @media (max-width: 480px) {
+    min-height: 840px;
+  }
+  @media (max-width: 320px) {
+    min-height: 900px;
+  }
+  .blackCover {
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+  .logo {
+    position: absolute;
+    top: 45px;
+    left: 45px;
+    @media (max-width: 480px) {
+      top: 100px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    @media (max-width: 320px) {
+      top: 100px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    img {
+      width: 70%;
+      @media (max-width: 768px) {
+        width: 120px;
+      }
+      @media (max-width: 480px) {
+        width: 120px;
+      }
+    }
+  }
+
+  .menu {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    @media (max-width: 480px) {
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    @media (max-width: 320px) {
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    li {
+      margin: 0 15px;
+      padding: 0;
+
+      a {
+        color: white;
+        font-size: 16px;
+        font-family: "GTHaptikBold", serif;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      &:hover,
+      &.active {
+        border-bottom: 5px solid white;
+      }
+
+      &.user {
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding-right: 25px;
+
+        span {
+          font-weight: 300;
+        }
+
+        .logout {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 30px;
+          height: 30px;
+          cursor: pointer;
+          background: url('../img/landing/icon-close-1.png');
+        }
+      }
+    }
+  }
+
+  .body {
+    position: absolute;
+    top: 190px;
+    left: 0;
+    right: 0;
+  }
+
+  .slogan {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 49px;
+    margin-bottom: 15px;
+    @media (max-width: 480px) {
+      margin-bottom: 50px;
+    }
+    @media (max-width: 320px) {
+      margin-bottom: 50px;
+    }
+    h1 {
+      font-size: 58px;
+      font-family: "GTHaptikBold", serif;
+      margin-bottom: 50px;
+      @media (max-width: 480px) {
+        font-size: 60px;
+        margin-bottom: 30px;
+      }
+      @media (max-width: 320px) {
+        font-size: 60px;
+        margin-bottom: 30px;
+      }
+      margin-bottom: 12px;
+      font-size: 56px;
+    }
+    div {
+      font-size: 24px;
+      line-height: 26px;
+      font-weight: 400;
+      @media (max-width: 480px) {
+        margin: 0 30px;
+      }
+      @media (max-width: 320px) {
+        margin: 0 30px;
+      }
+      @media (min-width: 1200px) {
+        font-size: 18px;
+      }
+      font-family: "GTHaptikBold", serif;
+    }
+  }
+  .icon {
+    min-height: 140px;
+    margin: 8px 0 37px 0;
+    @media (max-width: 1024px) {
+      margin: 59px 0 120px 0;
+    }
+    .image-style {
+      height: 112px;
+      background-size: auto 100%;
+      @media (min-width: 1200px) {
+        background-size: 100px !important;
+      }
+    }
+    .text-center {
+      @media (max-width: 768px) {
+        padding-top: 15px;
+      }
+    }
+    .title {
+      margin-top: -8px;
+      .logo-check {
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        background: url("../img/bii_landing/check-bii-icon.png") no-repeat center;
+        background-size: 28px;
+      }
+      .title-detail {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 40px;
+        font-family: LacrimaMG-SenzaBold;
+        vertical-align: bottom;
+      }
+    }
+    .first-image {
+      background: url("../img/bii_landing/visual-recipe-cloud.png") no-repeat center;
+    }
+    .second-image {
+      background: url("../img/bii_landing/menu-creation.png") no-repeat center;
+    }
+    .third-image {
+      background: url("../img/bii_landing/team-training.png") no-repeat center;
+    }
+    .fourth-image {
+      background: url("../img/bii_landing/online-promotion.png") no-repeat center;
+      background-size: 70px !important;
+    }
+  }
+
+  .video {
+    display: block;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 50px;
+
+    span {
+      display: inline-block;
+      position: relative;
+      padding-right: 35px;
+      font-size: 20px;
+      font-family: "GTHaptikBold", serif;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: url('../img/landing/icon-arrow-right.png') no-repeat center;
+        width: 18px;
+        height: 28px;
+      }
+    }
+  }
+
+  .email-register {
+    display: block;
+    width: 100%;
+    text-align: center;
+    @media (max-width: 320px) {
+      margin-bottom: 60px;
+    }
+    @media (max-width: 480px) {
+      margin-bottom: 60px;
+    }
+    input {
+      display: inline-block;
+      border: 0;
+      vertical-align: top;
+      margin-right: 10px;
+      width: 250px;
+      font-size: 15px;
+      height: 36px;
+      text-align: center;
+      @media (max-width: 320px) {
+        width: auto;
+        margin: 0 0 10px;
+        text-align: center;
+      }
+      @media (max-width: 480px) {
+        width: auto;
+        margin: 0 0 10px;
+        text-align: center;
+      }
+    }
+
+    button {
+      vertical-align: top;
+      display: inline-block;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      background: #f5e920;
+      &:hover {
+        color: black;
+      }
+      height: 36px;
+      font-size: 14px;
+      line-height: 36px;
+      min-width: 120px;
+      width: 128px;
+    }
+  }
+}

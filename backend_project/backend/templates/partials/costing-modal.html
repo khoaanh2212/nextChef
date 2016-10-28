@@ -1,0 +1,26 @@
+<div class="modal fade" id="costing-modal" ng-controller="CostingAddController" ng-init="fn.onLoad();"
+     data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form name="AddForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Ingredient</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="costing-modal">
+                        <div id="addCostingTable" class="table-responsive"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cancel" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button id="btn-add" type="button" class="btn btn-primary"
+                            ng-click="fn.onSave()">Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

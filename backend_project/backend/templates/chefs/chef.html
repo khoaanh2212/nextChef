@@ -1,0 +1,36 @@
+{% load thumbnail %}
+{% load staticfiles %}
+
+<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+	<div id="id_chef_{{chef.id}}" class="chef {% if chef.type == 1 %}pro{% endif%}" itemscope itemtype="https://schema.org/Person">
+
+            {% with chef_cover=chef.cover %}
+                {% if chef_cover %}
+                <div class="image" style="background-image: url({{chef_cover|thumbnail_url:'chefs_box'}})">
+                {% else %}
+                <div class="image" style="background-image: url({% static 'img/chef_avatar.jpg' %});">
+                {% endif %}
+            {% endwith %}
+			<a itemprop="name" href="{% url 'library' slug=chef.slug id=chef.id %}">{{chef.name}} {{chef.surname}}</a>
+		</div> 
+		<div class="info-bar">
+			<div class="loves pull-left">
+				<p>{{chef.cache_likes}}</p>
+			</div>
+			<div class="avatar" itemprop="image" style="background-image: url({{chef.photo}});">
+                {% if request.user.is_authenticated %}
+                    <div class="follow {% if request.user.is_authenticated and chef.id in USER_FOLLOWS_LIST %}following{% endif %}" onclick="follows_do_follow({{chef.id}})"></div>
+                {% else %}
+                    <div class="follow"></div>
+                {% endif %}
+			</div>
+			<div class="follows pull-right">
+				<p>{{chef.followed.count}}</p>
+			</div>
+		</div>
+		<p class="location" itemprop="address" >{{chef.location}}</p>
+		<div class="description">
+			<div><p><a itemprop="description" href="{% url 'library' slug=chef.slug id=chef.id %}">{% if chef.short_bio != None %}{{chef.short_bio}}{% endif %}</a></p></div>
+		</div>
+	</div>
+</div>

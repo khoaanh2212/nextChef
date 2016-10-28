@@ -1,0 +1,618 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load cache %}
+
+{% block title %}{{ chef.name }} {{chef.surname}}{% endblock title %}
+{% block description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+
+{% block fb_title %}{% trans 'Chef' %}: {{ chef.name }} {{chef.surname}} | {{ block.super }} {% endblock %}
+{% block fb_image %}
+    {% cache 300 photo chef.id %}
+        {{ chef.photo }}
+    {% endcache %}
+{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }} {% trans 'Chef' %}: {{ chef.name }} {{chef.surname}}{% endblock %}
+{% block tw_description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+{% block tw_image %}
+    {% cache 300 photo chef.id %}
+        {{ chef.photo }}
+    {% endcache %}
+{% endblock %}
+
+{% block extra_js %}
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script type="text/javascript">
+    	var CHEF_ID = {{chef.id}};
+    	var BOOKS = {{books|safe}};
+    	var DRAFTS = {{drafts|safe}};
+        var RECIPES = {{recipes|safe}};
+        var RECIPES_COUNT = {{recipes_count}};
+    	{% if restaurant and restaurant.latitude and restaurant.longitude %}
+		   	var RESTAURANT_LATITUDE = {{restaurant.latitude}};
+		   	var RESTAURANT_LONGITUDE = {{restaurant.longitude}};
+		{% else %}
+		   	var RESTAURANT_LATITUDE = '';
+		   	var RESTAURANT_LONGITUDE = '';
+		{% endif %}
+
+    	var USER_AUTHENTICATED = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+        var USER_ID = {% if request.user.is_authenticated %}{{request.user.id}}{% else %}-1{% endif %};
+    	var USER_LOVES_LIST = {{USER_LOVES_LIST}};
+    	var USER_FOLLOWS_LIST = {{USER_FOLLOWINGS_LIST}};
+        var CHEF_FOLLOWERS_COUNT = {{chef_followers_count}};
+	</script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/models/Chef.js' %}"></script>
+	<script src="{% static 'js/models/Book.js' %}"></script>
+	<script src="{% static 'js/filters/ChefFilter.js' %}"></script>
+	<script src="{% static 'js/controllers/RecipesListCtrl.js' %}"></script>
+    <script src="{% static 'js/models/BookModel.js' %}"></script>
+    <script src="{% static 'js/presenters/BookPresenter.js' %}"></script>
+	<script src="{% static 'js/controllers/BooksCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/LibraryCtrl.js' %}"></script>
+
+    <script src="{% static 'js/service/AjaxService.js' %}"></script>
+
+    <script src="{% static 'js/service/PresenterHandleCreator.js' %}"></script>
+	<script src="{% static 'js/controllers/BookModalCtrl.js' %}"></script>
+	<script src="{% static 'js/presenters/BookModalPresenter.js' %}"></script>
+	<script src="{% static 'js/models/BookModalModel.js' %}"></script>
+{% endblock extra_js %}
+
+{% block ng_app %}library{% endblock %}
+
+{% block content %}
+	<div class="container-fluid library" itemscope itemtype="https://schema.org/Person">
+
+        <div ng-controller="LibraryController" ng-init="message_content='{{message_content}}';message_type='{{message_type}}';alertToaster()">
+
+            <div id="library_controller" class="row header" ng-mouseleave="restaurantActive=false;">
+
+                <div class="col-sm-4 col-md-3 sidebar {% if chef.is_chef %}pro{% endif %}">
+                    {% with avatar_thumb=chef_avatar %}
+                        {% if avatar_thumb %}
+                            <img id="library_avatar" class="avatar {% if chef.is_chef and not restaurant and not chef.web %}no-restaurant-location{% elif not chef.is_chef and not chef.web and not chef.location %}no-restaurant{% endif %}" itemprop="image" src="{{avatar_thumb}}">
+                        {% else %}
+                            <img id="library_avatar" class="avatar" itemprop="image" src="{% static 'img/chef_avatar.jpg' %}">
+                        {% endif %}
+                    {% endwith %}
+                    <h1 itemprop="name">{{chef.name}} {{chef.surname}}</h1>
+                    {% if chef.is_chef %}
+
+{#                        {% if chef.role and chef.role != '' %}#}
+{#                            <h2 itemprop="description">{{chef.role}}</h2>#}
+{#                        {% else %}#}
+{#                            <h2 itemprop="description">{% trans 'Pro' %}</h2>#}
+{#                        {% endif %}#}
+
+                        {% if restaurant and restaurant.name != None and restaurant.city != None and restaurant.name != '' and restaurant.city != '' %}
+                            <div class="restaurant" ng-class="{active:restaurantActive, hasLocation:restaurantLoc}" ng-mouseover="restaurantActive=true;">
+                                {% comment %}
+                                <div class="restaurant-info data restaurant-info-chef" ng-class="{active:restaurantActive==true, hasLocation:restaurantLoc}">
+                                    {% with avatar_thumb=chef_base_avatar %}
+                                        {% if avatar_thumb %}
+                                            <img class="data-avatar" src="{{avatar_thumb}}"/>
+                                        {% else %}
+                                            <img class="data-avatar" src="{% static 'img/chef_avatar.jpg' %}"/>
+                                        {% endif %}
+                                    {% endwith %}
+                                    <div class="chef-text">
+                                        <h3 itemprop="name">{{ chef.name }} {{ chef.surname }}</h3>
+                                        <hr>
+{#                                        {% if chef.role and chef.role != '' %}#}
+{#                                            <h3 itemprop="description">{{ chef.role }}</h3>#}
+{#                                        {% else %}#}
+{#                                            <h3 itemprop="description">{% trans 'Pro' %}</h3>#}
+{#                                        {% endif %}#}
+                                    </div>
+                                </div>
+                                {% endcomment %}
+                                <div class="restaurant-info data" ng-hide="restaurantActive==true && restaurantLoc==true">
+                                    <h3>{{ restaurant.name|default_if_none:"" }}</h3>
+                                    <hr>
+                                    <a href="http://{{ chef.web }}" target="_blank">{{ chef.web|default_if_none:"" }}</a>
+                                </div>
+                                <div id="map_canvas" class="map" ng-show="restaurantLoc"></div>
+                            </div>
+                        {% elif chef.web and chef.web != '' %}
+                            <div class="restaurant">
+                                <div class="restaurant-info">
+                                    <br>
+                                    <a href="http://{{ chef.web }}" target="_blank">{{ chef.web }}</a>
+                                 </div>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+{#                        <h2 itemprop="description">Foodie</h2>#}
+                        {% if chef.web or chef.location %}
+                        <div class="restaurant">
+                            <div class="restaurant-info">
+                                {% if chef.web and chef.web != '' %}
+                                    <h3>{{ chef.location }}</h3>
+                                    <hr>
+                                    <a href="http://{{ chef.web }}" target="_blank">{{ chef.web }}</a>
+                                {% elif chef.location %}
+                                    <br>
+                                    <h3>{{ chef.location }}</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    <ul class="social">
+                        {% if chef.facebook_page %}
+                            <li><a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Social" data-gtme-tag="facebook" href="http://{{ chef.facebook_page }}" target="_blank"><img src="{% static 'img/facebook-page-icon.png' %}"></a></li>
+                        {% endif %}
+                        {% if chef.twitter_page %}
+                            <li><a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Social" data-gtme-tag="twitter" href="http://{{ chef.twitter_page }}" target="_blank"><img src="{% static 'img/twitter-page-icon.png' %}"></a></li>
+                        {% endif %}
+                        {% if chef.instagram_page %}
+                            <li><a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Social" data-gtme-tag="instagram" href="http://{{ chef.instagram_page }}" target="_blank"><img src="{% static 'img/instagram-page-icon.png' %}"></a></li>
+                        {% endif %}
+                        {% if chef.pinterest_page %}
+                            <li><a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Social" data-gtme-tag="pinterest" href="http://{{ chef.pinterest_page }}" target="_blank"><img src="{% static 'img/pinterest-page-icon.png' %}"></a></li>
+                        {% endif %}
+                        {% if chef.linkedin_page %}
+                            <li><a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Social" data-gtme-tag="linkedin" href="http://{{ chef.linkedin_page }}" target="_blank"><img src="{% static 'img/linkedin-page-icon.png' %}"></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="col-sm-8 col-md-9 main hidden-xs">
+                    <div class="chef-info" id="library_edit_profile-tooltip-wrapper">
+                        {% with cover_thumb=chef_cover %}
+                            {% if cover_thumb %}
+                                <div class="cover" style="background-image: url({{cover_thumb}});"></div>
+                                <!-- div class="cover blur" style="background-image: url({{cover_thumb}});"></div> -->
+                            {% else %}
+                                {% with best_recipe_cover_thumb=chef.best_recipe.cover|thumbnail_url:'library_cover' %}
+                                    {% if best_recipe_cover_thumb %}
+                                        <div class="cover" style="background-image: url({{best_recipe_cover_thumb}});"></div>
+                                        <!-- div class="cover blur" style="background-image: url({{best_recipe_cover_thumb}});"></div> -->
+                                    {% else %}
+                                        <div class="cover" style="background-image: url({% static 'img/chef_cover.jpg' %});"></div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        {% endwith %}
+                        <div class="gradient"></div>
+                        <div class="info">
+                            <p><b>{% if chef.short_bio %}{{chef.short_bio}}{% endif %}</b></p>
+                            <p class="description"><small>{% if chef.description %}{{chef.description}}{% endif %}</small></p>
+                            <hr>
+                            <ul>
+                                <li class="pull-left">
+                                    <a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Following" data-gtme-tag="list_following" ng-click="showFollowing()">
+                                        <b>
+                                            {{chef_following_count}}
+                                        </b>
+                                        {% trans 'Following' %}
+                                    </a>
+                                </li>
+                                <li class="pull-left">
+                                	<a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Followers" data-gtme-tag="list_followers" ng-click="showFollowers()">
+                                		<b ng-init="followersCount={{chef_followers_count}}">
+                                			{% verbatim %}{{followersCount}}{% endverbatim %}
+                                		</b>
+                                		{% trans 'Followers' %}
+                                	</a>
+                                </li>
+                                {% if request.user != chef %}
+                                <li class="pull-right" ng-hide="chef.followed" ng-click="follow(chef)">
+                                	<a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Follow" data-gtme-tag="follow">{% trans '+ Follow' %}</a>
+                                </li>
+                                <li class="pull-right" ng-show="chef.followed" ng-click="follow(chef)"><a>{% trans '- Unfollow' %}</a></li>
+                                {% else %}
+                                <li class="pull-right" ng-click="edit_profile()"><a id="library_edit_profile" class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Edit" data-gtme-tag="edit" href="#" data-toggle="modal" data-target="#edit_profile_modal">{% trans 'Edit' %}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if chef.is_chef %}
+                        {% if restaurant %}
+                            <div class="restaurant-info" ng-class="{active: restaurantActive}">
+                                {% with cover_thumb=restaurant_image %}
+                                    {% if cover_thumb %}
+                                        <div class="cover" style="background-image: url({{cover_thumb}});"></div>
+                                    {% else %}
+                                        <div class="cover" style="background-image: url({% static 'img/chef_cover.jpg' %});"></div>
+                                    {% endif %}
+                                {% endwith %}
+                                <div class="gradient"></div>
+                                <div class="info">
+                                    <p><b>{{restaurant.name}}</b></p>
+                                    <p><small>{{chef.location}}</small></p>
+                                    <hr>
+                                    <ul>
+                                        <li class="pull-left"><p>{{restaurant.address}} {% if restaurant.phone != None %}- {{restaurant.phone}}{% endif %}</p></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+                {% if request.user == chef %}
+                        {% include 'library/edit_modal.html' %}
+                {% endif %}
+            </div>
+            {% verbatim %}
+            <div class="row followers" ng-class="{active:followersActive, loading: followersLoading}" ng-mouseleave="followersActive=false">
+                <ul>
+                    <li ng-repeat="follower in chef.followers" ng-hide="follower.id==userId">
+                        <img ng-src="{{follower.thumb}}"/>
+                        <div class="chef-info">
+                            <span class="loves">{{follower.cache_likes}}</span>
+                            <span class="follows">{{follower.nb_followers}}</span>
+                            <hr>
+                            <a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Follow" data-gtme-tag="follow_follower" ng-hide="follower.followed" ng-click="follow(follower)">+ Follow</a>
+                            <a ng-show="follower.followed" ng-click="follow(follower)">- Unfollow</a>
+                        </div>
+                        <a class="library-link" href="{{ follower.url }}">{{ follower.name }} {{ follower.surname }}</a>
+                    </li>
+                </ul>
+                <a class="close" ng-click="showFollowers()">
+                    <img ng-src="/static/img/fullframe-close-icon-dark.png"/>
+                </a>
+            </div>
+            {% endverbatim %}
+
+            {% verbatim %}
+            <div class="row following" ng-class="{active:followingActive, loading: followingLoading}" ng-mouseleave="followingActive=false">
+                <ul>
+                    <li class="chef-wrapper" ng-repeat="following in chef.following" ng-hide="following.id==userId">
+                        <img ng-src="{{following.thumb}}"/>
+                   		<div class="chef-info">
+                            <span class="loves">{{following.cache_likes}}</span>
+                            <span class="follows">{{following.nb_followers}}</span>
+                            <hr>
+                            <a class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Follow" data-gtme-tag="follow_following" ng-hide="following.followed" ng-click="follow(following)">+ Follow</a>
+                            <a ng-show="following.followed" ng-click="follow(following)">- Unfollow</a>
+                        </div>
+                        <a class="library-link" href="{{ following.url }}">{{ following.name }} {{ following.surname }}</a>
+                    </li>
+                </ul>
+                <a class="close" ng-click="showFollowing()">
+                    <img ng-src="/static/img/fullframe-close-icon-dark.png"/>
+                </a>
+            </div>
+            {% endverbatim %}
+        </div>
+
+		<div class="clearfix"></div>
+
+		<div id="books_controller" class="row content" ng-controller="BooksController">
+	         <div class="col-sm-4 col-md-3 sidebar affix-sidebar hidden-xs">
+
+	             <div class="chef-data {% if chef.type == 1 %}pro{% endif %}">
+	                 {% with avatar_thumb=chef_base_avatar %}
+	                     {% if avatar_thumb %}
+	                         <img class="data-avatar" src="{{avatar_thumb}}"/>
+	                     {% else %}
+	                         <img class="data-avatar" src="{% static 'img/chef_avatar.jpg' %}"/>
+	                     {% endif %}
+	                 {% endwith %}
+	                 <div class="chef-text">
+	                     <h3 itemprop="name">{{ chef.name }} {{ chef.surname }}</h3>
+	                     <hr>
+{#                         {% if chef.type == 1 %}#}
+{#                             {% if chef.role and chef.role != '' %}#}
+{#                                 <h3 itemprop="description">{{ chef.role }}</h3>#}
+{#                             {% else %}#}
+{#                                 <h3 itemprop="description">{% trans 'Pro' %}</h3>#}
+{#                             {% endif %}#}
+{#                         {% else %}#}
+{#                             <h3 itemprop="description">{% trans 'Foodie' %}</h3>#}
+{#                         {% endif %}#}
+	                 </div>
+	             </div>
+
+	             <div class="scrollable-list">
+	                 <ul>
+	                     <li class="recipes-list">
+	                         {% if request.user == chef %}
+	                             <div id="library_recipe_title" class="list-title" ng-click="recipesListActive = !recipesListActive" ng-init="recipesListActive=true">
+	                                 <div class="recipes-title">{% trans 'Recipes' %}</div>
+	                                 {% verbatim %}<small class="recipes-counter">{{chefRecipesCount + drafts.length}}</small>{% endverbatim %}
+	                             </div>
+	                             <ul ng-class="{active: recipesListActive == true}">
+	                                 <li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Recipes" data-gtme-tag="select_recipes" ng-click="showChefRecipes()" ng-class="{active: currentBookId=='chefRecipes'}">
+	                                     <b>{% trans 'Recipes' %}</b>
+	                                     {% verbatim %}<small class="pull-right">{{chefRecipesCount}}</small>{% endverbatim %}
+	                                 </li>
+	                                 <li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Drafts" data-gtme-tag="select_drafts" ng-click="showDrafts()" ng-class="{active: currentBookId=='drafts'}">
+	                                     <b>{% trans 'Drafts' %}</b>
+	                                     {% verbatim %}<small class="pull-right">{{drafts.length}}</small>{% endverbatim %}
+	                                 </li>
+                                    <li class="gtm-event" ng-click="redirectTo('/kitchen/')">
+                                         <b>{% trans 'ADD A RECIPE' %}</b>
+                                         <small class="pull-right">+</small>
+	                                 </li>
+	                             </ul>
+	                         {% else %}
+	                             <div class="list-title gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Recipes" data-gtme-tag="select_recipes" ng-click="showChefRecipes()">
+	                                 <div class="recipes-title">{% trans 'Recipes' %}</div>
+	                                 {% verbatim %}<small class="recipes-counter">{{chefRecipesCount}}</small>{% endverbatim %}
+	                             </div>
+	                         {% endif %}
+	                     </li>
+	                     <li class="books-list">
+	                         <div class="list-title" ng-click="booksListActive = !booksListActive" ng-init="booksListActive=true">
+	                             <div class="books-title">{% trans 'Books' %}</div>
+	                             {% verbatim %}<small class="books-counter">{{books.length}}</small>{% endverbatim %}
+	                         </div>
+
+	                         <ul ng-class="{active: booksListActive == true}">
+	                             <li class="book gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Books" data-gtme-tag="select_books"
+                                     ng-repeat="book in books" ng-click="showBookRecipes(book)" ng-class="{active: currentBookId==book.id, tosell: book.book_type=='S'}">
+	                                 <b><i class="fa fa-lock" ng-if="book.private" aria-hidden="true"></i>
+                                         {% verbatim %}{{book.name}}{% endverbatim %}</b>
+	                                 {% if request.user == chef %}
+	                                     <small class="pull-right options" ng-if="book.chef==chefId">
+	                                         <span class="glyphicon glyphicon-pencil gtm-event" data-gmte-category="Library Books"
+                                                   data-gtme-action="Click Edit Book" data-gtme-tag="change_book_name"
+                                                   ng-click="setBookToEdit(book);" ng-hide="book.book_type=='S'"
+                                                   data-toggle="modal" data-target="#edit_book_modal"></span>
+	                                         <span class="glyphicon glyphicon-trash gtm-event" data-gmte-category="Library Books"
+                                                   data-gtme-action="Click Edit Book" data-gtme-tag="delete_book"
+                                                   ng-click="setBookToDelete(book)" ng-hide="book.book_type=='S'"
+                                                   data-toggle="modal" data-target="#delete_book_modal"></span>
+	                                     </small>
+	                                     <small class="pull-right nb-recipes">{% verbatim %}{{book.nb_recipes}}{% endverbatim %}</small>
+	                                 {% else %}
+	                                     <small class="pull-right" ng-hide="book.book_type=='S'">{% verbatim %}{{book.nb_recipes}}{% endverbatim %}</small>
+	                                     <small class="pull-right" ng-show="book.book_type=='S'">{% verbatim %}{{book.price}}€{% endverbatim %}</small>
+	                                 {% endif %}
+	                                 <div class="loading" ng-show="loadingRecipes"></div>
+	                             </li>
+	                             {% if request.user == chef %}
+	                                 <li class="book gtm-event"
+                                         data-gmte-category="Library Books"
+                                         data-gtme-action="Click Edit Book"
+                                         data-gtme-tag="add_book"
+                                         data-toggle="modal"
+                                         data-target="#book_modal"
+                                         ng-click="initAddBookModal()">
+	                                     <b>{% trans 'ADD A BOOK' %}</b>
+	                                     <small class="pull-right">+</small>
+	                                 </li>
+	                             {% endif %}
+	                         </ul>
+	                     </li>
+	                 </ul>
+	             </div>
+			</div>
+
+			<div class="col-sm-8 col-md-9 main affix-main" ng-controller="RecipesListController">
+
+				<div class="col-xs-12 visible-xs-* hidden-sm hidden-md hidden-lg" style="padding:0px;">
+					<select ng-change="showBookRecipesById(selectedBook)" ng-model="selectedBook" ng-init="selectedBook='allrecipes'">
+						<option value="allrecipes">ALL RECIPES</option>
+						{% verbatim %}
+						<option ng-repeat="book in books" value="{{book.id}}">{{book.name}}</option>
+						{% endverbatim %}
+					</select>
+				</div>
+
+				<div class="loading" ng-show="loadingRecipes"></div>
+
+				<ul class="col-xs-12 col-sm-12 col-md-12 col-lg-12 filters-list hidden-xs">
+					<li>
+						<div class="dropdown">
+							{% verbatim %}
+							<button class="btn btn-default dropdown-toggle" type="button" id="filterPopular" data-toggle="dropdown" ng-init="currentFilter = 'all'">
+						    	<small ng-model="currentFilterName">{{currentFilterName}}</small><span class="caret"></span>
+						  	</button>
+						  	{% endverbatim %}
+						  	<ul class="dropdown-menu" ng-init="currentFilterName = '{% trans 'All' %}'; recipesFilterDifferent = 0;">
+						    	<li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Filter" data-gtme-tag="all_recipes" ng-click="currentFilterName = '{% trans 'All' %}'; recipesFilterDifferent = 0;">{% trans 'All' %}</li>
+						    	{% if request.user == chef %}
+						    		<li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Filter" data-gtme-tag="mine_recipes" ng-click="currentFilterName = '{% trans 'Mine' %}'; recipesFilterDifferent = -1;">{% trans 'Mine' %}</li>
+						    	{% else %}
+						    		<li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Filter" data-gtme-tag="own_recipes" ng-click="currentFilterName = '{% trans 'Own' %}'; recipesFilterDifferent = -1;">{% trans 'Own' %}</li>
+						    	{% endif %}
+						    	<li class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Filter" data-gtme-tag="others_recipes" ng-click="currentFilterName = '{% trans 'Others' %}'; recipesFilterDifferent = 1">{% trans "Others" %}</li>
+						  	</ul>
+						</div>
+
+					</li>
+					<li class="pull-right"><input class="gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Search" data-gtme-tag="search_recipe" type="text" placeholder="Search.." ng-model="recipesFilter.name"></li>
+
+				</ul>
+
+				<div class="recipes-list">
+					{% verbatim %}
+					<div id="id_recipe_{{recipe.id}}" class="recipe-box {{recipe.chef_type}}" itemscope itemtype="http://schema.org/Recipe" ng-repeat="recipe in currentRecipes | chefFilter: chefId:recipesFilterDifferent | filter:recipesFilter" ng-class="{xmas:recipe.has_christmas_tag}">
+						<div class="image" itemprop="photo" ng-style="imageStyle" ng-init="imageStyle={'background-image':'url({{recipe.image_url}})'}">
+							<a class="logo" itemprop="author" href="{{recipe.recipe_url}}">{{recipe.chef_full_name}}</a>
+							<a href="{{recipe.recipe_url}}" class="xmas-icon" ng-class="recipe.xmasClass" ng-hide="!recipe.has_christmas_tag"></a>
+						</div>
+						<div class="info" ng-init="LCommentsActive=false; HasComments=(recipe.last_comments.length > 0);" ng-mouseleave="LCommentsActive=false">
+							<div class="description">
+								<div ng-class="{draft: recipe.draft}"><p><a class="gtm-event" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name" itemprop="name" href="{{recipe.recipe_url}}">{{ recipe.getShortName() }}</a></p></div>
+							</div>
+                            <div class="delete-draft" ng-show="recipe.draft">
+                                <button ng-click="setDraftToDelete(recipe)" class="btn btn-link gtm-event" data-toggle="modal" data-target="#delete_draft_modal" data-gtme-category="Recipe Box" data-gtme-action="Click Delete" data-gtme-tag="delete_draft">{% endverbatim %}{% trans 'Delete' %}{% verbatim %}</button>
+                            </div>
+                            <div class="delete-draft" ng-show="recipe.private">
+                                <img src="{% endverbatim %}{% static 'img/library/lock.png' %}{% verbatim %}">
+                            </div>
+							<div class="social" ng-hide="recipe.draft||recipe.private">
+								<p class="nb-likes gtm-event" ng-hide="LCommentsActive==true" data-gtme-category="Recipe Box" data-gtme-action="Click Social" data-gtme-tag="love_recipe" ng-class="{loved: recipe.loved}" ng-click="loveRecipe(recipe)">{{recipe.nb_likes}}</p>
+								<p class="nb-comments gtm-event" ng-hide="LCommentsActive==true || currentBook.book_type=='S'" ng-mouseover="LCommentsActive=HasComments" data-gtme-category="Recipe Box" data-gtme-action="Click Social" data-gtme-tag="comment_recipe" ng-click="commentRecipe(recipe)">{{recipe.nb_comments}}</p>
+								<p class="nb-added gtm-event" ng-hide="LCommentsActive==true || currentBook.book_type=='S'" data-gtme-category="Recipe Box" data-gtme-action="Click Social" data-gtme-tag="add_recipe" ng-click="addRecipe(recipe)">{{recipe.nb_added}}</p>
+								<p class="nb-shares gtm-event" ng-hide="LCommentsActive==true || currentBook.book_type=='S'" data-gtme-category="Recipe Box" data-gtme-action="Click Social" data-gtme-tag="share_recipe">{{recipe.nb_shares}}</p>
+
+								<ul class="comments" ng-mouseleave="LCommentsActive=false" ng-show="LCommentsActive==true && currentBook.book_type!='S'">
+									<li class="comment" ng-repeat="comment in recipe.last_comments">
+										<a class="anchor" href="{{comment.chef_url}}">
+										    <div class="avatar" ng-style="avatarStyle" ng-init="avatarStyle={'background-image':'url({{comment.chef_avatar}})'}"></div>
+										    <ul class="text">
+										        <li class="name">{{comment.chef_name}}</li>
+										        <li class="comment_line">{{comment.comment}}</li>
+										    </ul>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					{% endverbatim %}
+				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 load-more">
+					<button class="btn btn-gray gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Recipes" data-gtme-tag="load_more" ng-show="currentBookId=='chefRecipes' && loadingMore == false && chefRecipesCount>chefRecipes.length" ng-click="loadMoreChefRecipes()">{% trans 'Load More' %}</button>
+                    <button class="btn btn-gray gtm-event" data-gmte-category="Library Books" data-gtme-action="Click Books" data-gtme-tag="load_more" ng-show="currentBookId!='chefRecipes' && loadingMore == false && bookRecipesTotal>bookRecipesCount" ng-click="loadMoreBookRecipes(currentBookId)">{% trans 'Load More' %}</button>
+					<img ng-hide="loadingMore == false" class="loader" src="{% static 'img/ajax-loader.gif' %}">
+				</div>
+			</div>
+			{% if request.user == chef %}
+{#				<div id="add_book_modal" class="modal fade" tabindex="-1" role="dialog">#}
+{#					<div class="modal-dialog modal-md">#}
+{#						<div class="modal-content">#}
+{#							<div class="modal-header">#}
+{#								<button type="button" class="close" data-dismiss="modal">#}
+{#									<span aria-hidden="true">&times;</span>#}
+{#									<span class="sr-only">{% trans 'Close' %}</span>#}
+{#								</button>#}
+{#								<h4 class="modal-title">{% trans 'Add a new book' %}</h4>#}
+{#							</div>#}
+{#							<div class="modal-body">#}
+{#                                <div class="col-xs-12" style="padding: 15px;">#}
+{#                                    <div class="form-group">#}
+{#                                        <label>Name</label>#}
+{#                                        <input type="text" placeholder="Type the book name.."#}
+{#                                               ng-model="newBookName"#}
+{#                                               ng-focus="isShowCollaboratorDropdown = False">#}
+{#                                    </div>#}
+{#                                    <div class="form-group collaborator">#}
+{#                                        <label>Collaborators</label>#}
+{#                                        <input type="text"#}
+{#                                               placeholder="Search by name or email address"#}
+{#                                               ng-change="getCollaborator(collaboratorField)"#}
+{#                                               ng-model="collaboratorField">#}
+{#                                        <div class="collaborator-selector" ng-show="isShowCollaboratorDropdown">#}
+{#                                            {% verbatim %}#}
+{#                                            <ul class="list">#}
+{#                                                <li ng-repeat="item in collaborators.chefs">#}
+{#                                                    <div class="pic"><img src="/static/img/chef_avatar.jpg"></div>#}
+{#                                                    <div class="title">{{ item.name + ' ' + item.surname + ' (' + item.email + ')' }}</div>#}
+{#                                                </li>#}
+{#                                                <li ng-if="collaborators.readmore"#}
+{#                                                    ng-click="loadmoreCollaborator(collaboratorField, collaboratorDropdownPaging)"><span>See more +</span></li>#}
+{#                                            </ul>#}
+{#                                            {% endverbatim %}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#		      				</div>#}
+{#							<div class="modal-footer">#}
+{#								<button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>#}
+{#								<button type="button" class="btn btn-primary" ng-click="addNewBook(newBookName)" data-dismiss="modal">{% trans 'Save Book' %}</button>#}
+{#							</div>#}
+{#						</div>#}
+{#					</div>#}
+{#				</div>#}
+                {% include 'partials/edit-book-modal.html' %}
+                {% include 'partials/book-modal.html' %}
+
+				<!--<div id="edit_book_modal" class="modal fade" tabindex="-1" role="dialog">-->
+					<!--<div class="modal-dialog modal-md">-->
+						<!--<div class="modal-content">-->
+							<!--<div class="modal-header">-->
+								<!--<button type="button" class="close" data-dismiss="modal" ng-click="bookToEdit.name = bookToEditOldName">-->
+									<!--<span aria-hidden="true">&times;</span>-->
+									<!--<span class="sr-only">{% trans 'Close' %}</span>-->
+								<!--</button>-->
+								<!--<h4 class="modal-title">{% trans 'Edit Book' %}</h4>-->
+							<!--</div>-->
+							<!--<div class="modal-body">-->
+		        				<!--<input type="text" placeholder="Type the book name.." ng-model="bookToEdit.name">-->
+		      				<!--</div>-->
+							<!--<div class="modal-footer">-->
+								<!--<button type="button" class="btn btn-default" ng-click="bookToEdit.name = bookToEditOldName" data-dismiss="modal">{% trans 'Cancel' %}</button>-->
+								<!--<button type="button" class="btn btn-primary" ng-click="editBook(bookToEdit)" data-dismiss="modal">{% trans 'Save Book' %}</button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+
+				<div id="delete_book_modal" class="modal fade" tabindex="-1" role="dialog">
+					<div class="modal-dialog modal-md">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span>
+									<span class="sr-only">{% trans 'Close' %}</span>
+								</button>
+								<h4 class="modal-title">{% trans 'Delete Book' %}</h4>
+							</div>
+							<div class="modal-body">
+		        				<p>{% trans 'Do you really want to delete the book' %} {% verbatim %}{{bookToDelete.name}}{% endverbatim %}?</p>
+		      				</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+								<button type="button" class="btn btn-primary" ng-click="deleteBook(bookToDelete)" data-dismiss="modal">{% trans 'Delete' %}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+                <div id="delete_draft_modal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span>
+									<span class="sr-only">{% trans 'Close' %}</span>
+								</button>
+								<h4 class="modal-title">{% trans 'Delete Draft' %}</h4>
+							</div>
+                            <div class="modal-body">
+                                <p>{% trans 'Do you really want to delete the draft' %}?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                                <button type="button" class="btn btn-primary" ng-click="deleteDraft(draftToDelete)" data-dismiss="modal">{% trans 'Delete' %}</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="delete_chef_modal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>{% trans 'Do you really want to delete your account' %}?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                                <button type="button" onclick="location.href='{% url 'delete-chef' id=chef.id %}'" class="btn btn-primary" data-dismiss="modal">{% trans 'Delete' %}</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			{% endif %}
+		</div>
+
+    {% verbatim %}
+        <div class="toaster">
+            <div class="block-message alert message-{{ message_type }}" id="block-message">
+                <span class="msg">{{ message_content }}</span>
+            </div>
+        </div>
+    {% endverbatim %}
+	</div>
+
+{% endblock content %}

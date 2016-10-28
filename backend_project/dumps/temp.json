@@ -1,0 +1,240 @@
+{
+  "cautions": [],
+  "healthLabels": [
+    "FAT_FREE",
+    "LOW_FAT_ABS",
+    "SUGAR_CONSCIOUS",
+    "LOW_SUGAR",
+    "LOW_POTASSIUM",
+    "KIDNEY_FRIENDLY",
+    "VEGAN",
+    "VEGETARIAN",
+    "PESCATARIAN",
+    "PALEO",
+    "DAIRY_FREE",
+    "GLUTEN_FREE",
+    "WHEAT_FREE",
+    "EGG_FREE",
+    "MILK_FREE",
+    "PEANUT_FREE",
+    "TREE_NUT_FREE",
+    "SOY_FREE",
+    "FISH_FREE",
+    "SHELLFISH_FREE",
+    "PORK_FREE",
+    "RED_MEAT_FREE",
+    "CRUSTACEAN_FREE",
+    "CELERY_FREE",
+    "MUSTARD_FREE",
+    "SESAME_FREE",
+    "LUPINE_FREE",
+    "MOLLUSK_FREE",
+    "ALCOHOL_FREE",
+    "NO_OIL_ADDED",
+    "NO_SUGAR_ADDED",
+    "KOSHER"
+  ],
+  "ingredients": [
+    {
+      "text": "2 baking powder",
+      "parsed": [
+        {
+          "foodId": "Food_18370",
+          "weight": 4.6,
+          "food": "Leavening agents, baking powder, double-acting, straight phosphate",
+          "nutrients": {
+            "PROCNT": {
+              "quantity": 0.0046,
+              "unit": "g",
+              "label": "Protein"
+            },
+            "MG": {
+              "quantity": 1.7939999999999998,
+              "unit": "mg",
+              "label": "Magnesium, Mg"
+            },
+            "FIBTG": {
+              "quantity": 0.0092,
+              "unit": "g",
+              "label": "Fiber, total dietary"
+            },
+            "NA": {
+              "quantity": 363.078,
+              "unit": "mg",
+              "label": "Sodium, Na"
+            },
+            "CA": {
+              "quantity": 338.7439999999999,
+              "unit": "mg",
+              "label": "Calcium, Ca"
+            },
+            "ZN": {
+              "quantity": 0.00092,
+              "unit": "mg",
+              "label": "Zinc, Zn"
+            },
+            "P": {
+              "quantity": 456.22799999999995,
+              "unit": "mg",
+              "label": "Phosphorus, P"
+            },
+            "CHOCDF": {
+              "quantity": 1.1086,
+              "unit": "g",
+              "label": "Carbohydrate, by difference"
+            },
+            "FE": {
+              "quantity": 0.5184199999999999,
+              "unit": "mg",
+              "label": "Iron, Fe"
+            },
+            "K": {
+              "quantity": 0.23,
+              "unit": "mg",
+              "label": "Potassium, K"
+            },
+            "ENERC_KCAL": {
+              "quantity": 2.346,
+              "unit": "kcal",
+              "label": "Energy"
+            }
+          },
+          "foodMatch": "baking powder",
+          "retainedWeight": 4.6,
+          "measure": "medium",
+          "quantity": 2.0
+        }
+      ]
+    }
+  ],
+  "totalNutrients": {
+    "PROCNT": {
+      "quantity": 0.0046,
+      "unit": "g",
+      "label": "Protein"
+    },
+    "MG": {
+      "quantity": 1.794,
+      "unit": "mg",
+      "label": "Magnesium"
+    },
+    "FIBTG": {
+      "quantity": 0.0092,
+      "unit": "g",
+      "label": "Fiber"
+    },
+    "NA": {
+      "quantity": 363.078,
+      "unit": "mg",
+      "label": "Sodium"
+    },
+    "CA": {
+      "quantity": 338.74399999999997,
+      "unit": "mg",
+      "label": "Calcium"
+    },
+    "FAMS": {
+      "quantity": 0.0,
+      "unit": "g",
+      "label": "Fatty acids, total monounsaturated"
+    },
+    "ZN": {
+      "quantity": 0.00092,
+      "unit": "mg",
+      "label": "Zinc"
+    },
+    "P": {
+      "quantity": 456.228,
+      "unit": "mg",
+      "label": "Phosphorus"
+    },
+    "CHOCDF": {
+      "quantity": 1.1086,
+      "unit": "g",
+      "label": "Carbs"
+    },
+    "FE": {
+      "quantity": 0.51842,
+      "unit": "mg",
+      "label": "Iron"
+    },
+    "K": {
+      "quantity": 0.22999999999999998,
+      "unit": "mg",
+      "label": "Potassium"
+    },
+    "FAP": {
+      "quantity": 0.0,
+      "unit": "g",
+      "label": "Fatty acids, total polyunsaturated"
+    },
+    "ENERC_KCAL": {
+      "quantity": 2.346,
+      "unit": "kcal",
+      "label": "Energy"
+    }
+  },
+  "calories": 2,
+  "dietLabels": [
+    "LOW_FAT"
+  ],
+  "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_cfe3303982d7f2b4d14646f9c96e3d65",
+  "totalWeight": 4.6,
+  "totalDaily": {
+    "PROCNT": {
+      "quantity": 0.0092,
+      "unit": "%",
+      "label": "Protein"
+    },
+    "MG": {
+      "quantity": 0.4485,
+      "unit": "%",
+      "label": "Magnesium"
+    },
+    "FIBTG": {
+      "quantity": 0.0368,
+      "unit": "%",
+      "label": "Fiber"
+    },
+    "NA": {
+      "quantity": 15.128249999999998,
+      "unit": "%",
+      "label": "Sodium"
+    },
+    "CA": {
+      "quantity": 33.874399999999994,
+      "unit": "%",
+      "label": "Calcium"
+    },
+    "ZN": {
+      "quantity": 0.0061333333333333335,
+      "unit": "%",
+      "label": "Zinc"
+    },
+    "P": {
+      "quantity": 65.17542857142857,
+      "unit": "%",
+      "label": "Phosphorus"
+    },
+    "CHOCDF": {
+      "quantity": 0.3695333333333333,
+      "unit": "%",
+      "label": "Carbs"
+    },
+    "FE": {
+      "quantity": 2.880111111111111,
+      "unit": "%",
+      "label": "Iron"
+    },
+    "K": {
+      "quantity": 0.006571428571428572,
+      "unit": "%",
+      "label": "Potassium"
+    },
+    "ENERC_KCAL": {
+      "quantity": 0.11730000000000002,
+      "unit": "%",
+      "label": "Energy"
+    }
+  }
+}

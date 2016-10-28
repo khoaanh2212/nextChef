@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{collection.title1}} {{collection.title2}} Collection - NextChef{% endblock title %}
+{% block description %}{{collection.description}}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{collection.name}} {% trans 'COLLECTION' %}{% endblock %}
+{% block fb_image %}{{ collection.cover|thumbnail_url:"facebook_thumb" }}{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{{collection.title1}} {{collection.title2}}{% endblock %}
+{% block tw_summary %}{{collection.name}} {% trans 'COLLECTION' %}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{collection.title1}} {{collection.title2}}{% endblock %}
+{% block tw_image %}{{ collection.cover|thumbnail_url:"explore_box" }}{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+        var INIT_RECIPES = {{recipes|safe}};
+		var USER_LOVED_RECIPES = {{USER_LOVES_LIST}};
+	</script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/controllers/RecipesListCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/CollectionCtrl.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+	<div id="collection" ng-controller="CollectionController">
+        {% if cover %}
+        	<div class="header" style="background-image: url({{cover}})">
+        {% else %}
+            <div class="header" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+        {% endif %}
+			<div class="title">
+				<h1 class="top">{{collection.title1}}</h1>
+				<table>
+					<tr>
+						<td style="text-align: left; width: 30%;"><hr></td>
+						<td><p>{% trans 'recipe collection' %}</p></td>
+						<td style="text-align: right; width: 30%;"><hr></td>
+					</tr>
+				</table>
+				<h1 class="bottom">{{collection.title2}}</h1>
+			</div>
+		</div>
+		<div class="recipes-list" ng-controller="RecipesListController">
+			{% include 'partials/recipe.html' %}
+		</div>
+	</div>
+	
+{% endblock content %}

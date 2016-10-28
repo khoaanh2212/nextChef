@@ -1,0 +1,22 @@
+version: '2'
+services:
+
+  managepy:
+    image: "$REGISTRY/nextchef:$TAG"
+    links:
+      - db:nextchef.db
+      - elasticsearch:nextchef.elasticsearch
+      - redis:nextchef.redis
+    env_file:
+      - "config.env"
+    entrypoint: "python /code/backend/manage.py"
+
+  importtestdata:
+    extends: db
+    links:
+      - db:nextchef.db
+    volumes:
+      - ../dumps/nextchef-test-data.sql.gz:/dump.gz
+    command: sh -c 'gunzip -c dump.gz > dump; sleep 20s; mysql --max_allowed_packet=512M -h nextchef.db -uusr_cookbooth -pcookbooth cookbooth < dump'
+
+

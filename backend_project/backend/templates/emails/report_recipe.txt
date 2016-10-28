@@ -1,0 +1,8 @@
+Un usuario ha marcado una receta como inapropiada
+=================================================
+
+Id receta: {{ report.recipe.pk }}
+Título de la receta: {{ report.recipe.name }}
+Id chef: {{ report.recipe.chef.pk }}
+Nombre chef: {{ report.recipe.chef.name }} {{ report.recipe.chef.surname }}
+Motivo indicado: {{ report.subject }}

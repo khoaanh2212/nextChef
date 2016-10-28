@@ -1,0 +1,11 @@
+version: '2'
+services:
+  jmeter:
+    image: $REGISTRY/apium-jmeter-2.9
+    links:
+      - web:nextchef.local
+    volumes:
+     - "../functional_tests/jmeter/:/test/"
+    command: "/test/functional.jmx 40"
+    environment:
+      DISCOVERY_PATH: "web:8000"

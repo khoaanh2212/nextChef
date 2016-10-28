@@ -1,0 +1,187 @@
+{% extends 'emails/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h4>Te damos la bienvenida</h4>
+	
+	<p>La parte más emocionante de NextChefempieza justo ahora. <br>
+Ya puedes disparar tus fotorecetas paso a paso y archivarlas en libros <br>para compartirlas con tus seguidores y amigos.</p>
+
+	<!--<br><br>-->
+	<!--<img src="http://{{ site.domain }}{% static 'img/registration/ORDENADOR_IPHONE.png' %}">-->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<a href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8"><img src="http://{{ site.domain }}{% static 'img/registration/app_store.png' %}""></a>-->
+	<!--<a href="https://play.google.com/store/apps/details?id=com.cookbooth.cookbooth"><img src="http://{{ site.domain }}{% static 'img/registration/google_play.png' %}""></a>-->
+	<!-- -->
+	<!--<br><br><br><br>-->
+	<!--<table>-->
+		<!--<tr>-->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:65px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_recipe_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 9px;">Crea y edita mediante la App y web</p>-->
+			<!--</td>-->
+		<!-- -->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:60px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_management_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 3px;">Hazlas públicas o privadas</p>-->
+			<!--</td>-->
+		<!-- -->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:60px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_share_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 2px;">Compártelas</p>-->
+			<!--</td>-->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:50px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_print_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 5px;">Imprímelas</p>-->
+			<!--</td>-->
+		<!--</tr>-->
+	<!--</table>-->
+	<!-- -->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<p>Si quieres preparar deliciosos platos, no te pierdas estos perfiles.</p>-->
+	<!-- -->
+	<!--<table class="chefs-table">-->
+		<!--<tbody>-->
+			<!--<tr>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/billy-baroja-248">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/33587.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Billy Baroja</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/betlem-miscelanea-gastronomica-123781">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/42130.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Betlem</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/superchef-146152">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/61235.jpg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Superchef</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+			<!--</tr>-->
+			<!--<tr>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/ana-lovefood-119501">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/41682.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Ana Lovefood</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/mi-blog-entre-recetas-132968">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/46094.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Mi Blog Entre Recetas</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/recipe/ensalada-de-pochas-con-verduras-salteadas-81398">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/59691.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Pam Merino</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+			<!--</tr>-->
+		<!--</tbody>-->
+	<!--</table>-->
+	<!-- -->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<p>Algunas recetas que te inspirarán a cocinar o fotografiar las tuyas.</p>-->
+	<!-- -->
+	<!--<div class="recipies-table">-->
+		<!--<table>-->
+			<!--<tr>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/canelon-de-tartar-de-gamba-roja-con-pepino-y-helado-de-yoghourt-54870 ">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/88350.jpeg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/canelon-de-tartar-de-gamba-roja-con-pepino-y-helado-de-yoghourt-54870 ">-->
+								<!--CANELON DE TARTAR DE GAMBAS</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/cous-cous-negro-con-calamarcitos-a-la-plancha-black-cous-cous-with-grilled-baby-squid-39147">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/65218.jpeg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/cous-cous-negro-con-calamarcitos-a-la-plancha-black-cous-cous-with-grilled-baby-squid-39147">-->
+								<!--COUS COUS NEGRO CON CALAMARCITOS</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+			<!--</tr>-->
+			<!--<tr>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/passion-fruit-and-orange-marshmallows-nubes-de-fruta-de-la-pasion-y-naranja-52005">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/83250.jpg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/passion-fruit-and-orange-marshmallows-nubes-de-fruta-de-la-pasion-y-naranja-52005">-->
+								<!--NUBES DE FRUTA DE LA PASIÓN Y NARANJA</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/mare-satsuma-22640 ">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/70533.jpeg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/mare-satsuma-22640 ">-->
+								<!--MARE SATSUMA</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!-- -->
+
+			<!--</tr>-->
+			<!-- -->
+		<!--</table>-->
+	<!--</div>-->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<a href="http://nextchef.co" class="action">Empieza una fotoreceta</a>-->
+	<!-- -->
+	
+{% endblock %}
+
+{% block unsubscribe %}{% endblock %}

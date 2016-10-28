@@ -1,0 +1,9 @@
+{% load i18n %}
+{% trans "Get your stoves ready!" %}
+
+{% trans "Confirm your account" %}:
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+
+{% comment %}
+{% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
+{% endcomment %}

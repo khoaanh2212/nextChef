@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}NextChef{% endblock title %}
+{% block description %}A global community of creative chefs and foodies.{% endblock %}
+
+{% block nav-bar-fixed-space %}
+    <div style="height: 120px"></div>
+{% endblock %}
+{% load i18n %}
+{% block content %}
+    <div class="pricing-page-container wrapper" id="apiPricingPage">
+        <div class="blackCover"></div>
+        <div class="top-background"></div>
+        <div class="middle-background"></div>
+        <div class="page-title">
+            <h1><strong>Business solutions</strong> for <br> professional kitchens</h1>
+            <h2>No matter the size of your kitchen, <br><strong>we help you make more profit.</strong></h2>
+        </div>
+        <div class="page-content">
+            {% for res in result %}
+                <div class="col-sm-3 pricing-box{% if res.price.type == 'Pro' %} pro {% elif res.price.type == 'Business' %} business {% elif res.price.type == 'Enterprise' %} enterprise {% else %} free {% endif %}">
+                    <div class="cover-product">
+                        <div class="box">
+                            <div class="type">{{ res.price.type }}</div>
+                            <div class="price">
+                                {% if res.price.currency %}
+                                    <span class="currency {% if not res.price.type == 'Pro' and not res.price.type == 'Enterprise' %}number-middle{% endif %}">{{ res.price.currency }}</span>{% endif %}
+                                <span class="amount {% if not res.price.type == 'Pro' and not res.price.type == 'Enterprise' %}number-middle{% endif %}">{{ res.price.amountBegin }}{% if res.price.amountEnd != '' %}<span>.{{ res.price.amountEnd }}</span>{% endif %}</span>
+                                <span class="unit">{% if res.price.unit %} per {{ res.price.unit }}{% else %}
+                                    &nbsp; {% endif %}</span>
+                            </div>
+                        </div>
+                        <div class="desc">{{ res.price.desc }}</div>
+                        {% if not request.user.is_authenticated %}
+                            {% verbatim %}
+                                <a href="#" class="btn btn-default button" ng-click="fn.showRegisterPopup()">Sign
+                                    up</a>
+                            {% endverbatim %}
+                        {% else %}
+                            {% if request.user.membership == 'default' %}
+                                {% if res.price.type == 'Free' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Current' %}</a>
+                                {% elif res.price.type == 'Pro' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% elif res.price.type == 'Business' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% elif res.price.type == 'Enterprise' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if request.user.membership == 'pro' %}
+                                {% if res.price.type == 'Free' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Select' %}</a>
+                                {% elif res.price.type == 'Pro' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Current' %}</a>
+                                {% elif res.price.type == 'Business' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% elif res.price.type == 'Enterprise' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if request.user.membership == 'business' %}
+                                {% if res.price.type == 'Free' or res.price.type == 'Pro' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Select' %}</a>
+                                {% elif res.price.type == 'Business' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Current' %}</a>
+                                {% elif res.price.type == 'Enterprise' %}
+                                    <a href="{{ res.upgrade_path }}"
+                                       class="btn btn-default button">{% trans 'Upgrade' %}</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if request.user.membership == 'enterprise' %}
+                                {% if res.price.type == 'Free' or res.price.type == 'Pro' or res.price.type == 'Business' %}
+                                    <a href="{% url 'select-payment' %}?plan={{ res.price.type|lower }}"
+                                       class="btn btn-default button">{% trans 'Select' %}</a>
+                                {% elif res.price.type == 'Enterprise' %}
+                                    <a href="#" class="btn btn-default button">{% trans 'Current' %}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="description-box">
+                        <div class="intro-text">{{ res.info.desc_html|safe }}</div>
+                        <div class="user-limit">{{ res.info.user_limit }}</div>
+                        <div class="extra-info">
+                            <ul>
+                                {% for feature in res.info.features %}
+                                    <li><img class="img-plus" >{{ feature }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% if res.price.type == 'Business' %}
+                                <div class="notificate">{% trans '* only available in English' %}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="clearfix"></div>
+            <section class="col-sm-12" id="res-loved" style="display: none;">
+                <h2><strong>Tested</strong> in restaurants people love</h2>
+                <ul>
+                    <li>
+                        <img src="../static/img/pricing/logo1.jpg" alt="">
+                    </li>
+                    <li>
+                        <img src="../static/img/pricing/logo2.jpg" alt="">
+                    </li>
+                    <li>
+                        <img src="../static/img/pricing/logo3.jpg" alt="">
+                    </li>
+                    <li>
+                        <img src="../static/img/pricing/logo4.jpg" alt="">
+                    </li>
+                    <li>
+                        <img src="../static/img/pricing/logo5.jpg" alt="">
+                    </li>
+                </ul>
+            </section>
+            <section class="col-sm-12" id="chef" style="display: none;">
+                <div class="col-sm-3 chef-item">
+                    <img src="../static/img/pricing/damian.jpg">
+                    <h3>Damian Allsop</h3>
+                    <h4>Chocolatier & Pastry Chef Celler Can roca</h4>
+                    <p>“It’s a great way to explain my complicated and elaborate processes to new kitchen staff and
+                        maintain a high quality all over”</p>
+                </div>
+                <div class="col-sm-3 chef-item">
+                    <img src="../static/img/pricing/peter.jpg">
+                    <h3>Peter Gordon</h3>
+                    <h4>Restaurateur & Food Writer</h4>
+                    <p>“I run restaurants in different continents and cookbooth is the perfect tool to share my recipes
+                        across different restaurants”</p>
+                </div>
+                <div class="col-sm-3 chef-item">
+                    <img src="../static/img/pricing/kitchen.jpg">
+                    <h3>Kitchen Theory</h3>
+                    <h4>Molecular Gastronomy</h4>
+                    <p>“The sharing part for me is the best. I’ve learned from other chefs and want to encourage open
+                        source knowledge in kitchens”</p>
+                </div>
+                <div class="col-sm-3 chef-item">
+                    <img src="../static/img/pricing/sergi.jpg">
+                    <h3>Sergi de Meià</h3>
+                    <h4>Proximity Food Chef</h4>
+                    <p>“I have thousands of recipes in different places, i really needed a tool to put everything in the
+                        cloud for me and my team”</p>
+                </div>
+            </section>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+{% endblock %}

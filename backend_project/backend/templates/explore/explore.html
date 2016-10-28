@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Explore - NextChef{% endblock title %}
+{% block description %}Discover step by step recipes{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{ block.super }}{% endblock %}
+{% block fb_image %}{{ block.super }}{% endblock %}
+{% block fb_url %}{% endblock %}
+{% block fb_description %}{{ block.super }}{% endblock %}
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{ block.super }}{% endblock %}
+{% block tw_image %}{{ block.super }}{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+	    var USER_LOVED_RECIPES = {{USER_LOVES_LIST}};
+	    var EXPLORE_PAGE = {{explore_page|safe}};
+        var RECIPE_IN_PUBLIC_BOOKS = {{recipeInPublicBooks|safe}};
+	    var SECTION = "{{SECTION}}";
+		mixpanel.track("explore");
+	</script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+    <script src="{% static 'js/models/Chef.js' %}"></script>
+    <script src="{% static 'js/controllers/RecipesListCtrl.js' %}"></script>
+    <script src="{% static 'js/controllers/NewUserExperienceCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/ExploreCtrl.js' %}"></script>
+    <script src="{% static 'js/explore.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div id="explore" ng-controller="ExploreController">
+		<div class="header">
+
+			<div id="featured-recipes-carousel" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner">
+					{% for recipe in header_recipes %}
+		    		<div class="item {% if forloop.first %}active{% endif %}">
+		    			{% with recipe.cover as photo %}
+		    				<div class="image-wrapper">
+		      					<div class="image" style="background-image:url('{{photo|thumbnail_url:'explore_cover'}}');"></div>
+		      				</div>
+		      			{% endwith %}
+						<div class="carousel-caption" data-url="{% url 'recipe' slug=recipe.slug id=recipe.id %}">
+							<div class="text-wrapper">
+								<a href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" class="recipe">{{recipe.name}}</a>
+								<a href="{% url 'library' slug=recipe.chef.slug id=recipe.chef.id %}" class="chef">{{recipe.chef.name}} {{recipe.chef.surname}}</a>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			{% comment %}
+			<h1>{% trans 'Share your cooking step by step' %}</h1>
+
+			{% if not user.is_authenticated %}
+				<a id="call_to_action" href="#" onclick="checkAuthenticated('kitchen')" class="gtm-event" data-gtme-category="Header" data-gtme-action="Click CTA" data-gtme-tag="call_to_action">{% trans 'Start a Photorecipe' %}</a>
+			{% else %}
+				<a id="call_to_action" href="{% url 'kitchen' %}" class="gtm-event" data-gtme-category="Header" data-gtme-action="Click CTA" data-gtme-tag="call_to_action">{% trans 'Start a Photorecipe' %}</a>
+			{% endif %}
+
+			<div class="video-container">
+				<video id="header_video" loop="loop" preload="auto" autoplay="autoplay" poster="{% static 'img/transparent.png' %}">
+					<source src="{% static 'video/cookbooth.mp4' %}" type="video/mp4">
+					<source src="{% static 'video/cookbooth.webm' %}" type="video/webm">
+				</video>
+			</div>
+{#			<div class="downloads">#}
+{#				<a class="gtm-event" href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8" target="_blank"#}
+{#					data-gtme-category="Header" data-gtme-action="Click CTA" data-gtme-tag="iphone">#}
+{#					<img style="height:45px; cursor:pointer;" src="{% static 'img/explore/app_store.png' %}"></a>#}
+{#				<a class="gtm-event" href="https://play.google.com/store/apps/details?id=com.cookbooth.cookbooth" target="_blank"#}
+{#					data-gtme-category="Header" data-gtme-action="Click CTA" data-gtme-tag="android">#}
+{#					<img style="height:45px; cursor:pointer;" src="{% static 'img/explore/google_play.png' %}"></a>#}
+{#			</div>#}
+			{% endcomment %}
+		</div>
+
+		<div class="navbar">
+			<div class="container">
+				<ul class="nav navbar-nav recipes-nav">
+					<li>
+						<a class="first {% if request.path != '/explore/following' %}active{% endif %} gtm-event" href="{% url 'explore' %}"
+							data-gtme-category="Filter" data-gtme-action="Click Filter" data-gtme-tag="recommended">{% trans 'RECOMMENDED' %}</a></li>
+					<li>
+						{% if user.is_authenticated %}
+						<a class="first {% if request.path == '/explore/following' %}active{% endif %} gtm-event" href="{% url 'following' %}" style="border-left: 0px;"
+							data-gtme-category="Filter" data-gtme-action="Click Filter" data-gtme-tag="following">{% trans 'FOLLOWING' %}</a></li>
+						{% else %}
+						<a class="first {% if request.path == '/explore/following' %}active{% endif %} gtm-event" href="#"
+                           ng-click="fn.showConversionPopup()" style="border-left: 0px;"
+							data-gtme-category="Filter" data-gtme-action="Click Filter" data-gtme-tag="following">{% trans 'FOLLOWING' %}</a></li>
+						{% endif %}
+					{% comment %}
+					<li>
+						<a class="first {% if request.path != '/explore/chefs' and request.path != '/explore/foodies'%}active{% endif %} gtm-event" href="{% url 'home' %}"
+							data-gtme-category="Filter" data-gtme-action="Click Filter" data-gtme-tag="all_recipes">{% trans 'ALL' %}</a></li>
+					<li>
+						<a class="{% if request.path == '/explore/chefs' %}active{% endif %} gtm-event" href="{% url 'explore_pros' %}"
+							data-gtme-category="Filter" data-gtme-action="Click Filter" data-gtme-tag="foodie_recipes">{% trans 'CHEFS' %}</a></li>
+					<li>
+						<a class="{% if request.path == '/explore/foodies' %}active{% endif %} gtm-event" href="{% url 'explore_foodies' %}"
+							data-gtme-category=Filter data-gtme-action="Click Filter" data-gtme-tag="chef_recipes">{% trans 'FOODIES' %}</a></li>
+					{% endcomment %}
+				</ul>
+			</div>
+		</div>
+
+        {% verbatim %}
+
+        <div class="recipes-list">
+
+            <div class="item-box {{item.chef.type_class}}" ng-repeat="item in exploreItems">
+
+            	<!-- BOOK BOX -->
+            	<div class="book-box {{item.chef.type_class}}" ng-if="item.itemType == BOOK">
+			        <div class="content">
+			            <div class="label">{{item.nb_recipes}}</div>
+				        <div class="image" style="background-image: url({{item.cover}})">
+				            <a href="{{item.url}}">{{item.chef_full_name}}</a>
+			            </div>
+			            <div class="info">
+                            <div><a href="{{item.url}}">{{item.name}}</a></div>
+	                    </div>
+	                    <div class="price"><a href="{{item.url}}">{{item.price}}€</a></div>
+			        </div>
+				</div>
+
+				<!-- CHEF BOX -->
+                <div class="chef-box {{item.chef.type_class}}" ng-if="item.itemType == CHEF">
+                    <a href="{{item.url}}">
+                        <div class="image" ng-style="imageStyle" ng-init="imageStyle={'background-image':'url({{item.cover}})'}"></div>
+                        <img class="avatar" ng-src="{{item.avatar}}">
+                        <h3 class="name">{{item.full_name}}</h3>
+                    </a>
+                </div>
+
+                <!-- RECIPE BOX -->
+                <div ng-if="item.itemType == RECIPE" id="id_recipe_{{item.id}}" class="recipe-box {{item.chef_type_class}}" itemscope itemtype="http://schema.org/Recipe" ng-class="{xmas:item.has_christmas_tag, tosell:item.to_sell}">
+                    <div class="image" itemprop="photo" ng-style="imageStyle" ng-init="imageStyle={'background-image':'url({{item.image_url}})'}">
+                        <a class="logo" itemprop="author" class="gtm-event" href="{{item.url}}" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+                            {{item.chef_full_name}}
+                        </a>
+                        <a href="{{item.url}}" class="xmas-icon" ng-class="item.xmasClass" ng-hide="!item.has_christmas_tag"></a>
+                    </div>
+                    <div class="info" ng-controller="RecipesListController" ng-init="LCommentsActive=false; HasComments=(item.last_comments.length > 0);" ng-mouseleave="LCommentsActive=false">
+                        <div class="description">
+                            <div><p><a class="gtm-event" itemprop="name" href="{{item.url}}" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">{{controlName(item)}}</a></p></div>
+                        </div>
+                        <div class="social">
+                            <p class="nb-likes gtm-event" ng-class="{loved: item.loved}" ng-hide="LCommentsActive==true" ng-click="loveRecipe(item)" data-gtme-category="Recipe Box" data-gtme-action="Click Filter" data-gtme-tag="love_recipe">{{item.nb_likes}}</p>
+                            <p class="nb-comments gtm-event" ng-hide="LCommentsActive==true" ng-mouseover="LCommentsActive=HasComments" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="comment_recipe">{{item.nb_comments}}</p>
+                            <p class="nb-added gtm-event" ng-hide="LCommentsActive==true" ng-click="addRecipe(item)" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="add_recipe">{{item.nb_added}}</p>
+                            <p class="nb-shares gtm-event" ng-hide="LCommentsActive==true" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="share_recipe">{{item.nb_shares}}</p>
+
+                            <ul class="comments" ng-mouseleave="LCommentsActive=false" ng-show="LCommentsActive==true">
+                                <li class="comment" ng-repeat="comment in item.last_comments">
+                                    <a class="anchor" href="{{comment.chef_url}}">
+                                        <div class="avatar" ng-style="avatarStyle" ng-init="avatarStyle={'background-image':'url({{comment.chef_avatar}})'}"></div>
+                                        <ul class="text">
+                                            <li class="name">{{comment.chef_name}}</li>
+                                            <li class="comment_line">{{comment.comment}}</li>
+                                        </ul>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BANNER BOX -->
+                <div class="banner" ng-if="item.itemType == BANNER">
+                    <a class=" gtm-event" href="{{item.url}}" data-gtme-category="Explore" data-gtme-action="Click Banner" data-gtme-tag="Banner {{item.title}}">
+                        <img ng-src="{{item.thumb}}">
+                        <div class="filter" ng-hide="(item.title == '' && item.subtitle == '' && item.text == '') || item.type==4"></div>
+                        <div class="info" ng-show="item.type!=4">
+                            <h3 class="name">{{item.title}}</h3>
+                            <p class="text">{{item.subtitle}}</p>
+                            <h3 class="price">{{item.text}}</h3>
+                        </div>
+                        <div class="collection" ng-show="item.type==4">
+							<h1 class="top">{{item.title}}</h1>
+							<table>
+								<tr>
+									<td style="text-align: left; width: 30px;"><hr></td>
+									<td><p>{% endverbatim %}{% trans 'Recipe Collection' %}{% verbatim %}</p></td>
+									<td style="text-align: right; width: 30px;"><hr></td>
+								</tr>
+							</table>
+							<h1 class="bottom">{{item.subtitle}}</h1>
+						</div>
+                    </a>
+		        </div>
+
+		        <!-- COLLECTION BOX -->
+                <div class="banner" ng-if="item.itemType == COLLECTION" style="background-image:url({{item.thumb}});">
+                    <a class=" gtm-event" href="{{item.url}}"
+                    	data-gtme-category="Explore" data-gtme-action="Click Collection" data-gtme-tag="Collection {{item.title1}}">
+
+                        <div class="filter" ng-hide="(item.title1 == '' && item.title2 == '' && item.text == '') || item.type==COLLECTION"></div>
+                        <div class="collection">
+							<h1 class="top">{{item.title1}}</h1>
+							<table>
+								<tr>
+									<td style="text-align: left; width: 30px;"><hr></td>
+									<td><p>{% endverbatim %}{% trans 'Recipe Collection' %}{% verbatim %}</p></td>
+									<td style="text-align: right; width: 30px;"><hr></td>
+								</tr>
+							</table>
+							<h1 class="bottom">{{item.title2}}</h1>
+						</div>
+                    </a>
+		        </div>
+            </div>
+        </div>
+        {% endverbatim %}
+
+
+		<div class="load-more">
+			{% comment %}
+			<button class="btn btn-gray gtm-event" ng-click="loadMore()" ng-hide="loading" data-gtme-category="Load More" data-gtme-action="Click" data-gtme-tag="load_more">{% trans 'Load more' %}</button>
+			{% endcomment %}
+			<img class="loader" src="{% static 'img/ajax-loader.gif' %}" ng-show="loading">
+		</div>
+
+	</div>
+
+	{% if request.user.is_authenticated and nux %}
+		<div id="nux_modal" class="modal gtm-event" role="dialog" ng-controller="NewUserExperienceController" ng-init="selectChefOrFoodie()"
+			data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="backbround_close"
+			data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-body" ng-hide="showChefs">
+						<div class="foodie">
+							<p>{% trans 'You love food, food photography <br>and want to learn how to cook' %}</p>
+							<button ng-click="selectChefOrFoodie(true)">{% trans "I'm a FOODIE" %}</button>
+						</div>
+						<div class="chef">
+							<p>{% trans 'You are a professional chef, pastry <br>chef, restaurant or blogger' %}</p>
+							<button ng-click="selectChefOrFoodie(false)">{% trans "I'm a PRO" %}</button>
+						</div>
+					</div>
+					<div class="modal-body chefs-list" ng-show="showChefs">
+						<h4>{% trans 'CONNECTING CREATORS' %}</h4>
+						<p>{% trans 'Choose 5 chefs and foodies <br>you want to follow' %}</p>
+						<br><br>
+						<div class="chefs-inner-list">
+						{% for chef in nux_chefs %}
+                            <table>
+                                <tr>
+                                    <td class="image">
+                                    	{% with avatar=chef.avatar %}
+                                    		{% if avatar %}
+                                        		<img src="{{avatar|thumbnail_url:'base_nav_avatar'}}">
+                                        	{% else %}
+                                        		<img src="{% static 'img/chef_avatar.jpg' %}">
+                                        	{% endif %}
+                                        {% endwith %}
+                                    </td>
+                                    <td class="info">
+                                        <div class="name">{{chef.name}} {{chef.surname}}</div>
+                                        <hr>
+{#                                        <div class="role">{% if chef.role != None and chef.role != '' %}{{chef.role}}{% else %}{% if chef.type_class == 'pro' %}Pro{% else %}Foodie{% endif %}{% endif %}</div>#}
+                                    </td>
+                                    <td class="follow">
+                                    	<button id="chef-{{chef.id}}" data-chef-id="{{chef.id}}" class="button follow-button" ng-click="selectChefId({{chef.id}})" ng-class="{'active':isChefSelected({{chef.id}})}">+</button>
+                                    </td>
+                                </tr>
+                            </table>
+						{% endfor %}
+						</div>
+						<br>
+						<button class="btn btn-primary" ng-click="finishNux()" ng-class="{'disabled':chef_ids.length<5}">{% trans 'DONE' %}</button>
+						<form id="nuxform" action="." method="POST" style="display:none;">
+							{% csrf_token %}
+                    		<input id="nuxform_type" type="hidden" name="type">
+                    		<input id="nuxform_chefs" type="hidden" name="chefs">
+                        </form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	{% if request.user.is_authenticated and activation_complete %}
+		<div id="activation_modal" class="modal fade gtm-event" role="dialog" data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-body">
+						<a href="#" class="close" data-dismiss="modal">
+							<img class="gtm-event" src="{% static 'img/fullframe-close-icon-dark.png' %}"
+								data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="close">
+						</a>
+						<br>
+						<img class="logo" src="{% static 'img/cookbooth_complete_logo.png' %}">
+
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<br>
+								<p>{% trans "Your account is now activated." %}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+{% endblock content %}

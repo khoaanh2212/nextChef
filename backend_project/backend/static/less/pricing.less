@@ -1,0 +1,512 @@
+#apiPricingPage {
+  font-family: "GTHaptikLight", serif;
+  strong {
+    font-family: "GTHaptikBold", serif;
+  }
+  &.wrapper {
+    width: 720px;
+    margin: 0 auto;
+    @media (min-width: 1200px) {
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      width: 100%;
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      width: 100%;
+    }
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+    @media (max-width: 480px) {
+      width: 100%;
+    }
+
+  }
+  .blackCover,
+  .top-background {
+    background: url('../img/pricing/pricing-bg.jpg') no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 677px;
+    z-index: -1;
+    @media (max-width: 480px) {
+      height: 615px;
+    }
+  }
+  .blackCover {
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+  }
+  .middle-background {
+    background: url('../img/pricing/metal.jpg');
+    position: absolute;
+    top: 677px;
+    left: 0;
+    width: 100%;
+    height: 1005px;
+    z-index: -1;
+    @media (max-width: 480px) {
+      top: 615px;
+      height: 2960px;
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      height: 640px;
+    }
+  }
+  .page-title {
+    margin-top: 51px;
+    position: relative;
+    @media (max-width: 480px) {
+      margin-top: 0;
+    }
+    h1 {
+      margin-bottom: 35px;
+      @media (max-width: 480px) {
+        font-size: 50px;
+        margin-top: 100px;
+        margin-bottom: 0;
+      }
+      @media (max-width: 320px) {
+        margin-top: 120px;
+        font-size: 40px;
+      }
+      font-size: 38px;
+    }
+    h2 {
+      color: #FFFFFF;
+      font-size: 25px;
+      @media (max-width: 320px) {
+        font-size: 25px;
+      }
+    }
+  }
+  .page-content {
+    color: #ffffff;
+    margin-top: 80px;
+  }
+  .pricing-box {
+    padding: 0 7px;
+    min-height: 1260px;
+    @media (max-width: 480px) {
+      min-height: inherit;
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      min-height: 1000px
+    }
+    .cover-product {
+      height: 255px;
+      .box {
+        min-height: 150px;
+        @media (max-width: 768px) {
+          min-height: 140px;
+        }
+        .type {
+          font-family: "GTHaptikBold", serif;
+          font-size: 20px;
+          line-height: 30px;
+          padding: 16px 0 0;
+        }
+        .price {
+          font-family: "GTHaptikBold", serif;
+          @media (min-width: 768px) and (max-width: 991px) {
+            height: 110px;
+          }
+          .amount {
+            font-size: 66px;
+            line-height: normal;
+            span {
+              display: inline-block;
+              font-size: 30px;
+              vertical-align: top;
+              position: relative;
+              left: 0;
+              top: 14px;
+              @media (min-width: 768px) and (max-width: 991px) {
+                font-size: 32px;
+              }
+            }
+            @media (min-width: 768px) and (max-width: 991px) {
+              font-size: 65px;
+            }
+            &.number-middle {
+              right: 12px;
+              position: relative;
+            }
+
+          }
+          .currency {
+            font-family: "GTHaptikLight", serif;
+            font-size: 30px;
+            position: relative;
+            top: 12px;
+            vertical-align: top;
+            &.number-middle {
+              right: 12px;
+            }
+          }
+          .unit {
+            font-family: "GTHaptikLight", serif;
+            display: block;
+            font-size: 12px;
+            line-height: 19px;
+            position: relative;
+            top: -10px;
+          }
+        }
+
+      }
+      .desc {
+        font-size: 14px;
+        font-family: "GTHaptikBold", serif;
+        line-height: 21px;
+        padding: 0 30px;
+        min-height: 50px;
+        text-transform: capitalize;
+        @media (min-width: 768px) and (max-width: 991px) {
+          padding: 0;
+          min-height: 39px;
+        }
+      }
+      .button {
+        background: transparent;
+        font-family: "GTHaptikBold", serif;
+        color: #FFFFFF;
+        margin: 0;
+        display: inline-block;
+        border: 1px solid #fafafa;
+        min-width: 100px;
+        font-size: 11px;
+        &:hover {
+          background: rgba(51, 51, 51, 0.1);
+        }
+        @media (min-width: 768px) and (max-width: 991px) {
+          min-width: inherit;
+        }
+      }
+    }
+    .description-box {
+      background: #FFFFFF;
+      margin: 0;
+      .intro-text {
+        font-size: 15px;
+        line-height: 16px;
+        padding: 16px 15px;
+        height: 70px;
+        b {
+          font-family: "GTHaptikBold", serif;
+        }
+      }
+      .user-limit {
+        font-family: "GTHaptikBold", serif;
+        font-size: 11px;
+        display: inline-block;
+        padding: 5px 0;
+        width: 106px;
+      }
+      .extra-info {
+        color: black;
+        text-align: left;
+        text-transform: capitalize;
+        font-family: 'LacrimaMG-SenzaBold';
+        position: relative;
+        ul {
+          height: 360px;
+          padding: 0 23px;
+          margin-left: 10px;
+          @media (max-width: 480px) {
+            height: 100%;
+          }
+          @media (min-width: 768px) and (max-width: 991px) {
+            height: 420px;
+          }
+          li {
+            padding-bottom: 20px;
+            font-size: 12px;
+            @media (min-width: 768px) and (max-width: 991px) {
+              font-size: 14px;
+            }
+          }
+        }
+        .notificate {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          text-align: center;
+          text-transform: none;
+          font-size: 12px;
+        }
+      }
+    }
+    &.free {
+      .cover-product {
+        background: @color-free;
+      }
+      .description-box {
+        .intro-text {
+          color: @color-free;
+        }
+        .user-limit {
+          background: @color-free;
+        }
+        .extra-info {
+          ul {
+            li {
+              position: relative;
+              list-style-type: none;
+
+              &:before {
+                content: "";
+                position: absolute;
+                top: -2px;
+                left: -18px;
+                height: 17px;
+                width: 17px;
+                background: url("../img/pricing/blue-plus.png") no-repeat left center;
+                background-size: 9px;
+              }
+            }
+          }
+        }
+      }
+    }
+    &.pro {
+      .cover-product {
+        background: @color-pro;
+      }
+      .description-box {
+        .intro-text {
+          color: @color-pro;
+        }
+        .user-limit {
+          background: @color-pro;
+        }
+        .extra-info {
+          ul {
+            li {
+              position: relative;
+              list-style-type: none;
+
+              &:before {
+                content: "";
+                position: absolute;
+                top: -2px;
+                left: -18px;
+                height: 17px;
+                width: 17px;
+                background: url("../img/pricing/green-plus.png") no-repeat left center;
+                background-size: 9px;
+              }
+            }
+          }
+        }
+      }
+    }
+    &.business {
+      .cover-product {
+        background: @color-business;
+      }
+      .description-box {
+        .intro-text {
+          color: @color-business;
+        }
+        .user-limit {
+          background: @color-business;
+        }
+        .extra-info {
+          ul {
+            li {
+              position: relative;
+              list-style-type: none;
+
+              &:before {
+                content: "";
+                position: absolute;
+                top: -2px;
+                left: -18px;
+                height: 17px;
+                width: 17px;
+                background: url("../img/pricing/orange-plus.png") no-repeat left center;
+                background-size: 9px;
+              }
+            }
+          }
+        }
+      }
+    }
+    &.enterprise {
+      .cover-product {
+        background: @color-enterprise;
+        .box {
+          .price {
+            .amount {
+              font-size: 28px;
+              padding: 24px 15px 10px 15px;
+              text-align: center;
+              display: block;
+              line-height: 23px;
+              @media (min-width: 768px) and (max-width: 991px) {
+                font-size: 33px;
+              }
+            }
+          }
+          .desc {
+            font-family: "GTHaptikBold", serif;
+            font-size: 13px;
+            line-height: 21px;
+          }
+        }
+      }
+      .description-box {
+        .intro-text {
+          color: @color-enterprise;
+        }
+        .user-limit {
+          background: @color-enterprise;
+        }
+        .extra-info {
+          ul {
+            li {
+              position: relative;
+              list-style-type: none;
+
+              &:before {
+                content: "";
+                position: absolute;
+                top: -2px;
+                left: -18px;
+                height: 17px;
+                width: 17px;
+                background: url("../img/pricing/red-plus.png") no-repeat left center;
+                background-size: 9px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  #res-loved {
+    @media (max-width: 480px) {
+      background: #FFFFFF;
+    }
+    h2 {
+      color: black;
+      text-align: center;
+      font-size: 60px;
+      padding: 100px;
+      @media (max-width: 480px) {
+        padding: 30px 0px;
+        font-size: 35px;
+      }
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      li {
+        width: 19%;
+        text-align: center;
+        display: inline-block;
+        @media (max-width: 480px) {
+          width: 45%;
+          padding: 20px 0;
+        }
+      }
+    }
+  }
+  #chef {
+    padding-top: 150px;
+    padding-bottom: 150px;
+    @media (max-width: 480px) {
+      background: #FFFFFF;
+    }
+    .chef-item {
+      text-align: center;
+      color: #000000;
+      font-family: 'LacrimaMG-SenzaBold';
+      h3 {
+        font-family: "GTHaptikBold", serif;
+        margin-bottom: 0;
+        font-size: 21px;
+      }
+      h4 {
+        font-family: "GTHaptikLight", serif;
+        font-size: 16px;
+        min-height: 35px;
+      }
+    }
+  }
+}
+
+.pricing-page-container {
+  .page-title {
+    text-align: center;
+    margin-bottom: 25px;
+    h1 {
+      font-size: 60px;
+      color: white;
+    }
+  }
+  .page-content {
+    .grey {
+      color: rgba(0, 0, 0, .6);
+    }
+    .pricing-box {
+      padding: 30px;
+      padding-bottom: 15px;
+      > div {
+        text-align: center;
+      }
+      > div.box {
+        border: 1px solid rgba(0, 0, 0, .5);
+        background: rgba(0, 0, 0, .05);
+        min-height: 100px;
+        padding: 10px;
+        .type {
+          font-size: 1.4em;
+          margin-bottom: 7px;
+        }
+        .price, .desc {
+          margin-bottom: 15px;
+        }
+        .price {
+          .amount, .currency {
+            font-size: 1.4em;
+            font-weight: bold;
+          }
+        }
+        .btn {
+          min-width: 70%;
+        }
+      }
+      > div.description-box {
+        margin-top: 25px;
+        .intro-text {
+          height: 35px;
+          overflow: hidden;
+        }
+        .user-limit {
+          font-size: 1.1em;
+          padding: 7px;
+          background: #d0e9c6;
+          margin: 15px auto;
+          margin-bottom: 25px;
+        }
+      }
+    }
+  }
+}
+
+.modal-body {
+  .pricing-page-container {
+    .page-title {
+      h1 {
+        color: black;
+        font-size: 2em;
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <title>{% block title %}NextChef{% endblock title %}</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- styles -->
+	    <link href="{% static 'css/cookbooth.css' %}" rel="stylesheet">
+
+		<!-- fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700' rel='stylesheet' type='text/css'>
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+	</head>
+	<body style="text-align: center; width: 100%;">
+		
+		{% if not DEBUG %}
+			<!-- Google Tag Manager -->
+			<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PGKMLD"
+			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+			<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-PGKMLD');</script>
+			<!-- End Google Tag Manager -->
+		{% endif %}
+		
+		{% for recipe in recipes %}
+		<div class="recipe-box {{recipe.chef_type}}" style="height: 401px;">
+			{% with cover_thumb=recipe.cover|thumbnail_url:'explore_box' %}
+	        {% if cover_thumb %}
+	        <div class="image" style="background-image: url({{cover_thumb}});">
+	        {% else %}
+	        <div class="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+	        {% endif %}
+	        {% endwith %}
+				<a class="logo" target="_blank" class="gtm-event" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+					{{recipe.chef.name}} {{recipe.chef.surname}}
+				</a>
+			</div>
+			<div class="info">
+				<div class="description">
+					<div><p><a class="gtm-event" target="_blank" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">{{recipe.name}}</a></p></div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</body>
+</html>

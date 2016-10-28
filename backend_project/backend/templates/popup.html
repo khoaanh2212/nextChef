@@ -1,0 +1,341 @@
+{% load staticfiles %}
+{% load i18n %}
+{% comment %}
+    {% if not request.user.is_authenticated %}
+        <div id="account_modal" class="modal fade gtm-event" role="dialog" data-gtme-category="Signin Popup"
+             data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <a href="#" class="close" data-dismiss="modal">
+                            <img class="gtm-event" src="{% static 'img/fullframe-close-icon-dark.png' %}"
+                                 data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="close">
+                        </a>
+                        <h2></h2>
+                        <p>{% trans 'Sign in to Nextchef to share your cooking step by step' %}<br>{% trans 'and connect with other chefs and foodies worldwide.' %}
+                        </p>
+                        <a href="{% url 'auth_login' %}?next={{ request.path }}" class="btn gtm-event"
+                           data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                           data-gtme-tag="signin">{% trans 'Sign In' %}</a>
+                        <a href="{% url 'registration_register' %}" class="btn btn-primary gtm-event"
+                           data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                           data-gtme-tag="join">{% trans 'Join' %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endcomment %}
+
+<div id="conversion_modal" class="modal fade gtm-event"
+     ng-class="{'fullsize':accountModalStatus==accountModalMainStatus}" role="dialog"
+     data-gtme-category="Conversion Popup" data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sideimage start_photorecipe"
+                         ng-show="accountModalStatus==accountModalMainStatus && accountModalType==1">
+                        <div class="hidden-xs col-sm-4 col-md-6 col-lg-6 image"></div>
+                        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text">
+                            <br><br><br><br>
+                            {% comment %}
+                                <img src="{% static 'img/conversion_modals/start_photorecipe.png' %}"><br>
+                                <h2>Empieza una fotoreceta</h2>
+                                <p>Comparte tu cocina paso a paso<br>y conecta con Chefs y foodies de otras cocinas del
+                                    mundo.</p>
+                            {% endcomment %}
+                            <h2>Public or private?</h2>
+                            <p>Document your best recipes privately, <br>or connect them to your social networks <br>to
+                                share them with friends and followers. </p>
+                            <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                    data-gtme-tag="signin">
+                                {% trans 'Facebook' %}</button>
+                            <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                    data-gtme-tag="join">
+                                {% trans 'Email' %}</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sideimage follow_chefs"
+                         ng-show="accountModalStatus==accountModalMainStatus && accountModalType==2">
+                        <div class="hidden-xs col-sm-4 col-md-6 col-lg-6 image"></div>
+                        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text">
+                            <br><br><br>
+                            {% comment %}
+                                <img src="{% static 'img/conversion_modals/follow_chefs.png' %}"><br>
+                                <h2>Conecta con Chefs y sigue sus recetas</h2>
+                                <p>Aprende nuevas técnicas y elaboraciones.<br>Descubre ingredientes, combinaciones.
+                                    <br>Entra en la librería de recetas de Chefs y foodies. </p>
+                            {% endcomment %}
+                            <h2>STAY TUNED</h2>
+                            <p>Follow recipes published by Chefs and food lovers, and collect your personal recipes step
+                                by step classified into books.</p>
+                            <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                    data-gtme-tag="signin">
+                                {% trans 'Facebook' %}</button>
+                            <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                    data-gtme-tag="join">
+                                {% trans 'Email' %}</button>
+                        </div>
+                    </div>
+
+                    <table class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sideimage chefs"
+                           ng-show="accountModalStatus==accountModalMainStatus && accountModalType==3">
+                        <tr>
+                            <td class="hidden-xs col-sm-4 col-md-5 col-lg-5 image"></td>
+                            <td class="col-xs-12 col-sm-8 col-md-7 col-lg-7 text">
+                                <br><br><br>
+                                {% comment %}
+                                    <img src="{% static 'img/conversion_modals/follow_chefs.png' %}"><br>
+                                    <h2>Conecta con más de 10.000 Chefs y 150.000 Amantes de la Cocina.</h2>
+                                    <p>Nextchef es una solución profesional <br>para gestionar recetarios y compartir
+                                        conocimiento.</p>
+                                    <ul>
+                                        <li>- Recetas públicas y privadas.</li>
+                                        <li>- Librería App y web.</li>
+                                        <li>- Gestiona equipos.</li>
+                                        <li>- Promoción en redes sociales.</li>
+                                        <li>- Colecciona recetas de Chefs, bloggers y foodies.</li>
+                                    </ul><br>
+                                {% endcomment %}
+
+                                <h2>CONNECT WITH OVER 10,000 CHEFS AND 150,000 FOOD LOVERS.</h2>
+                                <p>Nextchef is a professional solution to manage recipes and share knowledge.</p>
+                                <ul>
+                                    <li>- Public and private recipes.</li>
+                                    <li>- App and web library.</li>
+                                    <li>- Manage teams.</li>
+                                    <li>- Promotion on social networks.</li>
+                                    <li>- Collect recipes from Chefs, bloggers and foodies.</li>
+                                </ul>
+                                <br>
+
+                                {% if not request.user.is_authenticated %}
+                                    <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                            data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                            data-gtme-tag="signin">
+                                        {% trans 'Facebook' %}</button>
+                                    <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                            data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                            data-gtme-tag="join">
+                                        {% trans 'Email' %}</button>
+                                    <br><br><br><br>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sideimage add_to_book"
+                         ng-show="accountModalStatus==accountModalMainStatus && accountModalType==4">
+                        <div class="hidden-xs col-sm-4 col-md-6 col-lg-6 image"></div>
+                        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text">
+                            <br><br><br><br><br><br>
+                            {% comment %}
+                                <img src="{% static 'img/conversion_modals/add_to_books.png' %}"><br>
+                                <h2>Añade esta receta a tus libros</h2>
+                                <p>Colecciona recetas paso a paso de <br>Chefs y foodies y contacta con sus autores.
+                                </p>
+                            {% endcomment %}
+                            <h2>Add this recipe to your books</h2>
+                            <p>Collect step by step recipes from <br>Chefs and foodies and contact their authors. </p>
+                            <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                    data-gtme-tag="signin">
+                                {% trans 'Facebook' %}</button>
+                            <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                    data-gtme-tag="join">
+                                {% trans 'Email' %}</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sideimage do_love"
+                         ng-show="accountModalStatus==accountModalMainStatus && accountModalType==5">
+                        <div class="hidden-xs col-sm-4 col-md-6 col-lg-6 image"></div>
+                        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text">
+                            <br><br><br><br><br>
+                            {% comment %}
+                                <img src="{% static 'img/conversion_modals/love_icon.png' %}"><br>
+                                <h2>¿Te gusta?</h2>
+                                <p>Colecciona las recetas que más te gustan<br>y díselo al autor.</p>
+                            {% endcomment %}
+                            <h2>Love this recipe?</h2>
+                            <p>Collect step by step recipes from <br>Chefs and foodies and contact their authors. </p>
+                            <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                    data-gtme-tag="signin">
+                                {% trans 'Facebook' %}</button>
+                            <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                    data-gtme-tag="join">
+                                {% trans 'Email' %}</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 conversion_form"
+                         ng-show="accountModalStatus==accountModalEmailStatus">
+
+                        <img class="logo" src="{% static 'img/cookbooth_complete_logo.png' %}">
+
+                        <ul class="selector">
+                            <li ng-click="selectLoginForm()"
+                                ng-class="{'active':accountModalTab==accountModalLoginTab}">{% trans "Login" %}</li>
+                            <li ng-click="selectJoinForm()"
+                                ng-class="{'active':accountModalTab==accountModalJoinTab}">{% trans "Join" %}</li>
+                        </ul>
+
+                        <form method="post" action="{% url 'auth_login' %}"
+                              ng-show="accountModalTab==accountModalLoginTab">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}"/>
+                            <input class="{% if form.username.errors %}error{% endif %}"
+                                   maxlength="254" name="username" type="text" placeholder="{% trans 'Email' %}">
+                            {% if form.username.errors %}
+                                <div>{{ form.username.errors }}</div>{% endif %}
+                            <input class="{% if form.password.errors %}error{% endif %}"
+                                   name="password" type="password" placeholder="{% trans 'Password' %}">
+                            {% if form.password.errors %}
+                                <div>{{ form.password.errors }}</div>{% endif %}
+                            <div>{{ form.non_field_errors }}</div>
+                            <button class="btn btn-primary">{% trans 'Sign in' %}</button>
+                            <a href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a>
+                        </form>
+
+                        <form id="signup_form" method="post" action="{% url 'registration_register' %}"
+                              ng-show="accountModalTab==accountModalJoinTab">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}"/>
+                            <input type="hidden" name="type" value="0"/>
+                            <input class="{% if form.name.errors %}error{% endif %}"
+                                   name="name" type="text" placeholder="{% trans 'Name' %}">
+                            {% if form.name.errors %}
+                                <div>{{ form.name.errors }}</div>{% endif %}
+                            <input class="{% if form.surname.errors %}error{% endif %}"
+                                   name="surname" type="text" placeholder="{% trans 'Surname' %}">
+                            {% if form.surname.errors %}
+                                <div>{{ form.surname.errors }}</div>{% endif %}
+                            <input class="{% if form.email.errors %}error{% endif %}"
+                                   name="email" type="email" placeholder="{% trans 'Email' %}">
+                            {% if form.email.errors %}
+                                <div>{{ form.email.errors }}</div>{% endif %}
+                            <input class="{% if form.password1.errors %}error{% endif %}"
+                                   name="password1" type="password" placeholder="{% trans 'Password' %}">
+                            {% if form.password1.errors %}
+                                <div>{{ form.password1.errors }}</div>{% endif %}
+                            <div>{{ form.non_field_errors }}</div>
+                            <button class="btn btn-primary">{% trans 'Sign Up' %}</button>
+                            <a href="http://blog.nextchef.co/privacy">{% trans "Privacy policy" %}</a>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not request.user.is_authenticated %}
+    <div id="account_modal" class="modal fade gtm-event" role="dialog" data-gtme-category="Signin Popup"
+         data-gtme-action="Click Close" data-gtme-tag="backbround_close">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <a href="#" class="close" data-dismiss="modal">
+                        <img class="gtm-event" src="{% static 'img/fullframe-close-icon-dark.png' %}"
+                             data-gtme-category="Signin Popup" data-gtme-action="Click Close" data-gtme-tag="close">
+                    </a>
+                    <!-- img class="logo" src="{% static 'img/cookbooth_complete_logo.png' %}" -->
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             ng-show="accountModalStatus==accountModalMainStatus">
+                            <h2>Welcome!</h2>
+                            <p>{% trans 'Save your cooking ' %}<br>{% trans 'step by step and connect with' %}<br>{% trans 'Chefs and food lovers.' %}
+                            </p>
+
+                            <p class="recipe"></p>
+                            <button class="btn btn-fb gtm-event" ng-click="fn.facebookCheck()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Signin"
+                                    data-gtme-tag="signin">
+                                {% trans 'Facebook' %}</button>
+
+                            <button class="btn btn-primary gtm-event" ng-click="fn.emailAccount()"
+                                    data-gtme-category="Signin Popup" data-gtme-action="Click Join"
+                                    data-gtme-tag="join">
+                                {% trans 'Email' %}</button>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                             ng-show="accountModalStatus==accountModalEmailStatus">
+
+                            <ul class="selector">
+                                <li ng-click="fn.selectLoginForm()"
+                                    ng-class="{'active':accountModalTab==accountModalLoginTab}">{% trans "Login" %}</li>
+                                <li ng-click="fn.selectJoinForm()"
+                                    ng-class="{'active':accountModalTab==accountModalJoinTab}">{% trans "Join" %}</li>
+                            </ul>
+
+                            <form method="post" action="{% url 'auth_login' %}"
+                                  ng-show="accountModalTab==accountModalLoginTab">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.path }}"/>
+                                <input class="{% if form.username.errors %}error{% endif %}"
+                                       maxlength="254" name="username" type="text" placeholder="{% trans 'Email' %}">
+                                {% if form.username.errors %}
+                                    <div>{{ form.username.errors }}</div>{% endif %}
+                                <input class="{% if form.password.errors %}error{% endif %}"
+                                       name="password" type="password" placeholder="{% trans 'Password' %}">
+                                {% if form.password.errors %}
+                                    <div>{{ form.password.errors }}</div>{% endif %}
+                                <div>{{ form.non_field_errors }}</div>
+                                <input class="hidden" name="bii" ng-model="bii" />
+                                <button class="btn btn-primary">{% trans 'Sign in' %}</button>
+                                <a href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a>
+                            </form>
+
+                            <form id="signup_form" method="post" class="form-parents" autocomplete="off" action="{% url 'registration_register' %}"
+                                  ng-show="accountModalTab==accountModalJoinTab">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.path }}"/>
+                                <input type="hidden" name="type" value="0"/>
+                                <input class="{% if form.name.errors %}error{% endif %}" required
+                                       name="name" type="text" placeholder="{% trans 'Name' %}">
+                                {% if form.name.errors %}
+                                    <div>{{ form.name.errors }}</div>{% endif %}
+                                <input class="{% if form.surname.errors %}error{% endif %}" required
+                                       name="surname" type="text" placeholder="{% trans 'Surname' %}">
+                                {% if form.surname.errors %}
+                                    <div>{{ form.surname.errors }}</div>{% endif %}
+                                <input class="{% if form.email.errors %}error{% endif %}" required
+                                       name="email" type="email" placeholder="{% trans 'Email' %}">
+                                {% verbatim %}
+                                <span style="color: red" ng-if="email_error">{{ email_error }}</span>
+                                {% endverbatim %}
+                                {% if form.email.errors %}
+                                    <div>{{ form.email.errors }}</div>{% endif %}
+                                <input class="{% if form.password1.errors %}error{% endif %}" required
+                                       name="password1" type="password" placeholder="{% trans 'Password' %}">
+                                {% verbatim %}
+                                {% endverbatim %}
+                                {% if form.password1.errors %}
+                                    <div>{{ form.password1.errors }}</div>{% endif %}
+                                <div>{{ form.non_field_errors }}</div>
+                                <input class="hidden" name="bii" ng-model="bii" />
+                                <a class="btn btn-primary" style="color: white" ng-click="fn.validationRegister($event)">{% trans 'Sign Up' %}</a>
+                                <button style="display: none"> class="btn btn-primary" ng-click="fn.validationRegister($event)">{% trans 'Sign Up' %}</button>
+                                <a href="http://blog.nextchef.co/privacy">{% trans "Privacy policy" %}</a>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

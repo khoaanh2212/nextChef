@@ -1,0 +1,7 @@
+Sitemap: http://nextchef.co/sitemap.xml
+User-agent: *
+Crawl-delay: 5
+Disallow: /cbt-admin/
+Disallow: /embed/
+Disallow: /search/
+

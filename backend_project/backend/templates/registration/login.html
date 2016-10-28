@@ -1,0 +1,40 @@
+{% extends "registration/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}Sign in - NextChef{% endblock title %}
+{% block description %}Sign in to enjoy all of cookbooth{% endblock %}
+
+{% block registration-content %}
+	<form id="login_form" method="post" action="." class="col-xs-12 col-sm-12 col-md-12 col-lg-12 login">
+		{% csrf_token %}
+		<input type="hidden" name="next" value="{{ next }}" />
+		
+		<a class="facebook col-xs-12 col-sm-12 col-md-12 col-lg-12" id="facebook_login" href="#">{% trans 'Connect with Facebook' %}</a>
+		
+		<p class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{% trans 'or' %}</p>
+		
+		<input class="col-xs-12 col-sm-12 col-md-12 col-lg-12 {% if form.username.errors %}error{% endif %}" id="id_username" maxlength="254" name="username" type="text" placeholder="{{form.username.label}}">
+		{% if form.username.errors %}<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ form.username.errors }}</div>{% endif %}
+		<input class="col-xs-12 col-sm-12 col-md-12 col-lg-12 {% if form.password.errors %}error{% endif %}" id="id_password" name="password" type="password" placeholder="{{form.password.label}}">
+		{% if form.password.errors %}<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ form.password.errors }}</div>{% endif %}
+		
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{form.non_field_errors}}
+		</div>
+		
+		<input class="col-xs-12 col-sm-12 col-md-12 col-lg-12" type="submit" value="{% trans 'Sign in' %}" />
+		
+		<div class="options col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<a class="col-xs-12 col-sm-6 col-md-6 col-lg-6" href="{% url 'registration_register' %}">{% trans "Create an account" %}</a>
+			<a class="col-xs-12 col-sm-6 col-md-6 col-lg-6" href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a>
+		</div>
+	</form>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script type="text/javascript">
+    mixpanel.track("login_form");
+</script>
+{% endblock extra_js %}

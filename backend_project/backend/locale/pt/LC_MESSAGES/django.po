@@ -1,0 +1,696 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-13 16:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Segment"
+msgstr ""
+
+msgid "metric"
+msgstr ""
+
+#, python-format
+msgid "%(creator_name)s is now following you."
+msgstr "%(creator_name)s começou a seguir você."
+
+#, fuzzy, python-format
+msgid "%(creator_name)s has commented on your %(recipe_title)s."
+msgstr "%(creator_name)s comentou sua receita %(recipe_title)s."
+
+#, python-format
+msgid "%(creator_name)s loves your %(recipe_title)s."
+msgstr "%(creator_name)s adorou sua receita %(recipe_title)s."
+
+#, python-format
+msgid "%(creator_name)s has added your %(recipe_title)s."
+msgstr "%(creator_name)s adicionou sua receita %(recipe_title)s."
+
+#, fuzzy, python-format
+msgid "%(creator_name)s has commented on %(recipe_title)s."
+msgstr "%(creator_name)s comentou sua receita %(recipe_title)s."
+
+#, fuzzy, python-format
+msgid "%(creator_name)s is now following %(followed)s."
+msgstr "%(creator_name)s começou a seguir você."
+
+#, fuzzy, python-format
+msgid "%(creator_name)s has published %(recipe_title)s."
+msgstr "%(creator_name)s adicionou sua receita %(recipe_title)s."
+
+msgid "Message for new users"
+msgstr ""
+
+msgid "Message for old users"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Catalan"
+msgstr ""
+
+msgid "Deutch"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Portuguese"
+msgstr ""
+
+msgid "Activate users"
+msgstr ""
+
+msgid "Re-send activation emails"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password (again)"
+msgstr ""
+
+msgid ""
+"This email address is already in use. Please supply a different email "
+"address."
+msgstr ""
+
+msgid "I have read and agree to the Terms of Service"
+msgstr ""
+
+msgid "You must agree to the terms to register"
+msgstr ""
+
+msgid ""
+"Registration using free email addresses is prohibited. Please supply a "
+"different email address."
+msgstr ""
+
+msgid "user"
+msgstr ""
+
+msgid "activation key"
+msgstr ""
+
+msgid "registration profile"
+msgstr ""
+
+msgid "registration profiles"
+msgstr ""
+
+msgid "Forbiden"
+msgstr ""
+
+msgid "This is a private page. You can find other cooking libraries wide open."
+msgstr ""
+
+msgid "Page Not found"
+msgstr ""
+
+msgid "Page not found. Please, keep on cooking."
+msgstr ""
+
+msgid "COLLECTIONS"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "library"
+msgstr ""
+
+msgid "logout"
+msgstr ""
+
+msgid "looking for.."
+msgstr ""
+
+msgid "Facebook"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Join"
+msgstr ""
+
+msgid "Forgot your password?"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Surname"
+msgstr ""
+
+msgid "Sign Up"
+msgstr ""
+
+msgid "Privacy policy"
+msgstr ""
+
+msgid "Save your cooking "
+msgstr ""
+
+msgid "step by step and connect with"
+msgstr ""
+
+msgid "Chefs and food lovers."
+msgstr ""
+
+msgid "ABOUT US"
+msgstr ""
+
+msgid "CONTACT"
+msgstr ""
+
+msgid "PRIVACY"
+msgstr ""
+
+msgid "PRESS"
+msgstr ""
+
+msgid "BLOG"
+msgstr ""
+
+msgid "JOBS"
+msgstr ""
+
+msgid "F.A.Q"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Clear cache"
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "COLLECTION"
+msgstr ""
+
+msgid "ADD BOOK"
+msgstr ""
+
+msgid "By Chef"
+msgstr ""
+
+msgid "You aready have this book!"
+msgstr ""
+
+msgid "Let’s cook!"
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "has been added to your library."
+msgstr ""
+
+msgid "Write a password to access your account and consult it."
+msgstr ""
+
+msgid "Password.."
+msgstr ""
+
+msgid "Password repeat.."
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Access your account to consult it."
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+msgid "ALL"
+msgstr ""
+
+msgid "CHEFS"
+msgstr ""
+
+msgid "FOODIES"
+msgstr ""
+
+msgid "Load more"
+msgstr ""
+
+msgid "recipe collection"
+msgstr ""
+
+msgid "Newsletter Unsubscribe"
+msgstr ""
+
+msgid "Unsubscribed succesfully."
+msgstr ""
+
+msgid "You can reset your password at following link"
+msgstr ""
+
+msgid "INGREDIENTS"
+msgstr ""
+
+msgid "Share your cooking step by step"
+msgstr ""
+
+msgid "Start a Photorecipe"
+msgstr ""
+
+msgid "Recipe Collection"
+msgstr ""
+
+msgid "Your account is now activated."
+msgstr ""
+
+msgid "PHOTORECIPE"
+msgstr ""
+
+msgid "at Nextchef"
+msgstr ""
+
+msgid "photorecipe"
+msgstr ""
+
+msgid "Congratulations"
+msgstr ""
+
+msgid "Your recipe has been created, check it at"
+msgstr ""
+
+msgid "Your recipe has been published, check it at"
+msgstr ""
+
+msgid "Promote it"
+msgstr ""
+
+msgid "Recipe"
+msgstr ""
+
+msgid "Steps"
+msgstr ""
+
+msgid "Ingredients"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "upload pictures"
+msgstr ""
+
+msgid "STEP"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Serves"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Select Cover"
+msgstr ""
+
+msgid "Select as cover"
+msgstr ""
+
+msgid "Select Books"
+msgstr ""
+
+msgid "New Book"
+msgstr ""
+
+msgid "Type the name of the new book.. "
+msgstr ""
+
+msgid "Save Privately"
+msgstr ""
+
+msgid "PUBLISH"
+msgstr ""
+
+msgid "Do you really want to delete the step"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Edit Account"
+msgstr ""
+
+msgid "Change Cover"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Bio"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "Social"
+msgstr ""
+
+msgid "DELETE ACCOUNT"
+msgstr ""
+
+msgid "JOB IMAGE"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "SAVE"
+msgstr ""
+
+msgid "Chef"
+msgstr ""
+
+msgid "Pro"
+msgstr ""
+
+msgid "Following"
+msgstr ""
+
+msgid "Followers"
+msgstr ""
+
+msgid "+ Follow"
+msgstr ""
+
+msgid "- Unfollow"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Foodie"
+msgstr ""
+
+msgid "Recipes"
+msgstr ""
+
+msgid "Drafts"
+msgstr ""
+
+msgid "Books"
+msgstr ""
+
+msgid "ADD A BOOK"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Mine"
+msgstr ""
+
+msgid "Own"
+msgstr ""
+
+msgid "Others"
+msgstr ""
+
+msgid "Load More"
+msgstr ""
+
+msgid "Add a new book"
+msgstr ""
+
+msgid "Save Book"
+msgstr ""
+
+msgid "Edit Book"
+msgstr ""
+
+msgid "Delete Book"
+msgstr ""
+
+msgid "Do you really want to delete the book"
+msgstr ""
+
+msgid "Delete Draft"
+msgstr ""
+
+msgid "Do you really want to delete the draft"
+msgstr ""
+
+msgid "Do you really want to delete your account"
+msgstr ""
+
+msgid "VER LA RECETA ONLINE"
+msgstr ""
+
+msgid "Start session to save <br>this recipe in your books."
+msgstr ""
+
+msgid "MY BOOKS"
+msgstr ""
+
+msgid "Type new book name.."
+msgstr ""
+
+msgid "Publication date:"
+msgstr ""
+
+msgid "Edit date:"
+msgstr ""
+
+msgid "< />"
+msgstr ""
+
+msgid "Servings"
+msgstr ""
+
+msgid "Print PDF"
+msgstr ""
+
+msgid "TAGS"
+msgstr ""
+
+msgid "COMMENTS"
+msgstr ""
+
+msgid "Write a comment"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "MORE FROM THE BOOK"
+msgstr ""
+
+msgid "MORE FROM"
+msgstr ""
+
+msgid "YOU MIGHT LOVE"
+msgstr ""
+
+msgid "FOLLOWING"
+msgstr ""
+
+msgid "View more recipes"
+msgstr ""
+
+msgid "Embed Photorecipe"
+msgstr ""
+
+msgid "Copy the code below to integrate the recipe in your blog"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "more photo-recipes at Nextchef"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Do you really want to delete the recipe"
+msgstr ""
+
+msgid "Type an ingredient.."
+msgstr ""
+
+msgid "EDIT TEXT"
+msgstr ""
+
+msgid "Make it public"
+msgstr ""
+
+msgid "Make it a draft"
+msgstr ""
+
+msgid "Delete Recipe"
+msgstr ""
+
+msgid "SEND"
+msgstr ""
+
+msgid "< >"
+msgstr ""
+
+msgid "Embed"
+msgstr ""
+
+msgid "MINUTES"
+msgstr ""
+
+msgid "SERVINGS"
+msgstr ""
+
+msgid "Edit Recipe"
+msgstr ""
+
+msgid "Add To Books"
+msgstr ""
+
+msgid "Account activation failed"
+msgstr ""
+
+msgid "Get your stoves ready!"
+msgstr ""
+
+msgid "Confirm your account"
+msgstr ""
+
+msgid "Activate your Nextchef Account"
+msgstr ""
+
+msgid "Connect with Facebook"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "Create an account"
+msgstr ""
+
+msgid ""
+"Your account has been disabled, contact with the administrator for more "
+"information."
+msgstr ""
+
+msgid "Logged out"
+msgstr ""
+
+msgid "Keep on exploring"
+msgstr ""
+
+msgid "Password changed"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Password reset successfully"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Set new password"
+msgstr ""
+
+msgid "Password reset failed"
+msgstr ""
+
+msgid "We just sent an email to your inbox."
+msgstr ""
+
+msgid "Don't forget to check your spam folder."
+msgstr ""
+
+msgid "It happens all the times, follow"
+msgstr ""
+
+msgid "this link"
+msgstr ""
+
+msgid "Type your email below to reset your password."
+msgstr ""
+
+msgid "Registration is currently closed."
+msgstr ""
+
+msgid "Your library is almost ready."
+msgstr ""
+
+msgid ""
+"Activate your account following the link on the email we`ve just sent you."
+msgstr ""
+
+msgid "Start exploring your profile"
+msgstr ""
+
+msgid "Register with Facebook"
+msgstr ""
+
+msgid "Join Nextchef and share what you know."
+msgstr ""
+
+msgid "Time to get cooking!"
+msgstr ""
+
+msgid "Reset password"
+msgstr ""
+
+msgid "pricing"
+msgstr ""

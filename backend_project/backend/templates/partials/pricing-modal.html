@@ -1,0 +1,61 @@
+<div class="modal fade" id="pricing-modal" ng-controller="PricingModalController" ng-init="onLoad()" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="pricing-page-container">
+                    <div class="page-title">
+                        <h1>Business solutions for the professional kitchen</h1>
+                    </div>
+                    <div class="page-content">
+
+                        <div class="col-sm-6 pricing-box">
+                            <div class="box">
+                                <div class="type">Business</div>
+                                <div class="price">
+                                    <span class="amount">49</span>
+                                    <span class="currency">£</span>
+                                    /month
+                                </div>
+                                <div class="desc">optimize your kitchen</div>
+                                <a ng-click="onClickUpgrade()" href="/chefs/payment?plan=business&costing=true" class="btn btn-default">Upgrade</a>
+                            </div>
+
+                            <div class="description-box">
+                                <div class="intro-text">Business: <b>Pro</b>, plus:</div>
+                                <div class="user-limit">5 users</div>
+                                <div class="extra-info">
+                                    <div>private group</div>
+                                    <div>costing</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 pricing-box">
+                            <div class="box">
+                                <div class="type">Enterprise</div>
+                                <div class="price">
+                                    <span class="amount">Contact Us</span>
+                                </div>
+                                <div class="desc">manage large teams</div>
+                                <a href="/pricing/enterprise/upgrade/" class="btn btn-default">Contact us</a>
+                            </div>
+
+                            <div class="description-box">
+                                <div class="intro-text">Enterprise: <b>Business</b>, plus:</div>
+                                <div class="user-limit">unlimited users</div>
+                                <div class="extra-info">
+                                    <div>discount for group purchase</div>
+                                    <div>account set-up</div>
+                                    <div>account manager</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

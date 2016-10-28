@@ -1,0 +1,825 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- If you delete this tag, the sky will fall on your head -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>NextChef News</title>
+	
+<style>
+/* ------------------------------------- 
+		GLOBAL 
+------------------------------------- */
+* { 
+	margin:0;
+	padding:0;
+}
+* { font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
+
+img { 
+	max-width: 100%; 
+}
+.collapse {
+	margin:0;
+	padding:0;
+}
+body {
+	-webkit-font-smoothing:antialiased; 
+	-webkit-text-size-adjust:none; 
+	width: 100%!important; 
+	height: 100%;
+	text-align: center;
+}
+
+
+/* ------------------------------------- 
+		ELEMENTS 
+------------------------------------- */
+a { color: #2BA6CB;}
+
+.btn {
+	text-decoration:none;
+	color: #FFF;
+	background-color: #666;
+	padding:10px 16px;
+	font-weight:bold;
+	margin-right:10px;
+	text-align:center;
+	cursor:pointer;
+	display: inline-block;
+}
+
+p.callout {
+	padding:15px;
+	background-color:#ECF8FF;
+	margin-bottom: 15px;
+}
+.callout a {
+	font-weight:bold;
+	color: #2BA6CB;
+}
+
+table.social {
+/* 	padding:15px; */
+	background-color: #ebebeb;
+	
+}
+.social .soc-btn {
+	padding: 3px 7px;
+	font-size:12px;
+	margin-bottom:10px;
+	text-decoration:none;
+	color: #FFF;font-weight:bold;
+	display:block;
+	text-align:center;
+}
+a.fb { background-color: #3B5998!important; }
+a.tw { background-color: #1daced!important; }
+a.gp { background-color: #DB4A39!important; }
+a.ms { background-color: #000!important; }
+
+.sidebar .soc-btn { 
+	display:block;
+	width:100%;
+}
+
+/* ------------------------------------- 
+		HEADER 
+------------------------------------- */
+table.head-wrap { width: 100%;}
+
+.header.container table td.logo { padding: 15px; }
+.header.container table td.label { padding: 15px; padding-left:0px;}
+.header.container table td p { 
+	padding-top: 40px; 
+	color: #888;
+	font-size: 12px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* ------------------------------------- 
+		BODY 
+------------------------------------- */
+table.body-wrap { 
+	width: 100%; 
+	border-collapse: collapse;
+}
+
+.logo{
+	padding-top: 15px;
+	margin-left: 35px;
+	margin-right: 35px;
+}
+
+.recipies-table{
+	width: 600px;
+	max-width: 600px;
+	display: inline-block;
+}
+
+.new-web-table{
+	width: 600px;
+	max-width: 600px;
+	display: inline-block;
+	background-color: white;
+}
+
+.new-web-table h3{
+	font-weight: 400;
+	font-size: 18px;
+	margin-top: 30px;
+	color: rgb(144, 144, 144);
+}
+
+.new-web-table p{
+	font-size: 14px;
+	color: rgb(144, 144, 144);
+}
+
+.new-web-table p b{
+	margin-top: 20px;
+	font-size: 14px;
+	display: block;
+	color: rgb(144, 144, 144);
+}
+
+.see-more{
+	margin-top: 30px;
+	margin-bottom: 30px;
+	display: inline-block;
+	color: white;
+	font-weight: 400;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	letter-spacing: 2px;
+	text-decoration: none;
+	font-family: 'Helvetica Neue', Helvetica, Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	text-align: center;
+	padding: 15px 30px;
+	word-wrap: break-word !important;
+	background: #474747;
+}
+
+.recipies-table table{
+	width: 600px;
+	max-width: 600px;
+	display: inline-block;
+	border-spacing: 20px;
+}
+
+.recipies-table td{
+	color: white;
+	background-color: #2e2e2e;
+	width: 270px;
+	vertical-align: top;
+}
+
+.recipies-table table table{
+	border-spacing: 0px;
+	
+}
+
+.recipies-table table table td{
+	border-spacing: 0px;
+	vertical-align: middle;
+	height: 150px;
+}
+
+.recipies-table table table td.name{
+	height: 120px;
+}
+
+.recipies-table table table td.name.foodie{
+	background-color:white;
+}
+
+.recipies-table table table td.name.foodie a{
+	color: #2e2e2e;
+}
+
+.recipies-table a{
+	font-size: 19px;
+	text-transform: uppercase;
+	text-align: center;
+	color: #f5f5f5;
+	padding: 0px;
+	margin: 0px;
+	padding-left: 15px;
+	padding-right: 15px;
+	text-decoration: none;
+	display: block;
+	font-weight: 200;
+}
+
+.recipies-table table table td.image-link a{
+	margin: 0px;
+	padding: 0px;
+	display: block;
+
+}
+
+.recipies-table table table td.image-link a img{
+	width: 270px;
+	/*height: 213px;*/
+	height: 190px;
+
+}
+
+.get-the-app{
+	background-color: white;
+}
+
+.get-the-app td{
+	vertical-align: middle;
+}
+
+.get-the-app img{
+	padding: 0px;
+}
+
+.get-the-app p{
+	color: #999999;
+	font-size: 12px;
+	max-width: 500px;
+	padding: 0px;
+	margin: 0px;
+	padding-right: 20px;
+	padding-left: 20px;
+	display: inline-block;
+
+}
+
+.get-the-app a{
+	text-decoration: none;
+}
+
+.get-the-app .social img{
+	padding: 20px;
+}
+
+
+/* ------------------------------------- 
+		FOOTER 
+------------------------------------- */
+table.footer-wrap { 
+	width: 100%;	
+	clear:both!important; 
+	border-collapse: collapse;
+}
+
+.footer-wrap .container content{
+	height: 50px;
+}
+
+.footer-wrap .container .content p,
+.footer-wrap .container .content p a{
+	font-size:12px;
+	font-weight: normal;
+	color: #999999;
+	padding: 5px;
+	text-decoration: none;
+}
+
+.footer-wrap .container .content p{
+	font-size:10px;
+	font-weight: bold;
+	color: #999999;
+	padding-bottom: 50px;
+
+	font-size: 12px;
+	color: #999;
+	font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+	line-height: 1.6;
+	display: inline-block;
+	margin: 0px 0px 10px;
+	padding: 0px 0px 0px 0px;
+	text-align: center;
+
+}
+
+
+
+/* ------------------------------------- 
+		TYPOGRAPHY 
+------------------------------------- */
+h1,h2,h3,h4,h5,h6 {
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; line-height: 1.1; margin-bottom:15px; color:#000;
+}
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small { font-size: 60%; color: #6f6f6f; line-height: 0; text-transform: none; }
+
+h1 { font-weight:200; font-size: 44px;}
+h2 { font-weight:200; font-size: 37px;}
+h3 { font-weight:500; font-size: 27px;}
+h4 { font-weight:500; font-size: 23px;}
+h5 { font-weight:900; font-size: 17px;}
+h6 { font-weight:900; font-size: 14px; text-transform: uppercase; color:#444;}
+
+hr {max-width: 300px;
+	display: inline-block;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #e1e1e1;
+	width: 300px;
+	/* border: 1px; */
+	border-style: solid;
+	height: 1px;
+	border: none;
+	background-color: #e1e1e1;}
+
+.collapse { margin:0!important;}
+
+p, ul { 
+	margin-bottom: 10px; 
+	font-weight: normal; 
+	font-size:14px; 
+	line-height:1.6;
+}
+p.lead { 
+	font-size:15px; 
+	color: #2e2e2e;
+	max-width: 500px;
+	display: inline-block;
+	padding-left: 15px;
+	padding-right: 15px;
+	}
+p.last { margin-bottom:0px;}
+
+ul li {
+	margin-left:5px;
+	list-style-position: inside;
+}
+
+/* ------------------------------------- 
+		SIDEBAR 
+------------------------------------- */
+ul.sidebar {
+	background:#ebebeb;
+	display:block;
+	list-style-type: none;
+}
+ul.sidebar li { display: block; margin:0;}
+ul.sidebar li a {
+	text-decoration:none;
+	color: #666;
+	padding:10px 16px;
+/* 	font-weight:bold; */
+	margin-right:10px;
+/* 	text-align:center; */
+	cursor:pointer;
+	border-bottom: 1px solid #777777;
+	border-top: 1px solid #FFFFFF;
+	display:block;
+	margin:0;
+}
+ul.sidebar li a.last { border-bottom-width:0px;}
+ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.sidebar li a h5,ul.sidebar li a h6,ul.sidebar li a p { margin-bottom:0!important;}
+
+
+
+/* --------------------------------------------------- 
+		RESPONSIVENESS
+		Nuke it from orbit. It's the only way to be sure. 
+------------------------------------------------------ */
+
+/* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+.container {
+	display:block!important;
+	max-width:600px!important;
+	margin:0 auto!important; /* makes it centered */
+	clear:both!important;
+}
+
+/* This should also be a block element, so that it will fill 100% of the .container */
+.content {
+	padding:15px;
+	width:600px !important;
+	margin:0 auto;
+	display:block; 
+	padding:0px;
+	background-color: white;
+}
+
+.content.content-header{
+	height: 90px;
+	text-align: left;
+}
+
+.content.content-header table{
+	height: 100%;
+	border-spacing: 0px;
+}
+
+/* Let's make sure tables in the content area are 100% wide */
+.content table { width: 100%; text-align: center;}
+
+
+/* Odds and ends */
+.column {
+	width: 300px;
+	float:left;
+}
+.column tr td { padding: 15px; }
+.column-wrap { 
+	padding:0!important; 
+	margin:0 auto; 
+	max-width:600px!important;
+}
+.column table { width:100%;}
+.social .column {
+	width: 280px;
+	min-width: 279px;
+	float:left;
+}
+
+/* Be sure to place a .clear element after each set of columns, just to be safe */
+.clear { display: block; clear: both; }
+
+
+/* ------------------------------------------- 
+		PHONE
+		For clients that support media queries.
+		Nothing fancy. 
+-------------------------------------------- */
+@media only screen and (max-width: 600px) {
+	
+	a[class="btn"] { display:block!important; margin-bottom:10px!important; background-image:none!important; margin-right:0!important;}
+
+	div[class="column"] { width: auto!important; float:none!important;}
+	
+	table.social div[class="column"] {
+		width:auto!important;
+	}
+
+}
+</style>
+</head>
+ 
+<body bgcolor="#ebebeb">
+
+<!-- HEADER -->
+<table class="head-wrap" bgcolor="#ebebeb">
+	<tr>
+		<td></td>
+		<td class="header container" valign="bottom">
+			<div class="content">
+				<table bgcolor="#ebebeb">
+					<tr>
+						<td align="left">
+							<p>Qué levanten la cuchara los amantes del invierno.</p>
+						</td>
+						<td align="right">
+							<p><webversion>Ver versión web</webversion></p>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+		<td></td>
+	</tr>
+</table><!-- /HEADER -->
+
+
+<!-- BODY -->
+<table class="body-wrap" bgcolor="#ebebeb">
+	<tr>
+		<td></td>
+		<td class="container" bgcolor="#ebebeb">
+			
+			<div class="content content-header">
+				<table bgcolor="#FFFFFF">
+					<tr>
+						<td></td>
+						<td>
+							
+							<div>
+								<table bgcolor="#FFFFFF">
+									<tr>
+										<td><a href="http://www.cookbooth.com?utm_source=mail.com&utm_medium=mail&utm_campaign=MGuz-ES&utm_content=Rey"><img class="logo" style="width: 350px;
+margin-left: 115px;" src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/cookbooth-news.jpg" alt="NextChefNews"/></a></td>
+										<td align="right"><h6 class="collapse"></h6></td>
+									</tr>
+								</table>
+							</div>
+								
+						</td>
+						<td></td>
+					</tr>
+				</table><!-- /HEADER -->
+			</div>
+
+			<div class="content">
+				<table cellpadding="0" cellspacing="0" bgcolor="#f5f5f5">
+					<tr>
+						<td>
+							<a href="http://shop.cookbooth.com/products/easykit-espherification?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://s3-eu-west-1.amazonaws.com/blog-cookbooth/wp-content/uploads/2015/01/collage_weekend_comfort_food.jpg" alt=""></a>
+							<br><br><br>
+							<p class="lead">Ya está aquí el final de enero. Te hemos preparado una colección de sopas con las que te dará gusto estar en casa y perderte en la cocina. </p>
+
+							<p class="lead">Gracias a los autores por compartir estas delicias. </p>
+
+							<p class="lead">Aquí tienes una pequeña selección para comer bien este fin de semana.</p>
+							<br/><br>
+							<div class="recipies-table">
+								<table>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/sopa-de-espinacas-54440?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/87543.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/sopa-de-espinacas-54440?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">SOPA DE ESPINACAS</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/pure-de-zanahoria-con-picatostes-31891?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/50109.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/pure-de-zanahoria-con-picatostes-31891?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">PURÉ DE ZANAHORIA CON PICATOSTES</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="
+http://www.cookbooth.com/recipe/crema-de-zanahorias-nabo-e-hinojo-y-revuelto-de-ajos-tiernos-56731?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/91998.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="
+http://www.cookbooth.com/recipe/crema-de-zanahorias-nabo-e-hinojo-y-revuelto-de-ajos-tiernos-56731?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">CREMA DE ZANAHORIAS, NABO E HINOJO Y REVUELTO DE AJOS TIERNOS</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/estofado-de-patatas-con-sepia-23263?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/40493.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/estofado-de-patatas-con-sepia-23263?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">ESTOFADO DE PATATAS CON SEPIA</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/sopa-de-salmon-finlandesa-54332?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/87243.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/sopa-de-salmon-finlandesa-54332?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">SOPA DE SALMON FINLANDESA</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/fabes-con-almejas-39586?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/61603.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/fabes-con-almejas-39586?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">FABES CON ALMEJAS</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/vichyssoise-con-apio-46644?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/73874.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name foodie">
+														<a href="http://www.cookbooth.com/recipe/vichyssoise-con-apio-46644?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">VICHYSSOISE CON APIO</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/arroz-patatas-y-bacalao-26332?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/44013.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name">
+														<a href="http://www.cookbooth.com/recipe/arroz-patatas-y-bacalao-26332?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">ARROZ PATATAS Y BACALAO</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/shellfish-soup-brodetto-with-saffron-and-smoked-garlic-rouille-and-madagascan-prawns-48400?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/76607.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name">
+														<a href="http://www.cookbooth.com/recipe/shellfish-soup-brodetto-with-saffron-and-smoked-garlic-rouille-and-madagascan-prawns-48400?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">SHELLFISH SOUP 'BRODETTO' WITH SAFFRON AND SMOKED GARLIC</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/autumn-vegetable-minestrone-and-spelt-52420?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/84914.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name">
+														<a href="http://www.cookbooth.com/recipe/autumn-vegetable-minestrone-and-spelt-52420?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">AUTUMN VEGETABLE MINESTRONE AND SPELT</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/garlic-soup-5073?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/24684.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name">
+														<a href="http://www.cookbooth.com/recipe/garlic-soup-5073?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">GARLIC SOUP</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td class="image-link">
+														<a href="http://www.cookbooth.com/recipe/butternut-squash-soup-55802?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR"><img src="https://cookbooth-images.s3.amazonaws.com/thumbs/90236.jpeg.390x278_q85_crop_upscale.jpg"></a>
+													</td>
+												</tr>
+												<tr>
+													<td class="name">
+														<a href="http://www.cookbooth.com/recipe/butternut-squash-soup-55802?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR">BUTTERNUT SQUASH SOUP</a>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<br><br>
+
+							<div>
+
+								<p class="lead">Es tiempo de sopas, y nos encantaría probar la tuya. </p>
+
+								<a target="_blank" href="http://blog.cookbooth.com/es/cookbooth-cooking-weekend-comfort-food/?utm_source=mail.com&utm_medium=mail&utm_campaign=WKProject&utm_content=COMFOR" class="see-more">VER COLECCIÓN COMPLETA</a>
+								<br><br><br>
+								
+							</div>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+						
+		</td>
+		<td></td>
+	</tr>
+</table><!-- /BODY -->
+
+<!-- FOOTER -->
+<table class="footer-wrap">
+	<tr>
+		<td></td>
+		<td class="container">
+			
+				<!-- content -->
+				<div class="content">
+				<table class="row footer">
+                  <tr>
+                    <td class="wrapper last">
+                      <table class="twelve columns">
+                        <tr>
+                          <td align="center">
+                            <center>
+                            	<br><br><br>
+                            	<img style="height: 120px; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; max-width: 100%; margin: 0; padding: 0px;" src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/get-the-app.png" alt="www.cookbooth.com">
+                              <br><br><br>
+                              <p class="footer" style="padding: 0px;">Síguenos en </p>
+                            </center>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+                      <br>
+                      <div style="display: inline-block;">
+	                      <table class="four columns" style="width: 300px;">
+	                        <tr>
+	                           <td><a href="https://www.facebook.com/pages/NexChef/671839039508391"><img src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/facebook.png" alt="Facebook"></a>
+	                           </td>
+	                           <td><a href="https://twitter.com/NexChef"><img src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/twitter.png" alt="Twitter"></a>
+	                           </td>
+	                           <td><a href="http://instagram.com/cookbooth"><img src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/instagram.png" alt="Instagram"></a>
+	                           </td>
+	                           <td><a href="https://www.youtube.com/channel/UCHDltK22RHmTTOqHhm_IwQQ"><img src="https://s3-eu-west-1.amazonaws.com/newsletter-cookbooth/youtube.png" alt="Youtube"></a>
+	                           </td>
+	                        </tr>
+	                      </table>
+	                     </div>
+                      <br>
+                    </td>
+                  </tr>
+                </table>
+
+                <table class="row footer">
+                  <tr>
+                    <td class="wrapper last">
+
+                      <table class="twelve columns">
+                        <tr>
+                          <td align="center">
+                            <center>
+                              <hr class="hr"></hr>
+                              <p class="footer" style="margin-bottom: 0px; color: rgb(39, 39, 39);">¿Qué te parece la nueva web de Nextchef? Ayúdanos a mejorar <br><a href="mailto:feedback@nextchef.co" style="color: rgb(39, 39, 39);">feedback@nextchef.co</a></p>
+                              <hr class="hr"></hr>
+                              <br><br>
+                              <p class="footer">Recibes este correo electrónico a la dirección con la que <br>te has registrado en Nextchef: [Email]</p>
+                            </center>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+
+                      <table class="twelve columns">
+                        <tr>
+                          <td align="center">
+                            <center>
+                              <p class="footer">
+                                <a style="color:#999; text-decoration:underline;" href="http://blog.nextchef.co/privacy/">Privacidad</a> | <unsubscribe>Darse de baja</unsubscribe>
+                              </p>
+                            </center>
+                          </td>
+                          <td class="expander"></td>
+                        </tr>
+                      </table>
+                      
+                      <br>
+                      <br>
+                    </td>
+                  </tr>
+                </table>
+				</div><!-- /content -->
+				
+		</td>
+		<td></td>
+	</tr>
+</table><!-- /FOOTER -->
+
+
+
+</body>
+</html>

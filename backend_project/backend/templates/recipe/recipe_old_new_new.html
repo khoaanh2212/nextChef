@@ -1,0 +1,684 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }} | {{ recipe.name }}{% endblock title %}
+{% block description %}{{ recipe.name }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+
+{% block fb_title %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block fb_image %}{{ recipe.cover|thumbnail_url:"share_facebook" }}{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+
+{% block tw_summary %}{{recipe.name}} {% trans 'PHOTORECIPE' %}{% endblock %}
+{% block tw_title %}{{ block.super }} {% trans 'Recipe' %}{% endblock %}
+{% block tw_description %}{% trans 'by' %} {{recipe.chef.name}} {{recipe.chef.surname}}{% endblock %}
+{% block tw_image %}{{ recipe.cover|thumbnail_url:"explore_box" }}{% endblock %}
+
+{% block extra_css %}
+	<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+{% endblock extra_css %}		
+
+{% block extra_js %}
+	<script src="{{STATIC_URL}}js/plugins/jquery.scrollTo.min.js"></script>
+    <script src="{{STATIC_URL}}js/plugins/jquery.localScroll.min.js"></script>
+	<script>
+        var USER_FOLLOWINGS_LIST = {{USER_FOLLOWINGS_LIST}};
+		{% if 'new-recipe' in request.path %}
+            var user_id = "{{ request.user.email }}";
+            mixpanel.track("recipe_begin", {
+                "source": "web",
+                "distinct_id": user_id
+            });
+		{% endif %}
+    </script>
+    <!-- script src="{% static 'js/recipe.js' %}"></script> -->
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/models/Chef.js' %}"></script>
+	<script src="{% static 'js/models/Book.js' %}"></script>
+	<script src="{% static 'js/controllers/RecipeCtrl.js' %}"></script>
+{% endblock extra_js %}
+
+{% block open_js %}
+
+	<script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
+	<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+	<script type="text/javascript">      	
+		
+	window.fbAsyncInit = function() {
+       		FB.init({
+          		appId      : '{{FACEBOOK_APP_ID}}',
+          		xfbml      : true,
+          		version    : 'v2.6'
+        	});
+      	};
+
+      	(function(d, s, id){
+         	var js, fjs = d.getElementsByTagName(s)[0];
+         	if (d.getElementById(id)) {return;}
+         	js = d.createElement(s); js.id = id;
+         	js.src = "//connect.facebook.net/en_US/sdk.js";
+         	fjs.parentNode.insertBefore(js, fjs);
+       	}(document, 'script', 'facebook-jssdk'));
+        
+      	var facebook_share_obj = {
+			method: 'feed',
+  			redirect_uri:'{{ request.build_absolute_uri }}',
+  			link: '{{ request.build_absolute_uri }}',
+  			picture: '{{ recipe.cover|thumbnail_url:"explore_box" }}',
+  			name: '{{recipe.name}} {% trans "PHOTORECIPE" %}',
+  			caption: '{% trans "by" %} {{recipe.chef.name}} {{recipe.chef.surname}}',
+  			description: '{% trans "at Nextchef" %}'
+		};
+      	
+      	var pinterest_share_obj = "//www.pinterest.com/pin/create/button/" +
+      		    "?url={{ request.build_absolute_uri }}" +
+      		    "&media={{ recipe.cover|thumbnail_url:'explore_box' }}" +
+      		    "&description={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}%20-%20Nextchef%20";
+    
+    </script>
+    
+{% endblock open_js %}
+
+{% block content %}
+	
+	<div id="recipe" class="recipe" itemscope itemtype="http://schema.org/Recipe"  
+		ng-controller="RecipeController" ng-init="chefId={{chef.id}}; recipeId={{recipe.id}}; userLovesList={{USER_LOVES_LIST}}; userFollowingList={{USER_FOLLOWINGS_LIST}}; userBooksList={{user_books}}; userRecipeInBooksList={{recipe_in_books}};">
+		
+		<!-- HEADER -->
+        <div class="header" itemprop="image" style="background-image: url({% if recipe_cover %}{{recipe_cover}}{% else %}{% static 'img/chef_cover.jpg' %}{% endif %});">
+			<div class="image-gradient"></div>
+			<a class="chef {% if chef.type == 1 %}pro{% endif %} gtm-event" 
+				data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="GoToChef" 
+				itemprop="author" href="{% url 'library' slug=chef.slug id=chef.id %}">
+				<img src="{{chef_avatar}}">
+				<strong>{{chef.name}} {{chef.surname}}</strong>
+				<hr>
+				{% if chef.short_bio %}<small>{{ chef.short_bio }}</small>{% endif %}
+				{% if chef.role != None and chef.role != '' %}<small>{{chef.role}}<br>{{chef.location}}</small>{% endif %}
+			</a>
+			<br>
+            {% if request.user != chef %}
+			<button ng-hide="chef.followed" ng-click="follow()">{% trans '+ Follow' %}</button>
+			<button ng-show="chef.followed" ng-click="follow()" class="following">{% trans '- Unfollow' %}</button>
+            {% endif %}
+		</div>
+		
+		<!-- TITLE -->
+		<div class="title">
+			<div>
+				<h1 itemprop="name" >{{recipe.name}}</h1>
+			</div>
+		</div>
+		
+		<div class="social">
+			<div class="social-nb">
+				<p class="nb-likes {% if request.user.is_authenticated and recipe.id in request.user.loves_list %}loved{% endif %} gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Love" data-gtme-tag="love">{{recipe.nb_likes}}</p>
+			</div>
+			<div class="social-nb" id="comments_scroll">
+				<a href="#comments_row">
+					<p class="nb-comments gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Comments" data-gtme-tag="go_to_comments">{{recipe.nb_comments}}</p>
+				</a>
+			</div>
+			<div class="social-nb" >
+				<a  class="nb-added gtm-event" href="#" id="add_dropdown_button" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="list_books">{{recipe.nb_added}}</a>
+				{% if request.user.is_authenticated %}
+				<div id="add_dropdown" class="dropdown" style="display:none;">
+					<div class="list-header">{% trans 'MY BOOKS' %}</div>
+					<ul>
+	                    {% for book in books %}
+	                    	<li data-book-id="{{book.id}}">
+	                    		<input type="checkbox" {% if book.id in recipe_in_books %}checked{% endif %} class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="select_book">
+	                    		<p>{{book.name}}</p>
+	                    	</li>
+	                    {% endfor %}
+	                </ul>
+	                <div id="add_book_dropdown_button">
+		                <input id="add_book_input" type="text" placeholder="{% trans 'Type new book name..' %}" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="type_book">
+		                <button id="add_book_button" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="add_books">+</button>
+	                </div>
+                </div>
+                {% endif %}
+			</div>
+			{% comment %}
+			<div class="social-nb" >
+	            <div id="share_dropdown_button" class="nb-share gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="list_methods">
+	                <div id="share_dropdown" class="dropdown" style="display:none;">
+	                    <ul>
+	                    	<li>
+	                    		<a id="show_embed_popup" href="#" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="embed">
+	                    			<b>{% trans '< >' %}</b>{% trans 'Embed' %}</a>
+	                    	</li>
+	                    	<li>
+	                    		<a id="facebook_share_button" class="gtm-event" href="#" data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="facebook">
+	                    			<img src="{% static 'img/facebook-page-icon.png' %}"> Facebook</a>
+	                    	</li>
+	                    	<li>
+	                    		<a class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="twitter" href="https://twitter.com/intent/tweet?text={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}&url={{ request.build_absolute_uri }}&via=NextChefCo&hashtags=photorecipe">
+	                    			<img src="{% static 'img/twitter-page-icon.png' %}"> Twitter</a>
+	                    		</li>
+	                    	<li>
+	                    		<a id="pinterest_share_button" href="" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="pinterest">
+	                    			<img src="{% static 'img/pinterest-page-icon.png' %}"> Pinterest</a>
+	                    	</li>
+	                    </ul>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+		{% endcomment %}
+		
+		<!-- RECIPE CONTENT -->
+		<div class="container">
+		
+			<!-- OPTIONS 1 -->
+			<div class="options row">
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					<!-- RECIPE LIST INGREDIENTS BUTTON -->
+					<a href="#" id="dropdown_ingredients" class="gtm-event" 
+						data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="ListIngredients">{% trans 'INGREDIENTS' %}</a>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					<!-- RECIPE DATE -->
+                    {% if recipe.publication_date and recipe.publication_date != None and recipe.edit_date and recipe.edit_date != None and recipe.publication_date == recipe.edit_date %}
+                    <p class="date">{% trans 'Publication date:'%} {{ recipe.edit_date|date:'l, j M. o' }}</p>
+                    {% elif recipe.edit_date and recipe.edit_date != None %}
+                    <p class="date">{% trans 'Edit date:'%} {{ recipe.edit_date|date:'l, j M. o' }}</p>
+                    {% endif %}
+                </div>
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 buttons">
+					
+					<!-- SHOW BOOKS -->
+                   	<button class="btn btn-gray save save-button gtm-event" ng-click="showBooksList()"
+                   		data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="ListBooks">
+                   		{% trans 'Add To Books' %}</button>
+                   	
+                   	<!-- SHARE WITH FACEBOOK -->
+                   	<button class="btn btn-gray facebook gtm-event" ng-click="facebookShare()"
+                   		data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Facebook">
+                   		<i class="fa fa-facebook"></i></button>
+                   	
+                   	<!-- OTHER SHARE OPTIONS -->
+                   	<button class="btn btn-gray share gtm-event"  ng-click="showShareList()"
+                   		data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="ListOptions">
+                   		<span class="glyphicon glyphicon-share"></span></button>
+                   	
+                   	<!-- BOOKS DROPDOWN -->
+                   	<div class="dropdown books" ng-class="{active:showBooksDropdown}" ng-mouseleave="showBooksList()">
+						<div class="list-header">{% trans 'MY BOOKS' %}</div>
+						
+						<!-- BOOKS LIST -->
+						<ul id="dropdown_books_list">
+		                    {% verbatim %}
+	                    	<li ng-repeat="book in userBooksList">
+	                    		<input type="checkbox" ng-click="addRecipeToBook(book);" ng-checked="book.added" class="gtm-event" 
+	                    			data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="SaveBook">
+	                    		<p>{{book.name}}</p>
+	                    	</li>
+		                    {% endverbatim %}
+		                </ul>
+		                
+		                <!-- ADD BOOK -->
+		                <div class="add-book-button">
+			                <input ng-model="newBookName" type="text" placeholder="{% trans 'Type new book name..' %}" class="gtm-event" 
+			                	data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="TypeNewBook">
+			                <button ng-click="createBook(newBookName);" class="gtm-event"
+			                	data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="AddBook">+</button>
+		                </div>
+	                </div>
+	                
+	                <!-- SHARE DROPDOWN -->
+                   	<div class="dropdown share" ng-class="{active:showShareDropdown}" ng-mouseleave="showShareList()">
+	                    <ul>
+	                    	<!-- EMBED  -->
+	                    	<li><button ng-click="embedShare()" class="gtm-event hidden"
+	                    			data-gtme-category="Recipe" data-gtme-action="Click Share" data-gtme-tag="Embed">
+	                    			<b>{% trans '< >' %}</b>{% trans 'Embed' %}</button></li>
+	                    	
+	                    	<!-- FACEBOOK  -->
+	                    	<li><button ng-click="facebookShare()" class="gtm-event"
+	                    			data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Facebook">
+	                    			<i class="fa fa-facebook"></i> Facebook</button></li>
+	                    	
+	                    	<!-- TWITTER  -->
+	                    	<li><a class="gtm-event" href="https://twitter.com/intent/tweet?text={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}&url={{ request.build_absolute_uri }}&via=NextChefCo&hashtags=photorecipe"
+	                    			data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Twitter" >
+	                    			<i class="fa fa-twitter"></i> Twitter</a></li>
+	                    	
+	                    	<!-- PINTEREST  -->
+	                    	<li><button ng-click="pinterestShare()" class="gtm-event" 
+	                    			data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Pinterest">
+	                    			<i class="fa fa-pinterest"></i> Pinterest</button></li>
+	                    </ul>
+	                </div>
+                </div>
+			</div>
+			
+			<!-- INGREDIENTS LIST -->
+			<div class="ingredients row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul id="ingredients_list" style="display: none;">
+                    	<li class="info">
+	                    	{% if recipe.prep_time != None and recipe.prep_time > 0 %}
+	                       	<p><b>{{recipe.prep_time}}</b> {% trans 'MINUTES' %} </p>
+	                        {% endif %}
+	                        {% if recipe.serves != None %}
+	                        <p><b>{{recipe.serves}}</b> {% trans 'SERVINGS' %}</p>
+	                        {% endif %}
+                        </li>
+						{% for ingredient in recipe_ingredients %}
+						<li itemprop="ingredients">{{ingredient.name}}</li>
+						{% endfor %}
+					</ul>
+                </div>
+			</div>
+			
+			<!-- STEPS & PRODUCT  -->
+			<div class="clearfix"></div>
+			<div id="steps_list" class="steps row" data-recipe-id="{{recipe.id}}">
+				{% if recipe_products != None and recipe_products.count > 0 %}
+				<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 steps-column">
+				{% else %}
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 steps-column">
+				{% endif %}
+					<!-- STEPS LIST  -->
+		            {% for step in recipe_steps %}
+		                {% if step != None and step.photo_order != None and step.step_thumb_small != None %}
+		                	
+		                	{% if has_products > 0 %}
+		                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 step" data-slide-number="{{forloop.counter0}}">
+		                    {% else%}
+		                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 step" data-slide-number="{{forloop.counter0}}">
+		                    {% endif %}
+		                        <div class="image" {% comment %}style="background-image: url('{{step.step_thumb_small}}')"{% endcomment %}>
+		                        
+		                        	
+		                        	<!-- STEP IMAGE  -->
+		                        	<img class="col-xs-12 col-sm-12 col-md-12 col-lg-12" src="{{step.step_thumb_small}}" title="{{recipe.name}} RECIPE - STEP {{forloop.counter}}" 
+		                        		{% if recipe_tags != None and recipe_tags.count > 0 %}alt="{% for tag in recipe_tags %}{{tag.name|cut:'#'}} {% endfor %}"{% endif %}>
+		                        	
+		                        	<!-- STEP DESCRIPTION  -->
+		                            <div class="layout">
+		                                <p class="order">
+		                                    <b>{{step.photo_order}}</b>
+		                                </p>
+		                                <p class="instructions">{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+		                            </div>
+		                            
+		                            <!-- STEP DROPDOWN BUTTON  -->
+		                            <div class="top-change-view-area">
+		                            	<button class="change-view-button"></button>
+		                            </div>
+		                        </div>
+		                        
+		                        <!-- STEP DROPDOWN DESCRIPTION  -->
+		                        <div class="description" style="display: none;">
+		                        	<div class="description-layout">
+			                            <h3 class="order">
+			                                <b>{{step.photo_order}}</b>
+			                            </h3>
+			                            <p class="instructions" itemprop="recipeInstructions">{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+			                        </div>
+		                            <div class="bottom-change-view-area">
+		                            	<button class="change-view-button"></button>
+		                            </div>
+		                        </div>
+		                    </div>
+		                {% endif %}
+		            {% endfor %}
+	        	</div>
+	        	<!-- PRODUCTS LIST  -->
+	        	{% if recipe_products != None and recipe_products.count > 0 %}
+					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 products-column">
+						{% for product in recipe_products %}
+							<div class="product">
+								<div class="image">
+								{% for photo in product.photos.all %}
+									{% if forloop.first %}
+										<img src="{{photo.photo.url}}">
+									{% endif %}
+								{% endfor %}
+								</div>
+								<div class="info">
+									<h2>{{product.name|safe}}</h2>
+									<p>{{product.description}}</p>
+								</div>
+								<a target="_blank" class="btn btn-black" href="{{product.shop_url}}">{{product.price}}</a>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif%}
+			</div>
+			
+			<!-- OPTIONS 2  -->
+			<div class="options-bottom row">
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 left">
+					
+					<!-- LOVE  -->
+					<button ng-click="loveRecipe()" ng-class="{loved: recipe.loved}" class="love gtm-event"
+						data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="Love">
+						<span class="glyphicon glyphicon-heart"></span></button>
+					<p ng-init="nb_likes={{recipe.nb_likes}}">{% verbatim %}{{recipe.nb_likes}}{% endverbatim %}</p>
+					
+					<!-- SAVE  -->
+					<div class="bottom-save">
+						<button ng-click="showBooksListUnder()" class="save gtm-event"
+							data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="Save">
+							<span class="glyphicon glyphicon-plus"></span></button>
+						<p ng-init="nb_added={{recipe.nb_added}}">{% verbatim %}{{nb_added}}{% endverbatim %}</p>
+						
+						<!-- BOOKS DROPDOWN -->
+		                <div class="dropdown books" ng-class="{active:showBooksDropdownUnder}" ng-mouseleave="showBooksListUnder()">
+		                    <div class="list-header">{% trans 'MY BOOKS' %}</div>
+		
+		                    <!-- BOOKS LIST -->
+		                    <ul id="dropdown_books_list_under">
+		                        {% verbatim %}
+		                        <li ng-repeat="book in userBooksList">
+		                            <input type="checkbox" ng-click="addRecipeToBook(book);" ng-checked="book.added" class="gtm-event"
+		                                data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="SaveBook">
+		                            <p>{{book.name}}</p>
+		                        </li>
+		                        {% endverbatim %}
+		                    </ul>
+		
+		                    <!-- ADD BOOK -->
+		                    <div class="add-book-button">
+		                        <input ng-model="newBookName" type="text" placeholder="{% trans 'Type new book name..' %}" class="gtm-event"
+		                            data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="TypeNewBook">
+		                        <button ng-click="createBook(newBookName);" class="gtm-event"
+		                            data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="AddBook">+</button>
+		                    </div>
+		                </div>	
+					</div>
+					
+					<!-- PRINT  -->
+					<a href="{% url 'recipe_download_pdf' slug=recipe.slug id=recipe.id %}" class="print gtm-event" 
+						data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="Print" target="_blank">
+						<span class="glyphicon glyphicon-print"></span></a>	
+						
+				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 center">
+					{% if request.user.is_authenticated and recipe.chef == request.user %}
+						<!-- EDIT  -->
+						<a href="{% url 'kitchen_recipe' id=recipe.id %}" class="btn btn-gray edit gtm-event" 
+							data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="EditRecipe">
+							{% trans 'Edit Recipe' %}</a>
+							
+						<!-- DELTE  -->
+					    <button ng-click="showDeleteModal()" class="btn btn-link delete gtm-event" 
+					    	data-gtme-category="Recipe" data-gtme-action="Engagement" data-gtme-tag="DeleteRecipe">
+					    	Delete</button>
+					{% endif %}
+				</div>
+				
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 right">
+					
+					<!-- EMBED  -->
+					<button ng-click="embedShare()" href="#" class="embed gtm-event hidden"
+						data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Embed">
+						<b>{% trans '< >' %}</b></button>
+						
+					<!-- FACEBOOK  -->
+					<button ng-click="facebookShare()" class="facebook gtm-event" 
+						data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Facebook">
+						<i class="fa fa-facebook"></i></button>
+					
+					<!-- TWITTER  -->
+					<a class="twitter gtm-event" href="https://twitter.com/intent/tweet?text={{recipe.name|capfirst}}%20{% trans 'photorecipe' %}%20{% trans 'by' %}%20{{recipe.chef.name}}%20{{recipe.chef.surname}}&url={{ request.build_absolute_uri }}&via=NextChefCo&hashtags=photorecipe"
+						data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Twitter">
+						<i class="fa fa-twitter"></i></a>
+					
+					<!-- PINTEREST  -->
+					<button ng-click="pinterestShare()" class="pinterest gtm-event" 
+						data-gtme-category="Recipe" data-gtme-action="Share" data-gtme-tag="Pinterest">
+						<i class="fa fa-pinterest"></i></button>
+				</div>
+			</div>
+
+			<!-- TAGS  -->
+            {% if recipe_tags != None and recipe_tags.count > 0 %}
+            <div class="row"><br><hr><br></div>
+            <div class="tags row">
+            	<p>{% trans 'TAGS' %}</p>
+				<ul class="tags-list">
+				    {% for tag in recipe_tags %}
+				    <li class="tag"><a href="/search/?q={{tag.name|cut:'#'}}">{{tag.name}}</a></li>
+				    {% endfor %}
+				</ul>
+            </div>
+            {% endif %}
+            
+            <!-- COMMENTS  -->
+            <div class="row"><br><hr><br></div>
+			<div class="comments row" id="comments_row">
+				<p>{% trans 'COMMENTS' %}</p>
+				{% for comment in recipe_comments %}
+					<div class="comment {% if forloop.first %}first{% endif %} col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+							<div class="avatar" style="background-image:url({{comment.chef.photo}})"></div>
+						</div>
+						<a href="{{comment.chef.url}}">
+                            <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" itemscope itemtype="https://schema.org/UserComments">
+                                <p class="sender" itemprop="creator">{{comment.chef.name}}</p>
+                                <p class="text" itemprop="commentText">{{comment.comment}}</p>
+                                <p class="date" itemprop="commentTime">{{comment.creation_date}}</p>
+						    </div>
+                        </a>
+					</div>
+				{% endfor %}
+                {% if request.user.is_authenticated %}
+                    <div class="comment {% if recipe.comments.all.count == 0%}first{% endif %} new-comment col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+							<div class="avatar" style="background-image:url({{request.user.photo}})"></div>
+						</div>
+						<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
+                            <p class="sender">{% trans 'Write a comment' %}:</p>
+							<textarea id="new_comment" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Comment" data-gtme-tag="type"></textarea>
+                            <button id="new_comment_button" class="btn btn-gray pull-right gtm-event"  data-gtme-category="Recipe" data-gtme-action="Click Comment" data-gtme-tag="send" data-comment-recipe-url="{% url 'comment-recipe' recipe_id=recipe.id %}">{% trans 'SEND' %}</button>
+						</div>
+					</div>
+                {% endif %}
+			</div>
+			
+			<!-- RELATED RECIPES  -->
+			<div class="row"><br><hr><br></div>
+			<div class="related row">
+				<p>{% trans 'MORE FROM' %} {{chef.name}} {{chef.surname}}</p>
+				{% for recipe in related_recipes %}
+					<div class="col-xs-12 col-sm-4 col-md-2 col-lg-2">
+					<div class="recipe-box {{recipe.chef_type}}" style="height: 401px;">
+						{% with cover_thumb=recipe.cover|thumbnail_url:'explore_box' %}
+							{% if cover_thumb %}
+								<div class="image" style="background-image: url({{cover_thumb}});">
+							{% else %}
+								<div class="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+							{% endif %}
+						{% endwith %}
+									<a class="logo" target="_blank" class="gtm-event" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+										{{recipe.chef.name}} {{recipe.chef.surname}}
+									</a>
+								</div>
+								<div class="info">
+									<div class="description">
+										<div><p><a class="gtm-event" target="_blank" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">{{recipe.name}}</a></p></div>
+									</div>
+								</div>
+							</div>
+						</div>
+	              {% endfor %}
+            </div>
+            
+            <!-- RELATED RECIPES -->
+            <div class="row"><br><hr><br></div>
+            <div class="other-recipes row">
+				<p>{% trans 'YOU MIGHT LOVE' %}</p>
+				<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 related">
+					{% for recipe in other_recipes %}
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+							<div class="recipe-box {{recipe.chef_type}}" style="height: 401px;">
+							{% with cover_thumb=recipe.cover|thumbnail_url:'explore_box' %}
+								{% if cover_thumb %}
+									<div class="image" style="background-image: url({{cover_thumb}});">
+								{% else %}
+									<div class="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+								{% endif %}
+							{% endwith %}
+										<a class="logo" target="_blank" class="gtm-event" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+											{{recipe.chef.name}} {{recipe.chef.surname}}
+										</a>
+									</div>
+									<div class="info">
+										<div class="description">
+											<div><p><a class="gtm-event" target="_blank" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}" data-gtme-category="Related Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">{{recipe.name}}</a></p></div>
+										</div>
+									</div>
+								</div>
+							</div>
+		              {% endfor %}
+				</div>
+                <!-- RELATED CHEFS -->
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 followers">
+				{% for follower in chef_followings %}
+					<a href="{{follower.url}}">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 follower">
+                            <table>
+                                <tr>
+                                    <td class="image">
+                                        <img src="{{follower.thumb}}">
+                                    </td>
+                                    <td class="info">
+                                        <div class="name">{{follower.name}} {{follower.surname}}</div>
+                                        <hr>
+                                        <div class="role">{% if follower.role != None and follower.role != '' %}{{follower.role}}{% else %}{% if follower.type_class == 1 %}Pro{% else %}Foodie{% endif %}{% endif %}</div>
+                                    </td>
+                                    <td class="follow">
+                                        <button id="chef-{{follower.id}}" data-chef-id="{{follower.id}}" class="button follow-button">+</button>
+                                    </td>
+                                </tr>
+                            </table>
+					    </div>
+                    </a>
+				{% endfor %}
+				</div>
+            </div>
+		</div>
+		
+		<!-- RECIPE FOOTER  -->
+		<br><br><hr>
+		<div class="recipe-footer">
+			<a href="/" class="btn btn-gray">{% trans 'View more recipes' %}</a>
+		</div>
+		
+		<!-- EMBED POPUP  -->
+        <div id="embed_popup" class="popup" style="display: none;">
+            <div class="content">
+                  <h2>{% trans 'Embed Photorecipe' %}</h2>
+                  <iframe style='display:inline-block;border:0px;' src="{% url 'recipe-embed' slug=recipe.slug id=recipe.id %}" width="600" height="450" ></iframe>
+                <p>{% trans 'Copy the code below to integrate the recipe in your blog' %}:</p>
+                  <div class="width">
+                    <p>{% trans 'Width' %}:</p>
+                    <select name="width-select" onchange="selectOnChange(this.value)">
+                        <option class="width-button gtm-event" data-gmte-category="Recipe" data-gtme-action="Click Select Embed" data-gtme-tag="embed_600px" value=600>600px</option>
+                        <option class="width-button gmt-event" data-gmte-category="Recipe" data-gtme-action="Click Select Embed" data-gtme-tag="embed_100%" value=100 selected>100%</option>
+                    </select>
+                  </div>
+                  <textarea class="width-100" id="textarea_iframe" readonly>
+                      <iframe src="http://{{SITE}}{% url 'recipe-embed' slug=recipe.slug id=recipe.id %}" width="100%" height="450" style='border:0px;'></iframe>
+                      <a href="http://nextchef.co" target="_blank" style="display:block;float:right;text-align:right;font-size:12px;color:#000;font-family:sans-serif;font-weight:200;">{% trans 'more photo-recipes at Nextchef' %}</a>
+                  </textarea>
+            </div>
+        </div>
+        
+        <!-- FULLSCREEN POPUP -->	
+		<div id="fullscreen_view_modal" class="fullscreen-view col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
+			<a id="fullscreen_close_button" href="#" class="fullscreen-close"><img class="gtm-event" src="{% static 'img/fullframe-close-icon.png' %}" data-gtme-category="Recipe" data-gtme-action="Click Close View" data-gtme-tag="close_full_screen_view"></a>
+			<table class="fullscreen-slider">
+				<tr>
+					<td width="10%">
+                           <a class="left carousel-control" href="#fullscreen-steps-carousel" data-slide="prev" role="button"></a>
+                       </td>
+					<td width="80%">
+						<div id="fullscreen-steps-carousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+							<div class="carousel-inner">
+								{% for step in recipe_steps %}
+					    		<div class="item {% if forloop.first %}active{% endif %}">
+					    			
+				    				<div class="image-wrapper col-xs-12 col-sm-8 col-md-8 col-lg-9">
+				      					<div class="image" style="background-image:url({{ step.step_thumb_big }});"></div>
+				      				</div>
+									<div class="recipe-info col-xs-12 col-sm-4 col-md-4 col-lg-3">
+										<h1>{{recipe.name}}</h1>
+										<h2>{{step.photo_order}}</h2>
+										<p>{% if step.instructions != None %}{{step.instructions}}{% endif %}</p>
+									</div>
+								
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</td>
+					<td width="10%">
+                           <a class="right carousel-control" href="#fullscreen-steps-carousel" data-slide="next" role="button"></a>
+                       </td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- ADD RECIPE POPUP  -->
+		{% if request.user.is_authenticated %}
+		<div id="add_recipe_modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                	<div class="modal-header">
+                		<h2>{% trans 'MY BOOKS' %}</h2>
+                	</div>
+                    <div class="modal-body">
+                        
+						<ul>
+		                    {% for book in books %}
+		                    	<li data-book-id="{{book.id}}">
+		                    		<input type="checkbox" {% if book.id in recipe_in_books %}checked{% endif %} class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="select_book">
+		                    		<p>{{book.name}}</p>
+		                    	</li>
+		                    {% endfor %}
+		                </ul>
+		                <div id="add_book_dropdown_button">
+			                <input id="add_book_input" type="text" placeholder="{% trans 'Type new book name..' %}" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="type_book">
+			                <button id="add_book_button" class="gtm-event" data-gtme-category="Recipe" data-gtme-action="Click Books" data-gtme-tag="add_books">+</button>
+		                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans 'Back' %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- DELETE RECIPE POPUP  -->
+        {% if request.user.is_authenticated and recipe.chef == request.user %}
+        <div id="delete_recipe_modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>{% trans 'Do you really want to delete the recipe' %}?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                        <button type="button" onclick="location.href='{% url 'delete-recipe' id=recipe.id %}'" class="btn btn-primary" data-dismiss="modal">{% trans 'Delete' %}</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+	</div>
+{% endblock content %}
+
+
+

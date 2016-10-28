@@ -1,0 +1,8 @@
+{% extends "emailing/emailing_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Newsletter Unsubscribe' %}{% endblock title %}
+
+{% block error-content %}
+    <p>{% trans 'Unsubscribed succesfully.' %}</p>
+{% endblock error-content %}

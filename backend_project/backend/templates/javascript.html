@@ -1,0 +1,16 @@
+{% load staticfiles %}
+<script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.smartbanner.js' %}"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+<script src="{% static 'js/vendor/ui-bootstrap-tpls-1.2.5.min.js' %}"></script>
+{% include 'partials/api.html' %}
+<script src="{% static 'js/app.js' %}"></script>
+<script type="text/javascript">
+    var BOOKS = {% if books != None %} {{books|safe}} {% else %} undefined {% endif %};
+    var IS_AT_HOME = {% if is_at_home != None and is_at_home == True %} true {% else %} false {% endif %};
+</script>
+<script src="{% static 'js/domain/kitchen/TutorialTooltip.js' %}"></script>
+<script src="{% static 'js/infrastructure/LocalStorage.js' %}"></script>
+<script src="{% static 'js/infrastructure/KitchenTooltipStorage.js' %}"></script>
+<script src="{% static 'js/controllers/CookboothCtrl.js' %}"></script>
+<script src="{% static 'js/plugins/bootstrap/tooltip.js' %}"></script>

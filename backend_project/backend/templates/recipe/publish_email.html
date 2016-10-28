@@ -1,0 +1,64 @@
+{% extends 'emails/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block content %}
+
+
+	<h3 style="text-transform:uppercase;">{{recipe.name}}</h3>
+	
+	{% if books.count == 1 %}
+		<p>You have uploaded a recipe to the book {% for book in books %}{{book.book.name}}{% endfor %}</p>
+	{% else %}
+		<p>You have uploaded a recipe to the books {% for book in books %}{% if not forloop.first %}, {% endif %}{{book.book.name}}{% endfor %}</p>
+	{% endif %}
+	
+	<br><br>
+	<a href="http://{{site}}{% url 'recipe' id=recipe.id slug=recipe.slug %}?utm_source=Email&utm_medium=email&utm_campaign=PUBLISH_RECIPE" class="action">{% trans 'See recipe' %}</a>
+    <br>
+	<table cellpadding="0" cellspacing="0" class="step-by-step-table">
+		<tr>
+			{% for step in recipe.photos.all %}
+				{% if forloop.counter0|divisibleby:'3' %}</tr><tr>{% endif %}
+				<td>
+					<a href="http://{{site}}{% url 'recipe' id=recipe.id slug=recipe.slug %}?utm_source=Email&utm_medium=email&utm_campaign=PUBLISH_RECIPE">
+						<img style="border-bottom: 1px solid white;" src="{{ step.image_url|thumbnail_url:'publish_email_size' }}">
+					</a>
+				</td>
+			{% endfor %}
+		</tr>
+	</table>
+	<br>
+
+{#	{% comment %}#}
+{#	<table class="chefs-table">#}
+{#		<tr>#}
+{#			#}
+{#			<td>#}
+{#				<table style="width: 300px;">#}
+{#					<tr>#}
+{#						<td class="image">#}
+{#							<a href="http://{{site}}{% url 'library' slug=recipe.chef.slug id=recipe.chef.id %}?utm_source=Email&amp;utm_medium=mail&amp;utm_campaign=PUBLISH_RECIPE">#}
+{#								<img src="{% thumbnail recipe.chef.avatar 'chef_avatar'%}"></a>#}
+{#						</td>#}
+{#						<td class="info">#}
+{#							<p>{{recipe.chef.name}} {{recipe.chef.surname}}</p>#}
+{#							<hr>#}
+{#							<p>{{recipe.chef.short_bio}}</p>#}
+{#						</td>#}
+{#					</tr>#}
+{#				</table>#}
+{#			</td>#}
+{#			#}
+{#			<td>#}
+{#				<a href="http://{{site}}{% url 'recipe' id=recipe.id slug=recipe.slug %}?utm_source=Email&utm_medium=email&utm_campaign=PUBLISH_RECIPE" class="action" #}
+{#					style="border-bottom-left-radius: 3px;border-bottom-right-radius: 3px;border-top-left-radius: 3px;border-top-right-radius: 3px;color: #474747;border: 1px solid #474747; background-color: white;">{% trans 'VER LA RECETA ONLINE' %}</a>#}
+{#			</td>#}
+{#		</tr>#}
+{#	</table>#}
+{#	{% endcomment %}#}
+
+{% endblock %}
+
+{% block unsubscribe %}{% endblock %}

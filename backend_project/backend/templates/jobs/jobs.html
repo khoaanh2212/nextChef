@@ -1,0 +1,91 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }}{% endblock title %}
+{% block description %}{{ block.super }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{ block.super }}{% endblock %}
+{% block fb_image %}{{ block.super }}{% endblock %}
+{% block fb_url %}{% endblock %}
+{% block fb_description %}{{ block.super }}{% endblock %}
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{ block.super }}{% endblock %}
+{% block tw_image %}{{ block.super }}{% endblock %}
+
+{% block extra_js %}
+    <script src="{{STATIC_URL}}js/plugins/jquery.scrollTo.min.js"></script>
+    <script src="{{STATIC_URL}}js/plugins/jquery.localScroll.min.js"></script>
+    <script src="{{STATIC_URL}}js/jobs.js"></script>
+{% endblock %}
+
+{% block ng_app %}{% endblock %}
+
+{% block content %}
+    <div id="jobs">
+        <div class="content">
+            <h1>We are hiring</h1>
+            <p>Nextchef is build by a small, passionate team of chefs,engineers and communicators in Barcelona and London.</p>
+            <br>
+            <p>We build beautiful products and user experiences so chefs and foodies from around the world can save and share their best recipes step by step.</p>
+            <br>
+            <p>We are always looking for people to help us achieve our vision. Being a foodie is always a plus. </p>
+            <br>
+            <p>If you are interested in exploring opportunities to work together</p>
+            <br>
+            <p>please send us an email introducing yourself to</p>
+            <br>
+            <a href="mailto:careers@nextchef.co">careers@nextchef.co</a>
+        </div>
+        {% comment %}
+        <div class="positions">
+            <h1>Open positions</h1>
+            <ul class="list" id="list_positions">
+                <li>We are always looking for talented and passionate foodies,<br> if you’re interested in exploring opportunities
+                    to work together <br>send us a email introducing yourself to <br><br><a href="mailto:careers@nextchef.co">careers@nextchef.co</a></li>
+                {# <li><a href="#">Backend engineer Python/Django (BCN)</a></li> #}
+                {# <li><a href="#">Mobile acquisition (BCN or LDN)</a></li>  #}
+            </ul>
+        </div>
+
+        <div id="ios_engineer">
+            <h2>iOS engineer (BCN)</h2>
+            <div>
+                <h3>About you</h3>
+                <p>You are an exceptional iOS engineer who wants to help take an already well regarded iOS app to the next level.
+                    You believe our app could be more lively and engaging and know how to get it there. You are eager to work in a fast paced startup environment
+                    and want to ship products that are as beautifully built as they are designed.</p>
+            </div>
+            <div>
+                <h3>Responsibilites</h3>
+                <ul class="list">
+                    <li>Maintain, improve, and extend an existing iOS codebase.</li>
+                    <li>Develop new features based on detailed flows from designers as well as ideas initiated by engineering.</li>
+                    <li>Improving the stability of the iOS app</li>
+                    <li>Translate a Photoshop PSD into pixel-perfect views.</li>
+                    <li>Perform code reviews daily and write unit tests for your code.</li>
+                    <li>Partner with our product and design teams to help define feature specifications.</li>
+                    <li>Supervise and implement analytic tools and proactively suggest features to improve engagement and user experience</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Minimum qualifications</h3>
+                <ul class="list">
+                    <li>B.S. or higher in Computer Science (or equivalent work experience)</li>
+                    <li>Proficient in the following technologies: Objective-C and Cocoa Touch</li>
+                    <li>Experience with third party libraries, integration with REST API and in app purchases</li>
+                    <li>We value previously developed apps on the iOS App Store</li>
+                </ul>
+            </div>
+        </div>
+        <div id="backend_engineer">
+            <h1>Backend engineer Python/Django (BCN)</h1>
+        </div>
+        <div id="mobile_acquisition">
+            <h1>Mobile acquisition (BCN or LDN)</h1>
+        </div>
+        {% endcomment %}
+    </div>
+{% endblock content %}

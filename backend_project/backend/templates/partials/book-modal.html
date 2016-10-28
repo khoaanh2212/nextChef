@@ -1,0 +1,104 @@
+{% load i18n %}
+<div id="book_modal"
+     class="modal fade" tabindex="-1" role="dialog" ng-controller="BookModalController" ng-init="events.onLoad()">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form name="BookForm" id="bookEdit">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">{% trans 'Close' %}</span>
+                    </button>
+                    <h4 class="modal-title">{% trans 'Create a new book of recipes' %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{% trans 'Book’s name' %}</label>
+                            <div class="col-sm-8">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Name"
+                                       name="name"
+                                       ng-model="book.name"
+                                       ng-focus="isShowCollaboratorDropdown = False"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{% trans 'Set privacy of the book' %}</label>
+                            <div class="col-sm-8">
+                                <input type="radio"
+                                       class="form-control"
+                                       name="private"
+                                       value="1"
+                                       title="private"
+                                       ng-model="book.private"
+                                       ng-checked="book.private == 1"/>
+                                <input type="radio"
+                                       class="form-control"
+                                       name="private"
+                                       value="0"
+                                       title="private"
+                                       ng-model="book.private"
+                                       ng-checked="book.private == 0"/>
+                                <div class="note"
+                                     ng-show="book.private == 1">{% trans 'This book is private. Invite collaborators to see the book and its content' %}</div>
+                                <div class="note"
+                                     ng-show="book.private == 0">{% trans 'Books are public by default. Private books are only accesible by invitation.' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Collaborators</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control colSelected" ng-model="colaborator_name"
+                                       ng-change="fn.getCollaborator(colaborator_name);"
+                                       placeholder="Search by name or email address">
+                                {% verbatim %}
+                                    <div class="collaborator-dropdown" ng-show="isShowCollaboratorDropdown">
+                                        <ul class="list">
+                                            <li ng-repeat="item in collaborators.chefs"
+                                                ng-click="fn.selectCollaborator(item)">
+                                                <div class="pic"><img src="{{ item.avatar }}"></div>
+                                                <div class="title">
+                                                    {{ item.name + ' ' + item.surname }}
+                                                    <span>{{ item.email }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="collaborator-selected">
+                                        <ul class="list">
+                                            <li ng-repeat="collaborator in book.collaborators">
+                                                <div class="pic"><img src="{{ collaborator.avatar }}"></div>
+                                                <div class="title">
+                                                    {{ collaborator.name + ' ' + collaborator.surname }}
+                                                    <span>{{ collaborator.email }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endverbatim %}
+                                <button type="button"
+                                        ng-disabled="BookForm.$invalid"
+                                        ng-click="isCreate=true;onClickAddingBook()"
+                                        data-dismiss="modal"
+                                        class="btn btn-default button">
+                                    {% trans 'Create' %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {#                <div class="modal-footer">#}
+                {#                    <button type="button"#}
+                {#                            class="btn btn-default"#}
+                {#                            data-dismiss="modal">#}
+                {#                        {% trans 'Cancel' %}#}
+                {#                    </button>#}
+                {#                </div>#}
+            </form>
+        </div>
+    </div>
+</div>

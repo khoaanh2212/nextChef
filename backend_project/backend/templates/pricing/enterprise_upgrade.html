@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}NextChef{% endblock title %}
+{% block description %}A global community of creative chefs and foodies.{% endblock %}
+
+{% block nav-bar-fixed-space %}
+    <div style="height: 120px"></div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/controllers/EntepriseCtrl.js' %}"></script>
+{% endblock extra_js %}
+
+{% block content %}
+    <div class="col-sm-12">
+        <h3 class="text-center">Upgrade Enterprise</h3>
+    </div>
+    <div class="col-sm-8 col-sm-offset-2" ng-controller="EnterpriseCtrl" ng-init="onLoad()">
+        <form class="form-horizontal" method="post" action=".">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Phone Number<br>
+                    <small style="text-transform: lowercase">(include country code)</small>
+                </label>
+                <div class="col-sm-7">
+                    <div class="col-xs-4" style="padding: 0 5px 0 0">
+                        {% verbatim %}
+                        <input type="text"
+                               class="form-control"
+                               value="Loading..."
+                               ng-show="!countryCode.length"
+                               style="width: 100%; background: white"
+                               readonly>
+                        <select name="country_code" class="form-control" style="height: 44px;" required ng-show="countryCode.length">
+                            <option value="">Select country code</option>
+                            <option ng-repeat="code in countryCode track by $index" value="{{ code }}">{{ code }}</option>
+                        </select>
+                        {% endverbatim %}
+                    </div>
+                    <div class="col-xs-8" style="padding: 0">{{ form.phone }}</div>
+                    <div class="col-xs-12" style="padding: 0">{{ form.phone.errors }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Company</label>
+                <div class="col-sm-7">
+                    {{ form.company }}
+                    {{ form.company.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Company Website</label>
+                <div class="col-sm-7">
+                    {{ form.company_website }}
+                    {{ form.company_website.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Company Type</label>
+                <div class="col-sm-7">
+                    {{ form.company_type }}
+                    {{ form.company_type.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Number of location</label>
+                <div class="col-sm-7">
+                    {{ form.number_location }}
+                    {{ form.number_location.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">How many employees</label>
+                <div class="col-sm-7">
+                    {{ form.employee }}
+                    {{ form.employee.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">What current recipe software do you use</label>
+                <div class="col-sm-7">
+                    {{ form.software }}
+                    {{ form.software.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">What is your role</label>
+                <div class="col-sm-7">
+                    {{ form.role }}
+                    {{ form.role.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">Comments</label>
+                <div class="col-sm-7">
+                    {{ form.message }}
+                    {{ form.message.errors }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-7">
+                    <button type="submit" class="btn btn-default">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clearfix"></div>
+    <div style="height: 50px"></div>
+{% endblock %}

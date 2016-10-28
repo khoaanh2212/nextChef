@@ -1,0 +1,17 @@
+version: '2'
+services:
+  web:
+    restart: always
+    environment:
+      TEST_DATA: "true"
+      INIT_STRIPE_PLANS: "true"
+    ports:
+      - "8001:8000"
+  db:
+    restart: always
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "5506:3306"
+volumes:
+  dbdata: {}

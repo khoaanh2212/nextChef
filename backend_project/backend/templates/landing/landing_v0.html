@@ -1,0 +1,175 @@
+{% extends 'base.html' %} 
+
+{% block extra_css %}{% endblock extra_css %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+		
+		current_index_chefs = 0;
+		current_index_foodies = 0;
+		$(document).ready(function(){
+			
+			$('.chefs .item').mouseover(function(){	
+				if(current_index_chefs != $(this).index()){
+					current_index_chefs = $(this).index()
+					$(".chefs .sentences p").filter(function () {
+						return $(this).css("display") == "inline-block";
+					}).fadeOut(200,function(){
+						$($('.chefs .sentences p')[current_index_chefs]).fadeIn(200);
+					});
+				}
+			});
+			
+			$('.foodies .item').mouseover(function(){	
+				if(current_index_foodies != $(this).index()){
+					current_index_foodies = $(this).index()
+					$(".foodies .sentences p").filter(function () {
+						return $(this).css("display") == "inline-block";
+					}).fadeOut(200,function(){
+						$($('.foodies .sentences p')[current_index_foodies]).fadeIn(200);
+					});
+				}
+			});
+		});
+
+        mixpanel.track("home");
+	</script>
+{% endblock extra_js %}
+
+{% block content %}
+
+	<div class="landing">
+		<div class="step-by-step">
+			<h1>Your cooking explained<br> step by step for everyone <br>to see and cook</h1>
+		</div>
+		
+		<div class="step-by-step-image">
+			<br>
+			<img src="{{STATIC_URL}}img/landing/photo-recipe-phone.png">
+			<br>
+{#			<div class="download">#}
+{#				<a target="_blank" href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8"><img src="{{STATIC_URL}}img/landing/app-store.png"></a>#}
+{#				<a target="_blank" href="https://play.google.com/store/apps/details?id=com.cookbooth.cookbooth"><img src="{{STATIC_URL}}img/landing/google_play.jpg"></a>#}
+{#			</div>#}
+		</div>
+	
+		<div class="social-cooking-experience">
+			<img class="sentence" src="{{STATIC_URL}}img/landing/social-cooking-experience.png">
+			<br>
+			<a target="_blank" href="https://www.youtube.com/watch?v=bdc16F6PHlc" class="fresco" 
+				data-fresco-options="width: 853, height: 480,youtube: { autoplay: 0 }">Introducing<img src="{{STATIC_URL}}img/landing/play-button.png">NextChef</a>
+		</div>
+	
+		<div class="chef-and-foodie">
+			<div class="chef-foodie-header" style="background-image:url({{STATIC_URL}}img/landing/home-chef-foodie.jpg)">
+				<h2>¿Chef or Foodie?</h2>
+			</div>
+			<p>NextChef is a fun and practical way to save your recipes while you are preparing them. <br>To share them with your friends, colleagues and family.</p>
+			<br><br>
+			<p>A new way to communicate through your recipes, to document your creations <br>so everybody can enjoy them. With all the details and explanations.</p>
+			<br><br>
+			<p>Ready to be shared on facebook, twitter or email.</p>
+			<br>
+			<img src="{{STATIC_URL}}img/landing/empieza-comer-bien.png">
+		</div>
+
+		<div class="testimonials">
+			<div class="chefs">
+				<h2>Chefs</h2>
+				<div class="list">
+					<a href = "/library/fatima-gismero-158748">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_1.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/fatima-gismero.png">
+                            <p>Creative Pastry</p>
+                        </div>
+                    </a>
+                    <a href = "/library/sergi-de-meia-121300">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_2.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/sergi-maia.png">
+                            <p>Proximity Food</p>
+                        </div>
+                    </a>
+                    <a href = "/library/sergi-ferrer-125442">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_3.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/sergi-ferrer.png">
+                            <p>Pastry chef at CETT</p>
+                        </div>
+                    </a>
+                    <a href="/library/betlem-miscelanea-gastronomica-123781">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_4.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/victor-ferrer.png">
+                            <p>Restaurant Betlem</p>
+                        </div>
+                    </a>
+                    <a href="/library/damian-allsop-126632">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_5.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/damian-allshop.png">
+                            <p>Water Ganache</p>
+                        </div>
+                    </a>
+                    <a href = "/library/iain-graham-126179">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/chef_6.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/iain-graham.png">
+                            <p>Food Stylist</p>
+                        </div>
+                    </a>
+				</div>
+				<div class="sentences">
+					<p style="display:inline-block;">"The best way to save your recipes is to share them"</p>
+					<p style="display:none;">"Your team can look up the recipes any time"</p>
+					<p style="display:none;">“NextChef is the best tool to keep my recipes and shares my passion for cooking”</p>
+					<p style="display:none;">"I meet people who want to know what we are doing"</p>
+					<p style="display:none;">"Find out how I do my chocolate without cream"</p>
+					<p style="display:none;">"An addictive platform to find, share and create beautiful recipes"</p>
+				</div>
+			</div>
+			<div class="foodies">
+				<h2>Foodies</h2>
+				<div class="list">
+                    <a href = "/library/ana-lovefood-119501">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/foodie_1.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/ana-casanova.png">
+                            <p>LoveFood</p>
+                        </div>
+                    </a>
+                    <a href = "/library/adam-arnold-100377">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/foodie_2.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/adam-arnold.png">
+                            <p>The Meat Club</p>
+                        </div>
+                    </a>
+                    <a href = "/library/alice-gabriella-fenwick-129356">
+                        <div class="item">
+                            <img src="{{STATIC_URL}}img/landing/foodie_3.png">
+                            <br>
+                            <img src="{{STATIC_URL}}img/landing/allice-and-gabrielle.png">
+                            <p>Blogger Twin Sisters</p>
+                        </div>
+                    </a>
+				</div>
+				<div class="sentences">
+					<p style="display:inline-block;">"Sharing a photorecipe is sharing an experience"</p>
+					<p style="display:none;">"I wanted to make a blog but then I discovered NextChef"</p>
+					<p style="display:none;">“We fell in love with it when we came across it”</p>
+				</div>
+				<!--p>'We fell in love with it when we came across it'</p-->
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+
+<script type="text/javascript">
+
+	/* AUTH */
+	var FACEBOOK_SIGNUP_URL = "{% url 'account_signup_facebook' %}";
+	var FACEBOOK_LOGIN_URL = "{% url 'account_login_facebook' %}";
+
+	/* USER */
+	var AUTHENTICATED = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+	var USER_AUTHENTICATED = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+	/* SEARCH */
+	var SEARCH_URL = "{% url 'search' %}";
+    var SEARCH_LIST_RECIPES_URL = "{% url 'search_page_recipes_list' %}";
+
+	/* RECIPE */
+	var GET_RECIPE_URL = "{% url 'kitchen_get_recipe' id='RECIPE_ID' %}";
+	var RECIPE_LOVE_URL = "{% url 'recipe_love' recipe_id='RECIPE_ID' %}";
+	var RECIPE_DELETE_URL = "{% url 'delete-recipe' id='RECIPE_ID' %}";
+	var GET_INGREDIENTSSUGGESTION_URL = "{% url 'kitchen_suggestion_ingredients' search_key='SEARCH_KEY' %}";
+	var EDIT_INGREDIENTS_URL = "{% url 'kitchen_edit_ingredients' recipe_id='RECIPE_ID' %}";
+	var EDIT_TAGS_URL = "{% url 'kitchen_edit_tags' recipe_id='RECIPE_ID' %}";
+	var EDIT_ALLERGEN_URL = "{% url 'kitchen_edit_allergens' recipe_id='RECIPE_ID' %}";
+	var EDIT_TITLE_URL = "{% url 'kitchen_edit_title' recipe_id='RECIPE_ID' %}";
+	var EDIT_SERVES_URL = "{% url 'kitchen_edit_serves' recipe_id='RECIPE_ID' %}";
+	var EDIT_PREP_TIME_URL = "{% url 'kitchen_edit_prep_time' recipe_id='RECIPE_ID' %}";
+	var SELECT_BOOK_URL = "{% url 'kitchen_select_book' recipe_id='RECIPE_ID' %}";
+	var RECIPE_SELECT_COVER_URL = "{% url 'kitchen_select_cover' photo_id='PHOTO_ID' %}";
+	var RECIPE_UPLOAD_PHOTO_URL = "{% url 'kitchen_upload_photo' recipe_id='RECIPE_ID' %}";
+
+	{% comment %}
+	var PUBLISH_RECIPE_URL = "{% url 'kitchen_publish_recipe' recipe_id='RECIPE_ID' %}";
+	var MAKE_PRIVATE_RECIPE_URL = "{% url 'kitchen_make_private_recipe' recipe_id='RECIPE_ID' %}";
+	{% endcomment %}
+	var PUBLISH_RECIPE_URL = "{% url 'kitchen_publish' id='RECIPE_ID' %}";
+	var MAKE_PRIVATE_RECIPE_URL = "{% url 'kitchen_make_private' id='RECIPE_ID' %}";
+
+	/* STEP */
+	var STEP_DELETE_PHOTO_URL = "{% url 'kitchen_delete_photo' photo_id='PHOTO_ID' %}";
+	var STEP_UPDATE_INSTRUCTIONS_URL = "{% url 'kitchen_photo_update_instructions' photo_id='PHOTO_ID' %}";
+	var STEP_CHANGE_PHOTO_ORDER_URL = "{% url 'kitchen_change_photo_order' photo_id='PHOTO_ID' %}";
+
+	/* BOOK */
+	var BOOK_ADD_URL = "{% url 'books_add_book' %}";
+	var BOOK_ADD_AND_RECIPE_URL = "{% url 'add-book-with-recipe' recipe_id='RECIPE_ID' %}";
+	var BOOK_ADD_RECIPE_URL = "{% url 'books_add_recipe_book' book_id='BOOK_ID' recipe_id='RECIPE_ID' %}";
+	var BOOK_LIST_RECIPES_URL = "{% url 'library_book_recipes' book_id='BOOK_ID' %}";
+	var BOOK_EDIT_URL = "{% url 'books_edit_book' book_id='BOOK_ID' %}";
+	var BOOK_DELETE_URL = "{% url 'books_delete_book' book_id='BOOK_ID' %}";
+
+	/* CHEF */
+	var CHEF_FOLLOW_URL = "{% url 'chefs_follow' %}";
+	var CHEF_RECIPES_URL = "{% url 'library_chef_recipes' chef_id='CHEF_ID' %}";
+	var CHEF_RECIPES_BY_NAME_URL = "{% url 'library_chef_recipes_by_name' chef_id='CHEF_ID' name='NAME' %}";
+    var CHEF_LOAD_FOLLOWING_URL = "{% url 'library_chef_following' chef_id='CHEF_ID'%}";
+	var CHEF_LOAD_FOLLOWERS_URL = "{% url 'library_chef_followers' chef_id='CHEF_ID'%}";
+	var CHEF_UPLOAD_RESTAURANT_IMAGE_URL = "{% url 'library_upload_restaurant_image' chef_id='CHEF_ID' %}";
+	var CHEF_UPLOAD_AVATAR_IMAGE_URL = "{% url 'library_upload_avatar_image' chef_id='CHEF_ID' %}";
+	var CHEF_UPLOAD_COVER_IMAGE_URL = "{% url 'library_upload_cover_image' chef_id='CHEF_ID' %}";
+    var CHEF_GET_BY_NAME_AND_LIMIT = "{% url 'get_chef_by_name_limit' %}";
+	var CHEF_GET_BY_LIST_ID = "{% url 'get_chef_by_list_id' %}";
+
+	/* EXPLORE */
+	var FOLLOWING_URL = '/1/explore';
+    var RECOMMENDED_URL = '/1/recommended';
+    {% comment %}
+    //var EXPLORE_RECIPES_URL = "{% url 'explore_recipes' %}";
+	//var EXPLORE_LIST_FOODIE_RECIPES_URL = "{% url 'explore_list_recipes_foodie' %}";
+	//var EXPLORE_LIST_PRO_RECIPES_URL = "{% url 'explore_list_recipes_pro' %}";
+	{% endcomment %}
+
+</script>
+
+	

@@ -1,0 +1,13 @@
+{% extends "registration/base.html" %}
+{% load i18n %}
+
+{% block registration-content %}
+	<p>{% trans "Your account is now activated." %}</p>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script type="text/javascript">
+    mixpanel.track("activation_complete");
+</script>
+{% endblock extra_js %}

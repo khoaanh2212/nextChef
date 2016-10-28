@@ -1,0 +1,56 @@
+.toaster {
+  .block-message {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: #79838d;
+  width: 100%;
+  z-index: 1040;
+  color: white;
+  border-radius: 0;
+  padding: 20px 0;
+
+  &#block-message {
+    display: none;
+  }
+
+  .msg {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .ap-delete {
+    font-size: 12px;
+    margin-left: 10px;
+  }
+
+  &.message-success {
+    background-color: #b9df90;
+    color: #3c763d;
+  }
+
+  &.message-danger {
+    background-color: #f2838f;
+    color: #a94442;
+  }
+
+  &.message-primary {
+    background-color: #1f3562;
+    color: white;
+    height: 146px;
+    line-height: normal;
+    padding-top:40px;
+
+    .msg {
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .btn {
+      margin: 0 7px;
+    }
+  }
+}
+}

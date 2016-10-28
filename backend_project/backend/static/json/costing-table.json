@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Apple",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Pears",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Potato",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Apple",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Pears",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Potato",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Apple",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Pears",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Potato",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Apple",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Pears",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Potato",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Apple",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Pears",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  },
+  {
+    "name": "Potato",
+    "family": "Fruit",
+    "quantity": "1000",
+    "unit": "gr",
+    "grossPrice": "3.05",
+    "waste": "7",
+    "netPrice": "3.09",
+    "supplier": "guzman"
+  }
+]

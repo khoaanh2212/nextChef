@@ -1,0 +1,221 @@
+{% extends 'emails/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<!--Sorry about that...-->
+	<div id="test-maill" style="width: 600px; margin: 0 auto; font-size:14.67px; font-family:Arial">
+        <div style="text-align: center;"><strong>Pleased to meet you.</strong></div>
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <div style="text-align: center;"><strong>Let's get started!</strong></div>
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <p>I'm your <strong>kitchen assistant manager</strong>, along with the whole team at <strong>NextChef</strong>, we are here to make your life easier, making managing your kitchen less stressful and more efficient.
+        </p>
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <p>I'll help you to set up a <strong>Visual Recipe Cloud</strong> with all your recipes in one place. To easily pass on your methods to your team achieving a higher level of consistency. Connecting your recipes to your supplier's price lists and designing a more cost effective menu.
+        </p>
+
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <p style="text-align: center;">
+            <strong>We will help you save time on training</strong><br>
+            <strong>and make more profit with every dish.</strong>
+        </p>
+
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <p>It will only take 5 minutes of your time to set up your company profile. Then you can start uploading your recipes and methods with <strong> NextChef's automatic allergen recognition</strong>.
+        </p>
+        <div style="display: block; height: 20px;">&nbsp;</div>
+
+        <p>Set up your company's profile:</p>
+
+        <div style="text-align: center;">
+            <a class="action" href="http://{{ site.domain }}{{ user.url }}">Let's get started</a>
+        </div>
+
+        <p>Need help?</p>
+
+        <p>Get in touch <a href="mailto:hello@nextchef.co" target="_blank">hello@nextchef.co</a></p>
+
+    </div>
+
+	<!--<br><br>-->
+	<!--<img src="http://{{ site.domain }}{% static 'img/registration/ORDENADOR_IPHONE.png' %}">-->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<a href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8"><img src="http://{{ site.domain }}{% static 'img/registration/app_store.png' %}""></a>-->
+	<!--<a href="https://play.google.com/store/apps/details?id=com.cookbooth.cookbooth"><img src="http://{{ site.domain }}{% static 'img/registration/google_play.png' %}""></a>-->
+	<!-- -->
+	<!--<br><br><br><br>-->
+	<!--<table>-->
+		<!--<tr>-->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:65px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_recipe_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 9px;">Create photo recipes <br>with the app and web</p>-->
+			<!--</td>-->
+		<!-- -->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:60px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_management_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 3px;">Make them public<br> or keep them private</p>-->
+			<!--</td>-->
+		<!-- -->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:60px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_share_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 2px;">Share them via <br>social networks</p>-->
+			<!--</td>-->
+			<!--<td style="height: 100px; width: 25%;">-->
+				<!--<img style="opacity:0.7; width:50px;" src="http://{{ site.domain }}{% static 'img/registration/welcome_email_print_icon.png' %}">-->
+				<!--<br>-->
+				<!--<p style="margin-top: 5px;">Print your <br>recipes</p>-->
+			<!--</td>-->
+		<!--</tr>-->
+	<!--</table>-->
+	<!-- -->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<p>To get started, here are a few chefs & foodies we recommend you to follow.</p>-->
+	<!-- -->
+	<!--<table class="chefs-table">-->
+		<!--<tbody>-->
+			<!--<tr>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/iain-graham-126179?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/59190.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Iain Graham</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/peter-gordon-155636?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/80905.jpg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Peter Gordon</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/gizzi-erskine-168008?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/119570.png.130x130_q85_crop_upscale.png">-->
+						<!--<h2>Gizzie Ersquine</h2>-->
+						<!--<h3>Chef</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+			<!--</tr>-->
+			<!--<tr>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/alice-gabriella-129356?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/___62207.jpg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Alice & Gabriella</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/library/adam-arnold-100377?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/22067.jpeg.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Adam Arnold</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+				<!--<td class="image small" style="text-align:center;">-->
+					<!--<a href="http://nextchef.co/recipe/cherry-gazpacho-gaspatxo-de-cirera-44213?utm_source=mail.com&amp;utm_medium=mail&amp;utm_campaign=WP&amp;utm_content=EASTER_CAKE">-->
+						<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/_87610.JPG.130x130_q85_crop_upscale.jpg">-->
+						<!--<h2>Barcelona Delicious</h2>-->
+						<!--<h3>Foodie</h3>-->
+					<!--</a>-->
+				<!--</td>-->
+			<!--</tr>-->
+		<!--</tbody>-->
+	<!--</table>-->
+	<!-- -->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<p>And check out some of our favorite recipes for this season.</p>-->
+
+	<!--<div class="recipies-table">-->
+		<!--<table>-->
+			<!--<tr>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/scallop-and-yuzu-ceviche-65164">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/photos/o/p/t/optdd6xl5mfeao4.jpeg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/scallop-and-yuzu-ceviche-65164">-->
+								<!--SCALLOP AND YUZU CEVICHE</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/beetroot-risotto-risotto-de-remolacha-25285">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/531e5830069ff.jpg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/beetroot-risotto-risotto-de-remolacha-25285">-->
+								<!--BEETROOT RISOTTO</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+			<!--</tr>-->
+			<!--<tr>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/vegan-chocolate-cake-65987">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/_104394.jpg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/vegan-chocolate-cake-65987">-->
+								<!--VEGAN CHOCOLATE CAKE</a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--<table>-->
+						<!--<tr>-->
+							<!--<td class="image-link">-->
+								<!--<a href="http://nextchef.co/recipe/passion-fruit-and-orange-marshmallows-nubes-de-fruta-de-la-pasion-y-naranja-52005">-->
+								<!--<img src="https://cookbooth-images.s3.amazonaws.com/thumbs/83250.jpg.380x300_q85_crop_upscale.jpg"></a>-->
+							<!--</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td class="name">-->
+								<!--<a href="http://nextchef.co/recipe/passion-fruit-and-orange-marshmallows-nubes-de-fruta-de-la-pasion-y-naranja-52005">-->
+								<!--PASSION FRUIT AND ORANGE MARSHMELLOWS </a>-->
+							<!--</td>-->
+						<!--</tr>-->
+					<!--</table>-->
+				<!--</td>-->
+				<!-- -->
+
+			<!--</tr>-->
+			<!-- -->
+		<!--</table>-->
+	<!--</div>-->
+	<!--<br><br>-->
+	<!-- -->
+	<!--<a href="http://nextchef.co" class="action">START A PHOTORECIPE</a>-->
+
+{% endblock %}
+
+{% block unsubscribe %}{% endblock %}

@@ -1,0 +1,195 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<div id="edit_profile_modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form id="save_profile_form" method='POST' action="{{request.path}}" autocomplete="off">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-md-4 col-avatar">
+						<a class="gtm-event" id="upload_avatar_image_button" href="#"
+							data-gmte-category="Library Header" data-gtme-action="Click Change Avatar" data-gtme-tag="change_avatar" >
+							<div ng-show="loadingAvatar" class="loading"></div>
+	    					{% with avatar_thumb=chef_avatar %}
+						        {% if avatar_thumb %}
+						        	<img id="library_modal_avatar" class="avatar" src="{{avatar_thumb}}">
+						        {% else %}
+						        	<img id="library_modal_avatar" class="avatar" src="{% static 'img/chef_avatar.jpg' %}">
+						        {% endif %}
+					        {% endwith %}
+				        </a>
+					</div>
+					<div class="col-md-8 col-cover">
+	       				<a id="upload_cover_image_button" href="#"
+	       					class="gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Change Cover" data-gtme-tag="change_cover" >
+							<div class="camera"></div>
+							<div ng-show="loadingCover" class="loading"></div>
+							{% with cover_thumb=chef_edit_cover %}
+						        {% if cover_thumb %}
+						        	<img id="library_modal_cover" class="cover" src="{{cover_thumb}}">
+						        {% else %}
+						        	{% with best_recipe_cover_thumb=chef.best_recipe.cover|thumbnail_url:'library_edit_modal_cover' %}
+								        {% if best_recipe_cover_thumb %}
+								        	<img id="library_modal_cover" class="cover" src="{{best_recipe_cover_thumb}}">
+								        {% else %}
+								        	<img id="library_modal_cover" class="cover" src="{% static 'img/library/edit_cover.jpg' %}">
+								        {% endif %}
+							        {% endwith %}
+						        {% endif %}
+					        {% endwith %}
+				        </a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-menu">
+						<ul>
+							<li ng-click="selectedSection='settings';" ng-class="{active: selectedSection == 'settings'}" ng-init="selectedSection='settings';">{% trans 'PROFILE' %}</li>
+							<li ng-click="selectedSection='account';" ng-class="{active: selectedSection == 'account'}">{% trans 'SETTINGS' %}</li>
+						</ul>
+					</div>
+					<div class="col-md-8 col-content">
+						<div ng-show="selectedSection=='settings'"
+                             ng-init="type_member='{{ type_member }}';showChangePassword=false;change_password_title = 'Change password';
+                             isValidNewPassword=false;isChangePassword = 0">
+                            <div class="col-md-6">
+								<label class="col-md-12">{% trans 'your current plan' %}</label>
+                                <div class="col-md-6 selector-no-underline">{{ type_member }}</div>
+							</div>
+                            <div class="col-md-6">
+								<label class="col-md-12">&nbsp;</label>
+								<div class="col-md-12 selector-no-underline">
+                                    <a class="btn btn-profile" href="{% url 'pricing' %}" ng-show="type_member=='Free' || type_member=='Pro'">
+                                        {% trans 'UPGRADE NOW!' %}
+                                    </a>
+                                </div>
+							</div>
+							<div class="col-md-6">
+								<label class="col-md-12">{% trans 'NAME' %}</label>
+								{{profile_form.name}}
+							</div>
+							<div class="col-md-6">
+								<label class="col-md-12">{% trans 'LAST NAME' %}</label>
+								{{profile_form.surname}}
+							</div>
+							<div class="col-md-6">
+								<label class="col-md-12">{% trans 'LOCATION' %}</label>
+								{{profile_form.location}}
+							</div>
+							<div class="col-md-6">
+								<label class="col-md-12">{% trans 'WEBSITE' %}</label>
+								{{profile_form.web}}
+							</div>
+							<div class="col-md-12 description">
+								<label class="col-md-12">{% trans 'SHORT DESCRIPTION' %}</label>
+                                {{profile_form.short_bio}}
+                                <label class="limit-describe">max 70 character</label>
+							</div>
+							<div class="col-md-12 description">
+								<label class="col-md-12">{% trans 'BIOGRAPHY' %}</label>
+								<textarea cols="40" maxlength="145" name="description" rows="3">{{ profile_form.description.value }}</textarea>
+                                <label class="limit-describe">max 145 character</label>
+							</div>
+                            {% if type_member == 'Enterprise' %}
+                                <div class="col-md-6">
+                                    <label class="col-md-12">{% trans 'COMPANY NAME' %}</label>
+                                    {{ restaurant_form.name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-md-12">{% trans 'TYPE OF COMPANY' %}</label>
+                                    {{ restaurant_form.type }}
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="col-md-12">{% trans 'TELEPHONE' %}</label>
+                                    {{ restaurant_form.phone }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-md-12">{% trans 'ADDRESS' %}</label>
+                                    {{ restaurant_form.address }}
+                                </div>
+                            {% endif %}
+						</div>
+						<div ng-show="selectedSection=='account'">
+                            <div class="col-md-12">
+                                <label class="col-md-12">{% trans 'Email' %}</label>
+								{{profile_form.email}}
+							</div>
+                            <div class="col-md-12">
+                                <label class="hide-change-password" ng-click="updateTitleChangePassword()">
+                                    {% verbatim %}
+                                    {{ change_password_title }}
+                                    {% endverbatim %}
+                                </label>
+                                <div class="change-password" ng-show="showChangePassword == true">
+                                    <label class="col-md-12">{% trans 'Current password' %}</label>
+                                    <input type="password" readonly onfocus="this.removeAttribute('readonly');"
+										   ng-model="old_password" name="old_password" ng-change="updateIsChangePassword()" />
+                                    <label class="col-md-12 lblNewPassword">{% trans 'New password' %}</label>
+                                    <input type="password" readonly onfocus="this.removeAttribute('readonly');"
+										   ng-model="new_password" name="new_password" ng-change="validateNewPassword()" />
+                                    <label class="col-md-12 lblConfirmPassword">{% trans 'Retype new password' %}</label>
+                                    <input type="password" readonly onfocus="this.removeAttribute('readonly');"
+										   ng-model="confirm_password" name="confirm_password" ng-change="validateNewPassword()" />
+       								<input type=text name="isChangePassword" ng-model="isChangePassword" style="display: none;">
+                                </div>
+
+							</div>
+                            <div class="col-md-12">
+                                <label class="col-md-12">{% trans 'Social networks' %}</label>
+                                <div class="clearfix"></div>
+                                <div class="block-social">
+                                    <span class="fa fa-facebook-official logo-social"></span>
+                                    {{ profile_form.facebook_page }}
+                                </div>
+                                <div class="block-social">
+                                    <span class="fa fa-twitter logo-social"></span>
+                                    {{ profile_form.twitter_page }}
+                                </div>
+                                <div class="block-social">
+                                    <span class="fa fa-linkedin logo-social"></span>
+                                    {{ profile_form.linkedin_page }}
+                                </div>
+                                <div class="block-social">
+                                    <span class="fa fa-instagram logo-social"></span>
+                                    {{ profile_form.instagram_page }}
+                                </div>
+
+                                <div class="block-social">
+                                    <span class="fa fa-pinterest logo-social"></span>
+                                    {{ profile_form.pinterest_page }}
+                                </div>
+                            </div>
+							<div class="col-md-12">
+								<label class="col-md-12">{% trans 'Notifications' %}</label>
+                                 {{profile_form.email_newsletter}}
+                                <label class="notifications">{% trans 'Receive newsletter by email' %}</label>
+                                <hr>
+                                {{profile_form.email_notifications}}
+                                <label class="notifications">{% trans 'Receive notifications by email' %}</label>
+                                <hr>
+							</div>
+							<div class="col-md-12 delete">
+	       						<a href="#" onclick="showDeleteChefModal()" class="gtm-event"
+	       							data-gtme-category="Library Header" data-gtme-action="Click Delete Chef" data-gtme-tag="delete_chef">
+	       							{% trans 'DELETE ACCOUNT' %}</a>
+	       					</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="modal-footer">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-8">
+					<button type="button" class="btn btn-default gtm-event" data-gmte-category="Library Header" data-gtme-action="Click Cancel Edit" data-gtme-tag="cancel_edit" data-dismiss="modal">{% trans 'CANCEL' %}</button>
+					<button type="button" class="btn btn-primary gtm-event" ng-class="{'btn-primary':checkChangePasswordCommit()==true,'btn-default':checkChangePasswordCommit()==false}"
+							data-gmte-category="Library Header" data-gtme-action="Click Save Edit" data-gtme-tag="save_edit"
+							ng-click="saveProfile()">{% trans 'SAVE' %}</button>
+				</div>
+            </div>
+            <input id="upload_avatar_image_input" type="file" name="image" style="display:none;">
+			<input id="upload_cover_image_input" type="file" name="image" style="display:none;">
+		</div>
+	</div>
+</div>

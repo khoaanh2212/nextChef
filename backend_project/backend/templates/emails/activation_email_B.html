@@ -1,0 +1,18 @@
+{% extends 'emails/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h4>COMPLETE YOUR PROFILE</h4>
+	<p>Complete your profile to connect with more chefs and foodies <br>and start building your own digital cookbook.</p>
+	<br><br>
+	<img src="http://{{ site.domain }}{% static 'img/chef_cover.jpg' %}">
+	<br><br><br>
+	<p>Upload a profile picture<br>Tell us about your cooking<br>Upload a nice header picture<br>Connect to your social networks</p>
+	<br>
+	<a href="http://{{ site.domain }}{% url 'library' slug=user.slug id=user.id %}" class="action">EDIT MY PROFILE</a>
+	
+{% endblock %}
+
+{% block unsubscribe %}{% endblock %}

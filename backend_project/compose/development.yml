@@ -1,0 +1,39 @@
+version: '2'
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        SSH_DEVELOPER_INSTALLED: 1
+    environment:
+      TEST_DATA: "false"
+    ports:
+      - "9000:8000"
+      - "2222:22"
+    volumes:
+      - ../backend/:/code/backend/
+      - ../development.env:/development.env
+      - pycharm_helpers:/root/.pycharm_helpers/
+    links:
+      - db_test:nextchef.testdb
+    command: "/usr/sbin/sshd -D"
+  elasticsearch:
+      ports:
+        - "9200:9200"
+  less_watcher:
+    build:
+      context: ..
+      dockerfile: Dockerfile.node-tools
+    volumes_from:
+      - web
+    command: grunt dev
+  db:
+    ports:
+      - "3307:3306"
+  db_test:
+    extends: db
+    ports:
+      - "3308:3306"
+volumes:
+  pycharm_helpers: {}

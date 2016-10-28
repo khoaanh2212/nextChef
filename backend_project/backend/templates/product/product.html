@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}NextChef{% endblock title %}
+{% block description %}Your kitchen could be losing money{% endblock %}
+
+{% block nav-bar-fixed-space %}
+    <div style="height: 120px"></div>
+{% endblock %}
+
+{% block content %}
+    <div class="productPage">
+        <div class="productBg"></div>
+        <div class="blackCover"></div>
+        <div class="container">
+            <div class="pageTitle">
+                <h1>Your kitchen could be <br><strong>losing money</strong></h1>
+                <div class="itemBox">
+                    <img src="{{ STATIC_URL }}img/product/item-1.png" alt="No consistency" class="item1">
+                    <img src="{{ STATIC_URL }}img/product/item-2.png" alt="No consistency" class="item2">
+                    <img src="{{ STATIC_URL }}img/product/item-3.png" alt="No consistency" class="item3">
+                    <img src="{{ STATIC_URL }}img/product/item-4.png" alt="No consistency" class="item4">
+                </div>
+                <div class="arrowDown">
+                    <img src="{{ STATIC_URL }}img/product/arrow-down.png">
+                </div>
+            </div>
+            <div class="pageContent container">
+                <h2>Control means <strong>profit</strong></h2>
+
+                <div class="profitItem">
+                    <div class="profitCol">
+                        <h3 class="img-circle"><span>Drag and drop to create a <strong>Visual Recipe Cloud</strong></span></h3>
+                    </div>
+                    <div class="profitCol">
+                        <img class="img-responsive" src="{{ STATIC_URL }}img/product/blueProfit.png" alt="">
+                    </div>
+                    <div class="profitCol">
+                        <ul>
+                            <li><img src="{{ STATIC_URL }}img/product/blueCheck.png" alt="Step by step photo recipes">
+                                <span>Step by step photo recipes</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/blueCheck.png" alt="Public or private">
+                                <span>Public or private</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/blueCheck.png" alt="Allergens & nutrition">
+                                <span>Allergens & nutrition</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/blueCheck.png" alt="Menu creation">
+                                <span>Menu creation</span></li>
+                        </ul>
+                        <a class="blueLink" href="#" title="Organize your recipes all in one place">Organize your recipes all in one place</a>
+                    </div>
+                </div>
+
+                <div class="profitItem">
+                    <div class="profitCol">
+                        <ul>
+                            <li><img src="{{ STATIC_URL }}img/product/greenCheck.png" alt="Own ingredient database">
+                                <span>Own ingredient database</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/greenCheck.png" alt="Cost per ingredient">
+                                <span>Cost per ingredient</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/greenCheck.png"
+                                     alt="Updated supplier prices">
+                                <span>Updated supplier prices</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/greenCheck.png" alt="Optimize food cost">
+                                <span>Optimize food cost</span></li>
+                        </ul>
+                        <a class="greenLink" href="#" title="Get more out of every dish and drink">Get more out of every
+                            dish and drink</a>
+                    </div>
+                    <div class="profitCol">
+                        <img class="img-responsive" src="{{ STATIC_URL }}img/product/greenProfit.png" alt="">
+                    </div>
+                    <div class="profitCol">
+                        <h3 class="img-circle"><span>Get the <strong>cost of every dish</strong> in one click</span></h3>
+                    </div>
+                </div>
+
+                <div class="profitItem">
+                    <div class="profitCol">
+                        <h3 class="img-circle"><span><strong>Team Training,</strong> faster and easier</span></h3>
+                    </div>
+                    <div class="profitCol">
+                        <img class="img-responsive" src="{{ STATIC_URL }}img/product/orangeProfit.png" alt="">
+                    </div>
+                    <div class="profitCol">
+                        <ul>
+                            <li><img src="{{ STATIC_URL }}img/product/orangeCheck.png"
+                                     alt="Online training of new staff">
+                                <span>Online training of new staff</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/orangeCheck.png" alt="Share recipes and methods">
+                                <span>Share recipes and methods</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/orangeCheck.png" alt="Download + print PDF">
+                                <span>Download + print PDF</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/orangeCheck.png" alt="Company best practices">
+                                <span>Company best practices</span></li>
+                        </ul>
+                        <a class="orangeLink" href="#" title="Assure accuracy over time and locations">Assure accuracy
+                            over time and locations</a>
+                    </div>
+                </div>
+
+                <div class="profitItem">
+                    <div class="profitCol">
+                        <ul>
+                            <li><img src="{{ STATIC_URL }}img/product/redCheck.png"
+                                     alt="Visual content for your followers">
+                                <span>Visual content for your followers</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/redCheck.png" alt="Promote specials">
+                                <span>Promote specials</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/redCheck.png" alt="Attract & engage customers">
+                                <span>Attract & engage customers</span></li>
+                            <li><img src="{{ STATIC_URL }}img/product/redCheck.png" alt="Get feedback">
+                                <span>Get feedback</span></li>
+                        </ul>
+                        <a class="redLink" href="#" title="Create an online portfolio for your business">Create an online portfolio for your business</a>
+                    </div>
+                    <div class="profitCol">
+                        <img class="img-responsive" src="{{ STATIC_URL }}img/product/redProfit.png" alt="">
+                    </div>
+                    <div class="profitCol">
+                        <h3 class="img-circle"><span>A <strong>new relationship</strong> with your customers</span></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid contactFooter" style="display: none;">
+            <div class="container">
+                <h4>We are on a mission to make your kitchen more efficient. Let us know how we can help:</h4>
+                <form action="" method="get">
+                    <input type="text" name="lname" placeholder="Please enter your email"><br>
+                    <input type="submit" value="Send">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+{% endblock %}

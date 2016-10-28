@@ -1,0 +1,37 @@
+
+{% verbatim %}
+
+	<div id="id_recipe_{{recipe.id}}" class="recipe-box {{recipe.chef_type}}" itemscope itemtype="http://schema.org/Recipe" ng-repeat="recipe in recipes" ng-class="{xmas:recipe.has_christmas_tag}">
+		<div class="image" itemprop="photo" ng-style="imageStyle" ng-init="imageStyle={'background-image':'url({{recipe.image_url}})'}">
+			<a class="logo" itemprop="author" class="gtm-event" href="{{recipe.recipe_url}}" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+				{{recipe.chef_full_name}}
+			</a>
+			<a href="{{recipe.recipe_url}}" class="xmas-icon" ng-class="recipe.xmasClass" ng-hide="!recipe.has_christmas_tag"></a>
+		</div>
+		<div class="info" ng-init="LCommentsActive=false; HasComments=(recipe.last_comments.length > 0);" ng-mouseleave="LCommentsActive=false">
+			<div class="description">
+				<div><p><a id="recipe_title" class="gtm-event" itemprop="name" href="{{recipe.recipe_url}}" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">{{controlName(recipe)}}</a></p></div>
+			</div>
+			<div class="social">
+				<p class="nb-likes gtm-event" ng-class="{loved: recipe.loved}" ng-hide="LCommentsActive==true" ng-click="loveRecipe(recipe)" data-gtme-category="Recipe Box" data-gtme-action="Click Filter" data-gtme-tag="love_recipe">{{recipe.nb_likes}}</p>
+				<p class="nb-comments gtm-event" ng-hide="LCommentsActive==true" ng-mouseover="LCommentsActive=HasComments" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="comment_recipe">{{recipe.nb_comments}}</p>
+				<p class="nb-added gtm-event" ng-hide="LCommentsActive==true" ng-click="addRecipe(recipe)" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="add_recipe">{{recipe.nb_added}}</p>
+				<p class="nb-shares gtm-event" ng-hide="LCommentsActive==true" data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="share_recipe">{{recipe.nb_shares}}</p>
+				
+				<ul class="comments" ng-mouseleave="LCommentsActive=false" ng-show="LCommentsActive==true">
+					<li class="comment" ng-repeat="comment in recipe.last_comments">
+						<a class="anchor" href="{{comment.chef_url}}">
+						    <div class="avatar" ng-style="avatarStyle" ng-init="avatarStyle={'background-image':'url({{comment.chef_avatar}})'}"></div>
+						    <ul class="text">
+						        <li class="name">{{comment.chef_name}}</li>
+						        <li class="comment_line">{{comment.comment}}</li>
+						    </ul>
+						</a>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</div>
+
+{% endverbatim %}

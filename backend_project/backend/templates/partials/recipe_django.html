@@ -1,0 +1,27 @@
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% if recipe.name != None and recipe.name != '' or recipe.chef == request.user %}
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+	<div id="id_recipe_{{recipe.id}}" class="recipe {% if recipe.chef.type == 1 %}pro{% endif %}" itemscope itemtype="http://schema.org/Recipe">
+
+        {% with cover_thumb=recipe.cover|thumbnail_url:'explore_box' %}
+        {% if cover_thumb %}
+        <div class="image" style="background-image: url({{cover_thumb}});">
+        {% else %}
+        <div class="image" itemprop="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+        {% endif %}
+        {% endwith %}
+
+			<a itemprop="author" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}">{{recipe.chef.name}} {{recipe.chef.surname}}</a>
+		</div>
+		<div class="description">
+			<div><p><a itemprop="name" href="{% url 'recipe' slug=recipe.slug id=recipe.id %}">{{recipe.name}}</a></p></div>
+		</div>
+        <div class="loves {% if request.user.is_authenticated and recipe.id in USER_LOVES_LIST %}loved{% endif %}">
+			<p onclick="do_love({{recipe.id}})">{{recipe.cache_likes}}</p>
+		</div>
+	</div>
+</div>
+{% endif %}
+

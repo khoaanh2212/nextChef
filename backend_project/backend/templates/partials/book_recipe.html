@@ -1,0 +1,25 @@
+
+{% verbatim %}
+
+	<div id="id_recipe_{{recipe.id}}" class="recipe-box {{recipe.chef.type_class}}" ng-repeat="recipe in recipes">
+		<div class="image" ng-style="imageStyle" ng-init="imageStyle={'background-image':'url({{recipe.image_url}})'}">
+			<a class="logo" class="gtm-event" ng-click="gotoRecipe(recipe)" href=""
+				data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_author">
+				{{recipe.chef.full_name}}
+			</a>
+		</div>
+		<div class="info" ng-init="LCommentsActive=false; HasComments=(recipe.last_comments.length > 0);" ng-mouseleave="LCommentsActive=false">
+			<div class="description">
+				<div><p><a id="recipe_title" class="gtm-event" ng-click="gotoRecipe(recipe)" href="" 
+					data-gtme-category="Recipe Box" data-gtme-action="Click Recipe" data-gtme-tag="recipe_name">
+					{{controlName(recipe)}}</a></p></div>
+			</div>
+			<div class="social">
+				<p class="nb-likes gtm-event" ng-class="{loved: recipe.loved}" ng-hide="LCommentsActive==true" ng-click="loveRecipe(recipe)" 
+					data-gtme-category="Recipe Box" data-gtme-action="Click Filter" data-gtme-tag="love_recipe">{{recipe.nb_likes}}</p>
+			</div>
+			
+		</div>
+	</div>
+
+{% endverbatim %}

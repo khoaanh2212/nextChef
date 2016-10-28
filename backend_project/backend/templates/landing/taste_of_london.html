@@ -1,0 +1,59 @@
+{% extends 'base.html' %} 
+{% load staticfiles %}
+
+{% block extra_css %}{% endblock extra_css %}
+{% block extra_head_js %}{% endblock extra_head_js %}
+{% block extra_js %}{% endblock extra_js %}
+{% block nav-bar-fixed-space %}{% endblock %}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+	
+	{% with rnd="1234567"|make_list|random %}
+	    {% if rnd == "1" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_01.png' %}')">
+	    {% elif rnd == "2" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_02.png' %}')">
+		{% elif rnd == "3" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_03.png' %}')">
+	    {% elif rnd == "4" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_01.png' %}')">
+	    {% elif rnd == "5" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_02.png' %}')">
+	    {% elif rnd == "6" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_03.png' %}')">
+	    {% elif rnd == "7" %}
+        <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_01.png' %}')">
+	    {% else %}
+	    <div class="taste-of-london" style="background-image:url('{% static 'img/landing/taste_bg_02.png' %}')">
+	    {% endif %}
+	{% endwith %}
+
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 hidden-xs col-sm-6 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
+						<img class="col-xs-12 col-sm-12 col-md-12 col-lg-12 iphone" src="{% static 'img/landing/taste_iphone.png' %}">
+					</div>
+{#					<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">#}
+{#						<h1>TAKE<br>TASTE<br>HOME</h1>#}
+{#						<h2>Thomasina Miers / Benares / SushiSamba <br>Ember Yard / Duck & Waffle<br>The House of Ho / Chai Wu / Kurobuta<br>Spice Market / Aqua Kyoto <br>Roux at Parliament Square / Pizarro<br> The Cinnamon Club / Trustcott Arms<br>Amesta / Sipsmith</h2>#}
+{#						<br>#}
+{#						<a target="_blank" href="https://play.google.com/store/apps/details?id=com.cookbooth.cookbooth">#}
+{#				            <img src="{% static 'img/landing/google_play.png' %}" class="gtm-event" #}
+{#				            	data-gtme-category="Footer" data-gtme-action="Click" data-gtme-tag="google_play">#}
+{#				        </a>#}
+{#				         <a target="_blank" href="https://itunes.apple.com/us/app/cookbooth.-photorecipes-by/id686428135?mt=8">#}
+{#				            <img src="{% static 'img/landing/app_store.png' %}" class="gtm-event" #}
+{#				            	data-gtme-category="Footer" data-gtme-action="Click" data-gtme-tag="itunes">#}
+{#				        </a>#}
+{#				        <br><br>#}
+{#				        <img class="logo" src="{% static 'img/landing/taste_landing_cookbooth_logo.png' %}">#}
+{#					</div>#}
+				</div>
+			</div>
+		
+		
+	</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

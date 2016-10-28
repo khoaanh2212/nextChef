@@ -1,0 +1,5 @@
+# Test dependencies go here.
+-r base.txt
+coverage==3.6
+mock==1.0.1
+requests==2.3.0

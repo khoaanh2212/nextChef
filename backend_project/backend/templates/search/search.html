@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}Search - NextChef{% endblock title %}
+{% block description %}{{ block.super }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+{% block fb_title %}{{ block.super }}{% endblock %}
+{% block fb_image %}{{ block.super }}{% endblock %}
+{% block fb_url %}{% endblock %}
+{% block fb_description %}{{ block.super }}{% endblock %}
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }}{% endblock %}
+{% block tw_description %}{{ block.super }}{% endblock %}
+{% block tw_image %}{{ block.super }}{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+		var INIT_RECIPES = {{recipes|safe}};
+        var USER_LOVES_LIST = {{USER_LOVES_LIST}}
+		var KEYWORDS = "{{ keywords }}";
+		{% if USER_AUTHENTICATED %}
+			var USER_ID = {{request.user.id}};
+		{% else %}
+			var USER_ID = 0;
+        {% endif %}
+        
+        mixpanel.track("search", {
+            "source": "web",
+            "distinct_id": USER_ID,
+            "keywords": "{{ keywords }}",
+            "num_results": {{ recipes|length }}
+        });
+	</script>
+	<script src="{% static 'js/models/Step.js' %}"></script>
+	<script src="{% static 'js/models/Recipe.js' %}"></script>
+	<script src="{% static 'js/controllers/RecipesListCtrl.js' %}"></script>
+	<script src="{% static 'js/controllers/SearchCtrl.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    
+	<div class="search" id="explore" ng-controller="SearchController">
+		<h2>{{keywords}}</h2>
+		<div class="recipes-list" ng-controller="RecipesListController">			
+			{% include 'partials/recipe.html' %}
+		</div>
+		<div class="load-more">
+			<button class="btn btn-gray" ng-click="loadRecipes()" ng-hide="loading">{% trans 'Load more' %}</button>
+			<img class="loader" src="{% static 'img/ajax-loader.gif' %}" ng-show="loading">
+		</div>
+	</div>
+	
+{% endblock content %}

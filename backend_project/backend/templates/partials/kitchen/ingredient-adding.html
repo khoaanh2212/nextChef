@@ -1,0 +1,95 @@
+{% load i18n %}
+<div class="col-md-12" id="ingredient_list_input" ng-controller="IngredientController" ng-init="events.onLoad()">
+    <h2>{% trans 'Ingredients' %}</h2>
+    <div class="ingredient-adding">
+        <div class="amount-field">
+            <input type="text" class="form-control" ng-model="amountField"
+                   ng-change="fn.checkEnable()"
+                   placeholder="Type quantity, i.e. 120 gr.">
+        </div>
+        <div class="ingredient-field" ng-class="{'loading': waitingServer}">
+            <input type="text" class="form-control" ng-model="ingredientField"
+                   ng-keydown="events.onClearSelectedIngredient();fn.onHandleKeyDownOnInputIngredient($event);"
+                   ng-change="fn.onChangeGetDropdownList()"
+                   placeholder="Type ingredient, i.e. tomato">
+            <div class="dropdown-list" ng-show="isShowDropdownList">
+                <div class="list-group" ng-show="ingredientList.total > 0">
+                    <h2>INGREDIENTS</h2>
+                    <ul class="list lst-ingredient">
+                        {% verbatim %}
+                            <li ng-repeat="item in ingredientList.list"
+                                ng-click="events.onSelectIngredient(item)">
+                                <p class="name">{{ item.ingredient }}</p>
+                                <span class="currency" ng-if="item.net_price>0">
+                                    &pound;{{item.net_price}} / {{item.quantity}}{{item.unit}}
+                                </span>
+                            </li>
+                            <li ng-click="events.onShowMoreIngredient()" class="show-more" ng-show="isShowMoreIngredient">Show more</li>
+                        {% endverbatim %}
+                    </ul>
+                </div>
+                <div class="list-group recipe" ng-show="recipeList.total > 0">
+                    <h2>OTHER RECIPES</h2>
+                    <ul class="list lst-sub-recipe">
+                        {% verbatim %}
+                            <li ng-repeat="item in recipeList.list" ng-click="events.onSelectIngredient(item)">
+                                <p class="name">{{ item.name }}</p>
+                                <span>{{ item.chef.name | uppercase }}</span>
+                            </li>
+                            <li ng-click="events.onShowMoreRecipe()" class="show-more" ng-show="isShowMoreRecipe">Show more</li>
+                        {% endverbatim %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="add-button">
+            <button class="btn btn-default"
+                    ng-disabled="!ingredientField || waitingAdding"
+                    ng-click="waitingAdding = true;
+                    events.onAddingIngredient({amount: amountField,ingredient: ingredientField})">ADD
+            </button>
+            <span class="small">or press enter to add</span>
+        </div>
+    </div>
+
+    <div class="ingredient-list">
+        <ul class="list" id="listIngredient">
+            {% verbatim %}
+                <li ng-repeat="item in list">
+                    <span class="label">{{ item.name }}</span>
+                    <span class="chef">{{ item.chef_name | uppercase }}</span>
+                <span class="link" ng-show="item.chef_name"
+                      ng-click="fn.redirect(item.link)"
+                      ng-mouseover="fn.tooltip($event)"
+                      title="Link to this recipe"></span>
+                    <span class="close" ng-click="fn.onConfirmDelete(item)"></span>
+                </li>
+            {% endverbatim %}
+        </ul>
+    </div>
+
+    {% verbatim %}
+        <div class="toaster">
+            <div class="block-message message-{{ toaster.data.alert.type }} alert" id="block-message">
+                <span class="msg">{{ toaster.data.alert.msg }}</span>
+            </div>
+        </div>
+    {% endverbatim %}
+
+    <div class="modal fade" id="delete-modal" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Do you want delete ingredient?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            ng-click="events.onDeleteIngredient(deleteItem)">Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

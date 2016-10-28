@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}NextChef{% endblock title %}
+{% block description %}A global community of creative chefs and foodies.{% endblock %}
+
+{% block nav-bar-fixed-space %}
+    <div style="height: 120px"></div>
+{% endblock %}
+
+{% block content %}
+    <div id="payment-page">
+
+        <h1>CHOOSE PAYMENT METHOD</h1>
+
+        <div class="payment-method">
+
+            <form id="payment-form" method="POST" action="/chefs/payment">
+
+                 {% csrf_token %}
+
+                <p><span class="title">Step 1: Select a plan</span></p>
+
+                <p><select name="payment-plan">
+                    {% for p in plan %}
+                        <option value="{{ p.0 }}" {% if p.1.upper == selected_plan.upper %}
+                                selected {% endif %}>{{ p.1|capfirst }}</option>
+                    {% endfor %}
+                </select></p>
+
+                <p><span class="title">Step 2: Select payment frequency</span></p>
+
+                {% for i in interval %}
+                    <p><input type="radio" {% if forloop.counter == 1 %} checked="true" {% endif %} name="payment-interval" value="{{ i.0 }}"> {{ i.1|capfirst }}</p>
+                {% endfor %}
+
+                <button type="submit" name="submit-payment-method" class="btn btn-primary">Add a payment method</button>
+
+            </form>
+
+        </div>
+
+    </div>
+    <div style="clear: both"></div>
+{% endblock %}

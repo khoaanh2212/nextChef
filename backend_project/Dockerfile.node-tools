@@ -1,0 +1,10 @@
+FROM node:4.3.2
+WORKDIR /code
+RUN npm install -g grunt-cli@1.2.0 && \
+    npm install -g phantomjs@1.9.8
+ENV PHANTOMJS_BIN phantomjs
+ADD package.json /code/package.json
+#ADD npm-shrinkwrap.json /code/npm-shrinkwrap.json
+RUN npm install
+ADD Gruntfile.js /code/Gruntfile.js
+ADD frontend_tests /code/frontend_tests

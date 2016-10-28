@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block extra_css %}{{block.super}}{% endblock extra_css %}
+
+{% block extra_head_js %}
+	<script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '{{FACEBOOK_APP_ID}}',
+          xfbml      : true,
+          version    : 'v2.6'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+    
+    <script>
+		var FACEBOOK_SIGNUP_URL = "{% url 'account_signup_facebook' %}";
+		var FACEBOOK_LOGIN_URL = "{% url 'account_login_facebook' %}";
+	</script>
+{% endblock extra_head_js %}
+   
+{% block extra_js %}
+	<script src="{% static 'js/accounts.js' %}"></script>
+{% endblock extra_js %}
+		
+{% block navbar %}{% endblock %}
+{% block nav-bar-fixed-space %}{% endblock %}
+
+{% block content %}
+
+	{% with rnd="1234567"|make_list|random %}
+	    {% if rnd == "1" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/9jDSFLOSfbmob5quRXY422HnCFNn6VlA6FmBC8djR8o.jpeg' %}')">
+	    {% elif rnd == "2" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/aKgySjpQeMwMWXBiZULBV5gzlhfxKnN728j6bgj2LMs.jpeg' %}')">
+		{% elif rnd == "3" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/cBMgLtTeirvELepw9Zp5tWAIrqps5-Qcb_0FwkVOfA0.jpeg' %}')">
+	    {% elif rnd == "4" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/CmT4lsS-NmByHyTeeKpBY3KC5_RTpq63bOtJKHLywzE.jpeg' %}')">
+	    {% elif rnd == "5" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/cvjgvCI8oPOlnPJMkw1Pq7YM4RcZHai2Hr4q73bDenw.jpeg' %}')">
+	    {% elif rnd == "6" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/UKqTxKODd9_Ye5PpXFNaE-WQjoYhFlN47uXAmStJXZk.jpeg' %}')">
+	    {% elif rnd == "7" %}
+        <div id="registration" style="background-image:url('{% static 'img/registration/yh5YeEX8fmV3af9vH7PA9HaW18-IrHbeKVFTaPMPz1w.jpeg' %}')">
+	    {% else %}
+	    <div id="registration">
+	    {% endif %}
+	{% endwith %}
+		<div class="container">
+			<div class="registration-content col-xs-12 col-sm-10 col-md-8 col-lg-6">
+				{% block registration-content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block social %}{% endblock %}
+{% block footer %}{% endblock %}

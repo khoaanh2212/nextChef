@@ -1,0 +1,24 @@
+{% load thumbnail %}
+{% load staticfiles %}
+<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+	<div class="book {% if book.chef.type == 1 %}pro{% endif %}">
+        <div class="content">
+            <div class="label">{{book.recipes.count}}</div>
+            {% with image=book.image %}
+            	{% if image %}
+	                <div class="image" style="background-image: url({{image|thumbnail_url:'explore_box'}})">
+			     {% else %}
+	        		{% with cover=book.cover %}
+				        {% if cover %}
+				        <div class="image" style="background-image: url({{cover|thumbnail_url:'explore_box'}})">
+				        {% else %}
+				        <div class="image" style="background-image: url({% static 'img/chef_cover.jpg' %});">
+				        {% endif %}
+				     {% endwith %}
+				 {% endif %}
+			{% endwith %}
+                <a href="{% url 'book' slug=book.slug id=book.id %}">{{book.name}}</a>
+            </div>
+        </div>
+	</div>
+</div>

@@ -1,0 +1,141 @@
+{% load thumbnail %}
+
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/"
+>
+
+<channel>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	{% comment %}
+	<wp:category><wp:term_id>19</wp:term_id><wp:category_nicename>humor</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[Humor]]></wp:cat_name></wp:category>
+	{% endcomment %}
+	<generator>http://wordpress.org/?v=4.2.2</generator>
+	{% for recipe_date in subscription_recipes %}
+	
+		{% with recipe=recipe_date.recipe %}
+			
+			{% with chef=recipe.chef %}
+			
+			<item>
+				<title>{{chef.full_name|lower|capfirst}}</title>
+				
+				<link>http://www.piensaesgratis.com/chefs_cookbooth/{{chef.slug}}-{{chef.id}}/</link>
+				<pubDate>{{recipe_date.date|date:"Y-m-d 08:00:00"}}</pubDate>
+				<dc:creator><![CDATA[admin]]></dc:creator>
+				<description></description>
+				<content:encoded><![CDATA[{{chef.short_bio}}]]></content:encoded>
+				<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+				<wp:post_id>1000000{{chef.id}}</wp:post_id>amazonaws
+				<wp:comment_status>closed</wp:comment_status>
+				<wp:ping_status>closed</wp:ping_status>
+				
+				<wp:post_name>{{chef.slug}}-{{chef.id}}</wp:post_name>
+				
+				<wp:status>publish</wp:status>
+				<wp:post_parent>0</wp:post_parent>
+				<wp:menu_order>0</wp:menu_order>
+				<wp:post_type>chefs_cookbooth</wp:post_type>
+				<wp:post_password></wp:post_password>
+								
+				<wp:is_sticky>0</wp:is_sticky>
+				
+				<wp:postmeta>
+					<wp:meta_key>location</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.location}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>type</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.type}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>name</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.name}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>surname</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.surname}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>avatar</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.avatar|thumbnail_url:'chef_avatar'}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>url</wp:meta_key>
+					<wp:meta_value><![CDATA[{{chef.public_url}}]]></wp:meta_value>
+				</wp:postmeta>
+				
+			</item>
+			{% endwith %}
+			
+			<item>
+				<title>{{recipe.name}}</title>
+				
+				<link>http://www.piensaesgratis.com/recipe/cookbooth-{{recipe.slug}}-{{recipe.id}}/</link>
+				<pubDate>{{recipe_date.date|date:"Y-m-d 08:00:00"}}</pubDate>
+				<dc:creator><![CDATA[admin]]></dc:creator>
+				<description></description>
+				<content:encoded><![CDATA[{{recipe.description}}]]></content:encoded>
+				<wp:post_date>{{recipe_date.date|date:"Y-m-d 08:00:00"}}</wp:post_date>
+				<wp:post_date_gmt>{{recipe_date.date|date:"Y-m-d 08:00:00"}}</wp:post_date_gmt>
+				<wp:comment_status>closed</wp:comment_status>
+				<wp:ping_status>closed</wp:ping_status>
+				<wp:post_name>cookbooth-{{recipe.slug}}-{{recipe.id}}</wp:post_name>
+				<wp:status>publish</wp:status>
+				<wp:post_parent>0</wp:post_parent>
+				<wp:menu_order>0</wp:menu_order>
+				<wp:post_type>recipe</wp:post_type>
+				<wp:post_password></wp:post_password>
+				<wp:is_sticky>0</wp:is_sticky>
+				{% comment %}
+				<category domain="recipe_category" nicename="cena-romantica"><![CDATA[Cena romantica]]></category>
+				{% endcomment %}
+				<category domain="chefs_cookbooth" nicename="{{recipe.chef.slug}}-{{recipe.chef.id}}"><![CDATA[{{recipe.chef.name}} {{recipe.chef.name}}]]></category>
+				
+				{% for ingredient in recipe.get_sorted_ingredients %}
+				<wp:postmeta>
+					<wp:meta_key>ingredient_{{forloop.counter}}</wp:meta_key>
+					<wp:meta_value><![CDATA[{{ingredient.name}}]]></wp:meta_value>
+				</wp:postmeta>
+				{% endfor %}
+				
+				{% for step in recipe.photos.all %}
+				<wp:postmeta>
+					<wp:meta_key>step{{forloop.counter}}</wp:meta_key>
+					<wp:meta_value><![CDATA[{{step.instructions}}]]></wp:meta_value>
+				</wp:postmeta>
+				
+				<wp:postmeta>
+					<wp:meta_key>step{{forloop.counter}}_image_url</wp:meta_key>
+					<wp:meta_value><![CDATA[{{step.image|thumbnail_url:'recipe_step'}}]]></wp:meta_value>
+				</wp:postmeta>
+				{% endfor %}
+				
+				<wp:postmeta>
+					<wp:meta_key>_custom_post_type_onomies_relationship</wp:meta_key>
+					<wp:meta_value><![CDATA[1000000{{recipe.chef.id}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>url</wp:meta_key>
+					<wp:meta_value><![CDATA[http://{{recipe.site_full_url}}]]></wp:meta_value>
+				</wp:postmeta>	
+				<wp:postmeta>
+					<wp:meta_key>recipe_time</wp:meta_key>
+					<wp:meta_value><![CDATA[{{recipe.prep_time}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>servings</wp:meta_key>
+					<wp:meta_value><![CDATA[{{recipe.serves}}]]></wp:meta_value>
+				</wp:postmeta>
+				<wp:postmeta>
+					<wp:meta_key>cover</wp:meta_key>
+					<wp:meta_value><![CDATA[{{recipe.cover_image|thumbnail_url:'wordpress_header'}}]]></wp:meta_value>
+				</wp:postmeta>
+			</item>
+		{% endwith %}
+	{% endfor %}
+</channel>
+</rss>

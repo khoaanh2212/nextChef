@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load cache %}
+
+{% block title %}{{ chef.name }} {{ chef.surname }}{% endblock title %}
+{% block description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+{% block keywords %}{{ block.super }}{% endblock %}
+
+{% block fb_title %}{% trans 'Chef' %}: {{ chef.name }} {{ chef.surname }} | {{ block.super }} {% endblock %}
+{% block fb_image %}
+    {% cache 300 photo chef.id %}
+        {{ chef.photo }}
+    {% endcache %}
+{% endblock %}
+{% block fb_url %}{{ request.build_absolute_uri }}{% endblock %}
+{% block fb_description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+
+{% block tw_summary %}{{ block.super }}{% endblock %}
+{% block tw_title %}{{ block.super }} {% trans 'Chef' %}: {{ chef.name }} {{ chef.surname }}{% endblock %}
+{% block tw_description %}{{ chef.short_bio|default_if_none:"" }}{% endblock %}
+{% block tw_image %}
+    {% cache 300 photo chef.id %}
+        {{ chef.photo }}
+    {% endcache %}
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        var USER_AUTHENTICATED = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+        var USER_ID = {% if request.user.is_authenticated %}{{request.user.id}}{% else %}-1{% endif %};
+        var USER_LOVES_LIST = {{USER_LOVES_LIST}};
+        var USER_FOLLOWS_LIST = {{USER_FOLLOWINGS_LIST}};
+        var USER_TYPE = '{{ user_type }}';
+    </script>
+    <script src="{% static 'js/service/PresenterHandleCreator.js' %}"></script>
+    <script src="{% static 'js/infrastructure/LocalStorage.js' %}"></script>
+
+    <script src="{% static 'js/controllers/costing/CostingCtrl.js' %}"></script>
+    <script src="{% static 'js/models/costing/CostingModel.js' %}"></script>
+    <script src="{% static 'js/presenters/costing/CostingPresenter.js' %}"></script>
+
+    <script src="{% static 'js/controllers/PricingModalCtrl.js' %}"></script>
+
+    <script src="{% static 'js/controllers/costing/CostingAddCtrl.js' %}"></script>
+    <script src="{% static 'js/models/costing/CostingAddModel.js' %}"></script>
+    <script src="{% static 'js/presenters/costing/CostingAddPresenter.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/hands-on-table/handsontable.full.min.css' %}">
+    <script src="{% static 'vendor/hands-on-table/handsontable.full.min.js' %}"></script>
+    <script src="{% static 'js/service/HandsOnTableService.js' %}"></script>
+    <script type="text/javascript">
+        (function () {
+            var language = {
+                delimiters: {
+                    thousands: ',',
+                    decimal: '.'
+                },
+                abbreviations: {
+                    thousand: 'k',
+                    million: 'm',
+                    billion: 'b',
+                    trillion: 't'
+                },
+                ordinal: function (number) {
+                    var b = number % 10;
+                    return (~~(number % 100 / 10) === 1) ? 'th' :
+                            (b === 1) ? 'st' :
+                                    (b === 2) ? 'nd' :
+                                            (b === 3) ? 'rd' : 'th';
+                },
+                currency: {
+                    symbol: '£'
+                }
+            };
+
+            // Node
+            if (typeof module !== 'undefined' && module.exports) {
+                module.exports = language;
+            }
+            // Browser
+            if (typeof window !== 'undefined' && this.numeral && this.numeral.language) {
+                this.numeral.language('en-gb', language);
+            }
+        }());
+    </script>
+{% endblock extra_js %}
+
+{% block ng_app %}library{% endblock %}
+
+{% block content %}
+    <div id="costing-page" class="container" ng-controller="CostingController" ng-init="events.onLoad();">
+        {% if user_type == 'default' or user_type == 'pro' %}
+            {% include 'partials/pricing-modal.html' %}
+        {% endif %}
+        <div class="costing-header">
+            <div class="title">
+                <h2>Ingredient list</h2>
+            </div>
+            <div class="search" style="flex-direction: row-reverse">
+{#                <input type="text" placeholder="Search...">#}
+                <button class="btn btn-primary" ng-if="isDisabledButton" disabled onClick="alert('Stop hacking man!')">+ Add</button>
+                <button class="btn btn-primary"
+                        ng-if="!isDisabledButton"
+                        data-target="#costing-modal"
+                        data-toggle="modal">+ Add</button>
+            </div>
+        </div>
+        <div class="costing-table table-responsive">
+            <table class="table table-bordered tblCosting">
+                <thead>
+                    <tr>
+                        <th>Ingredient</th>
+                        <th class="hidden">Family</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Gross price &nbsp;£</th>
+                        <th>% waste</th>
+                        <th>Net price &nbsp;£</th>
+{#                        <th class="hidden">Supplier</th>#}
+                        <th width="70px" class="hidden">Supplier</th>
+                        <th width="80px">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% verbatim %}
+                    <tr ng-repeat="item in costingTable">
+                        <td ng-click="fn.onEdit('ingredient', item, $index, $event)">
+                            <input type="text" class="form-control editable"
+                                   ng-if="inputAvailable && inputAvailable.index==$index"
+                                   ng-model="editElement.ingredient" ng-keydown="$event.which == 13 && fn.onUpdate()">
+                            <span>{{ inputAvailable && inputAvailable.index==$index  ? '&nbsp;' : item.ingredient }}</span>
+                        </td>
+                        <td ng-click="fn.onEdit('family', item, $index, $event)" class="hidden">
+                            <select ng-if="inputAvailable && inputAvailable.index==$index"
+                                    ng-options="family for family in listFamily"
+                                    ng-model="editElement.family" class="list-family" ng-change="fn.onUpdate()">
+                            </select>
+                            {{ inputAvailable && inputAvailable.index == $index ? '&nbsp;' : item.family }}
+                        </td>
+                        <td ng-click="fn.onEdit('quantity', item, $index, $event)">
+                            <input type="number" class="form-control editable" min="0.001"
+                                   ng-if="inputAvailable && inputAvailable.index==$index"
+                            ng-model="editElement.quantity" ng-keydown="$event.which == 13 && fn.onUpdate()"/>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.quantity }}
+                        </td>
+                        <td ng-click="fn.onEdit('unit', item, $index, $event)">
+                            <select ng-if="inputAvailable && inputAvailable.index==$index" ng-model="editElement.unit"
+                                    ng-change="fn.onUpdate()">
+                                    <option value="kg">kg</option>
+                                    <option value="lbs">lbs</option>
+                            </select>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.unit }}
+                        </td>
+                        <td ng-click="fn.onEdit('gross_price', item, $index, $event)">
+                            <input type="number" class="form-control editable" min="0"
+                                   ng-if="inputAvailable && inputAvailable.index==$index" ng-change="fn.updateNetPrice()"
+                            ng-model="editElement.gross_price" ng-keydown="$event.which == 13 && fn.onUpdate()"/>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.gross_price }}
+                        </td>
+                        <td ng-click="fn.onEdit('waste', item, $index, $event)">
+                            <input type="number" class="form-control editable" min="0"
+                                   ng-if="inputAvailable && inputAvailable.index==$index"
+                            ng-model="editElement.waste" ng-keydown="$event.which == 13 && fn.onUpdate()" ng-change="fn.updateNetPrice()"/>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.waste }}
+                        </td>
+                        <td ng-click="fn.onEdit('net_price', item, $index, $event)">
+                            <input type="number" class="form-control editable" min="0" readonly
+                                   ng-if="inputAvailable && inputAvailable.index==$index"
+                            ng-model="editElement.net_price" ng-keydown="$event.which == 13 && fn.onUpdate()"/>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.net_price }}
+                        </td>
+                        <td ng-click="fn.onEdit('supplier', item, $index, $event)" class="hidden">
+                            <input type="text" class="form-control editable"
+                                   ng-if="inputAvailable && inputAvailable.index==$index"
+                            ng-model="editElement.supplier" ng-keydown="$event.which == 13 && fn.onUpdate()"/>
+                            {{ inputAvailable && inputAvailable.index==$index ? '&nbsp;' : item.supplier }}
+                        </td>
+                        <!--<td><button class="btn btn-default" ng-disabled="isDisabledButton">see</button></td>-->
+                        <td>
+                            <!--
+                            <button class="btn btn-trans" disabled>
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            -->
+                            <!-- DUPLICATE BUTTON -->
+                            <button class="btn btn-trans" ng-if="isDisabledButton" disabled>
+                                <span class="glyphicon glyphicon-duplicate"></span>
+                            </button>
+                            <button class="btn btn-trans"
+                                    ng-if="!isDisabledButton"
+                                    ng-click="events.onDuplicate(item)">
+                                <span class="glyphicon glyphicon-duplicate"></span>
+                            </button>
+                            <!-- DELETE BUTTON -->
+                            <button class="btn btn-trans" ng-if="isDisabledButton" disabled>
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                            <button class="btn btn-trans"
+                                    ng-if="!isDisabledButton"
+                                    ng-click="fn.checkDelete(item)"
+                                    data-toggle="modal"
+                                    data-target="#delete-modal">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                    </tr>
+                {% endverbatim %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include 'partials/costing-modal.html' %}
+
+        <div class="modal fade" id="delete-modal" data-backdrop="static">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Do you want delete ingredient?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" ng-click="fn.onDelete()">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}

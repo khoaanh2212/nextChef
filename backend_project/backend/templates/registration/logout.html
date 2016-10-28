@@ -1,0 +1,8 @@
+{% extends "registration/base.html" %}
+{% load i18n %}
+
+{% block registration-content %}
+	<p>{% trans "Logged out" %}</p>
+    <a style="text-decoration: underline" href="{% url 'home' %}">{% trans "Keep on exploring" %}</a>
+    <br><br>
+{% endblock %}

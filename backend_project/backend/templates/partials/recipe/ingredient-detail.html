@@ -1,0 +1,104 @@
+{% load i18n %}
+<div class="ingredients ingredient-detail row" ng-controller="IngredientDetailController"
+     ng-init="events.onLoad();gross_profit={{ recipe.gross_profit }};food_cost={{ recipe.food_cost }};
+     servings={{ recipe.serves }};vat={{ recipe.vat }};oldServings={{ recipe.serves }} ">
+    <div id="ingredients_list" style="display: none;">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <td width="10%">{% if recipe.prep_time != None and recipe.prep_time > 0 %}
+                            <span>{{ recipe.prep_time }} {% trans 'Minutes' %}</span>
+                        {% endif %}</td>
+                    <td width="15%">{% if recipe.serves != None %}
+                            <span> <input class="inlineEdit" maxlength="2" size="2" ng-model="servings"
+                           ng-change="fn.publishServings()" ng-keypress="filterNumber($event)"
+                            {% if not allow_see_pricing or not owner %} disabled {% endif %}
+                           name="serves" type="text">{% trans 'Servings' %}</span>
+                        {% endif %}
+                    </td>
+                    <td>&nbsp;</td>
+                    {% if is_chef_or_collaborator and allow_see_pricing %}
+                    <td width="10%"></td>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% verbatim %}
+                    <tr ng-repeat="item in ingredientList">
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.measure }}</td>
+                        <td ng-if="item.type === 'ingredient'">{{ item.name }}</td>
+                        <td ng-if="item.type === 'recipe'">
+                            <a href="javascript:void(0);" ng-click="fn.linkRecipe(item)">{{ item.name }}</a>
+                        </td>
+                {% endverbatim %}
+                {% if is_chef_or_collaborator and allow_see_pricing %}
+                    {% verbatim %}
+                        <td ng-if="item.price">{{ item.price | number:2 }}</td>
+                        <td ng-if="!item.price">N/A</td>
+                    {% endverbatim %}
+                {% endif %}
+                    </tr>
+                </tbody>
+                {% if is_chef_or_collaborator and allow_see_pricing %}
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="rightText noBorderLeft">Total</td>
+                        <td>{% verbatim %}{{ total | number:2 }}{% endverbatim %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="rightText noBorderLeft">Cost per portion</td>
+                        <td>{% verbatim %}{{ total/servings | number:2 }}{% endverbatim %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="specific rightText noBorderLeft">Gross profit <span class="cover"><input
+                                ng-change="fn.publishGrossProfitEvent()" ng-keypress="filterNumber($event)"
+                                ng-model="gross_profit" class="inlineEdit percent" maxlength="2" name="grossProfit"
+                                type="text"><span class="overlap">%</span></span></td>
+                        <td>{% verbatim %}{{ (total/servings/food_cost)*gross_profit | number:2 }}{% endverbatim %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="specific rightText noBorderLeft">Food cost <span class="cover">
+                            <input ng-change="fn.publishFoodCostEvent()"
+                                   ng-model="food_cost"
+                                   ng-keypress="filterNumber($event)"
+                                   class="inlineEdit percent"
+                                   maxlength="2" name="foodCost"
+                                   type="text"><span class="overlap">%</span></span></td>
+                        <td>{% verbatim %}{{ total/servings | number:2 }}{% endverbatim %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="rightText noBorderLeft">Estimated selling price per portion</td>
+                        <td>{% verbatim %}{{ (total/servings)+((total/servings/food_cost)*gross_profit) | number:2
+                            }}{% endverbatim %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="noBorder">&nbsp;</td>
+                        <td class="specific rightText noBorderLeft">Estimated selling price including VAT <span class="cover"><input
+                                ng-model="vat" ng-change="fn.publishVatEvent()" type="text" maxlength="2"
+                                ng-keypress="filterNumber($event)" type="text" class="inlineEdit percent"
+                                name="vat"><span class="overlap">%</span></span></td>
+                        <td>{% verbatim %}
+                            {{ (total/servings)+(total/servings/food_cost)*gross_profit + ((total/servings)+(total/servings/food_cost)*gross_profit)/100*vat | number
+                            :2 }} {% endverbatim %}</td>
+                    </tr>
+                    <tr class="note" ng-if="hasEmptyIngredient">
+                        <td colspan="4">{% verbatim %}*Some ingredients have no price set. The total price of recipe is
+                            incomplete {% endverbatim %}</td>
+                    </tr>
+
+                </tfoot>
+                {% endif %}
+            </table>
+            <br>
+            <br>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
